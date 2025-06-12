@@ -1,0 +1,20 @@
+{
+  "dependencies": {
+    "@graphql-tools/load-files": "^7.0.1",
+    "@graphql-tools/merge": "^9.0.24",
+    "@graphql-tools/schema": "^10.0.23",
+    "@prisma/client": "^6.9.0",
+    "graphql": "^16.11.0",
+    "graphql-yoga": "^5.13.5",
+    "prisma": "^6.9.0"
+  },
+  "name": "server",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/node": "^24.0.1",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.8.3"
+  }
+}
