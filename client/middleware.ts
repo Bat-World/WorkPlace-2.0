@@ -5,7 +5,7 @@ export default clerkMiddleware(async (auth, req) => {
   const { pathname } = req.nextUrl;
   const { userId } = await auth();
 
-  const publicPaths = ["/", "/sign-in", "/sign-up"];
+  const publicPaths = ["/", "/auth/sign-in", "/auth/sign-up"];
   const isPublic = publicPaths.includes(pathname) || pathname.startsWith("/_next");
 
   if (!userId && !isPublic) {
