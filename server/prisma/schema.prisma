@@ -4,314 +4,177 @@ generator client {
 
 datasource db {
   provider = "postgresql"
-
-  url = env("DATABASE_URL")
+  url      = env("DATABASE_URL")
 }
 
 enum Role {
-  ADMIN // Superuser
-
-  DIRECTOR // Can manage teams, projects, approve
-
-  MEMBER // Default contributor
+  ADMIN
+  MEMBER
 }
 
 enum TaskStatus {
   BACKLOG
-
   TODO
-
   IN_PROGRESS
-
   REVIEW
-
   DONE
 }
 
 enum ReviewStatus {
   REQUESTED
-
   CHANGES_REQUESTED
-
   APPROVED
 }
 
 enum ActivityType {
   TASK_CREATED
-
   TASK_UPDATED
-
   TASK_REVIEWED
-
   PROJECT_CREATED
-
   COMMENT_ADDED
-
   FILE_UPLOADED
-
   STATUS_CHANGED
-
   REVIEW_REQUESTED
-
   REVIEW_APPROVED
-
   REVIEW_REJECTED
 }
 
 model User {
-  id String @id @default(cuid())
-
-  clerkId String @unique
-
-  name String
-
-  email String @unique
-
-  image String?
-
+  id            String             @id @default(cuid())
+  clerkId       String             @unique
+  name          String
+  email         String             @unique
+  image         String?
   organizations UserOrganization[]
-
-  tasksAssigned Task[] @relation("AssignedTasks")
-
-  tasksCreated Task[] @relation("CreatedTasks")
-
-  taskReviews TaskReview[] @relation("Reviewer")
-
-  comments Comment[]
-
-  activities Activity[]
-
-  leaderboard LeaderboardEntry[]
-
-  Project Project[]
+  tasksAssigned Task[]             @relation("AssignedTasks")
+  tasksCreated  Task[]             @relation("CreatedTasks")
+  taskReviews   TaskReview[]       @relation("Reviewer")
+  comments      Comment[]
+  activities    Activity[]
+  Project       Project[]
 }
 
 model Organization {
-  id String @id @default(cuid())
-
-  name String
-
-  createdAt DateTime @default(now())
-
-  members UserOrganization[]
-
-  projects Project[]
-
+  id         String             @id @default(cuid())
+  name       String
+  createdAt  DateTime           @default(now())
+  members    UserOrganization[]
+  projects   Project[]
   activities Activity[]
-
-  leaderboard LeaderboardEntry[]
 }
 
 model UserOrganization {
-  id String @id @default(cuid())
-
-  userId String
-
+  id             String       @id @default(cuid())
+  userId         String
   organizationId String
-
-  role Role
-
-  joinedAt DateTime @default(now())
-
-  user User @relation(fields: [userId], references: [id])
-
-  organization Organization @relation(fields: [organizationId], references: [id])
+  role           Role
+  joinedAt       DateTime     @default(now())
+  user           User         @relation(fields: [userId], references: [id])
+  organization   Organization @relation(fields: [organizationId], references: [id])
 
   @@unique([userId, organizationId])
 }
 
 model Project {
-  id String @id @default(cuid())
-
-  name String
-
-  description String
-
+  id             String       @id @default(cuid())
+  name           String
+  description    String
   organizationId String
-
-  createdById String
-
-  createdAt DateTime @default(now())
-
-  tasks Task[]
-
-  categories Category[]
-
-  labels Label[]
-
-  files File[]
-
-  activity Activity[]
-
-  organization Organization @relation(fields: [organizationId], references: [id])
-
-  createdBy User @relation(fields: [createdById], references: [id])
+  createdById    String
+  createdAt      DateTime     @default(now())
+  tasks          Task[]
+  categories     Category[]
+  labels         Label[]
+  files          File[]
+  activity       Activity[]
+  organization   Organization @relation(fields: [organizationId], references: [id])
+  createdBy      User         @relation(fields: [createdById], references: [id])
 }
 
 model Task {
-  id String @id @default(cuid())
-
-  title String
-
-  description String
-
-  status TaskStatus @default(TODO)
-
-  projectId String
-
-  categoryId String?
-
-  labelId String?
-
+  id           String       @id @default(cuid())
+  title        String
+  description  String
+  status       TaskStatus   @default(TODO)
+  projectId    String
+  categoryId   String?
+  labelId      String?
   assignedToId String?
-
-  createdById String
-
-  createdAt DateTime @default(now())
-
-  updatedAt DateTime @updatedAt
-
-  dueDate DateTime?
-
-  reviews TaskReview[]
-
-  comments Comment[]
-
-  files File[]
-
-  project Project @relation(fields: [projectId], references: [id])
-
-  category Category? @relation(fields: [categoryId], references: [id])
-
-  label Label? @relation(fields: [labelId], references: [id])
-
-  assignedTo User? @relation("AssignedTasks", fields: [assignedToId], references: [id])
-
-  createdBy User @relation("CreatedTasks", fields: [createdById], references: [id])
-
-  Activity Activity[]
+  createdById  String
+  createdAt    DateTime     @default(now())
+  updatedAt    DateTime     @updatedAt
+  dueDate      DateTime?
+  reviews      TaskReview[]
+  comments     Comment[]
+  files        File[]
+  project      Project      @relation(fields: [projectId], references: [id])
+  category     Category?    @relation(fields: [categoryId], references: [id])
+  label        Label?       @relation(fields: [labelId], references: [id])
+  assignedTo   User?        @relation("AssignedTasks", fields: [assignedToId], references: [id])
+  createdBy    User         @relation("CreatedTasks", fields: [createdById], references: [id])
+  activity     Activity[]
 }
 
 model TaskReview {
-  id String @id @default(cuid())
-
-  taskId String
-
+  id         String       @id @default(cuid())
+  taskId     String
   reviewerId String
-
-  comment String
-
-  status ReviewStatus
-
-  createdAt DateTime @default(now())
-
-  task Task @relation(fields: [taskId], references: [id])
-
-  reviewer User @relation("Reviewer", fields: [reviewerId], references: [id])
+  comment    String
+  status     ReviewStatus
+  createdAt  DateTime     @default(now())
+  task       Task         @relation(fields: [taskId], references: [id])
+  reviewer   User         @relation("Reviewer", fields: [reviewerId], references: [id])
 }
 
 model Comment {
-  id String @id @default(cuid())
-
-  content String
-
-  taskId String
-
-  authorId String
-
+  id        String   @id @default(cuid())
+  content   String
+  taskId    String
+  authorId  String
   createdAt DateTime @default(now())
-
-  task Task @relation(fields: [taskId], references: [id])
-
-  author User @relation(fields: [authorId], references: [id])
+  task      Task     @relation(fields: [taskId], references: [id])
+  author    User     @relation(fields: [authorId], references: [id])
 }
 
 model Category {
-  id String @id @default(cuid())
-
-  name String
-
+  id        String  @id @default(cuid())
+  name      String
   projectId String
-
-  project Project @relation(fields: [projectId], references: [id])
-
-  tasks Task[]
+  project   Project @relation(fields: [projectId], references: [id])
+  tasks     Task[]
 }
 
 model Label {
-  id String @id @default(cuid())
-
-  name String
-
-  color String
-
+  id        String  @id @default(cuid())
+  name      String
+  color     String
   projectId String
-
-  project Project @relation(fields: [projectId], references: [id])
-
-  tasks Task[]
+  project   Project @relation(fields: [projectId], references: [id])
+  tasks     Task[]
 }
 
 model File {
-  id String @id @default(cuid())
-
-  url String
-
-  name String
-
+  id         String   @id @default(cuid())
+  url        String
+  name       String
   uploadedAt DateTime @default(now())
-
-  projectId String?
-
-  taskId String?
-
-  project Project? @relation(fields: [projectId], references: [id])
-
-  task Task? @relation(fields: [taskId], references: [id])
+  projectId  String?
+  taskId     String?
+  project    Project? @relation(fields: [projectId], references: [id])
+  task       Task?    @relation(fields: [taskId], references: [id])
 }
 
 model Activity {
-  id String @id @default(cuid())
-
-  type ActivityType
-
-  userId String
-
+  id             String       @id @default(cuid())
+  type           ActivityType
+  userId         String
   organizationId String
-
-  projectId String?
-
-  taskId String?
-
-  message String
-
-  createdAt DateTime @default(now())
-
-  user User @relation(fields: [userId], references: [id])
-
-  organization Organization @relation(fields: [organizationId], references: [id])
-
-  project Project? @relation(fields: [projectId], references: [id])
-
-  task Task? @relation(fields: [taskId], references: [id])
-}
-
-model LeaderboardEntry {
-  id String @id @default(cuid())
-
-  organizationId String
-
-  userId String
-
-  score Int @default(0)
-
-  month Int
-
-  year Int
-
-  user User @relation(fields: [userId], references: [id])
-
-  organization Organization @relation(fields: [organizationId], references: [id])
-
-  @@unique([organizationId, userId, month, year])
+  projectId      String?
+  taskId         String?
+  message        String
+  createdAt      DateTime     @default(now())
+  user           User         @relation(fields: [userId], references: [id])
+  organization   Organization @relation(fields: [organizationId], references: [id])
+  project        Project?     @relation(fields: [projectId], references: [id])
+  task           Task?        @relation(fields: [taskId], references: [id])
 }
