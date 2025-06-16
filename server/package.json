@@ -1,27 +1,33 @@
 {
-  "name": "server",
-  "version": "1.0.0",
-  "main": "server.js",
-  "license": "MIT",
+  "name": "backend",
+  "version": "0.1.0",
+  "private": true,
   "scripts": {
-    "dev": "ts-node src/server.ts",
-    "build": "tsc",
-    "start": "node dist/src/server.js"
+    "dev": "next dev --turbopack",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
   },
-  "type": "commonjs",
   "dependencies": {
-    "@clerk/express": "^1.6.0",
     "@graphql-tools/load-files": "^7.0.1",
     "@graphql-tools/merge": "^9.0.24",
     "@graphql-tools/schema": "^10.0.23",
     "@prisma/client": "^6.9.0",
     "graphql": "^16.11.0",
+    "graphql-tag": "^2.12.6",
     "graphql-yoga": "^5.13.5",
-    "prisma": "^6.9.0"
+    "next": "15.3.3",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0"
   },
   "devDependencies": {
-    "@types/node": "^24.0.1",
-    "ts-node": "^10.9.2",
-    "typescript": "^5.8.3"
+    "@graphql-codegen/cli": "^5.0.7",
+    "@tailwindcss/postcss": "^4",
+    "@types/graphql": "^14.5.0",
+    "@types/node": "^20",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "tailwindcss": "^4",
+    "typescript": "^5"
   }
 }
