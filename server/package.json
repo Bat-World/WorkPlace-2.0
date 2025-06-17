@@ -19,6 +19,7 @@
     "graphql-tag": "^2.12.6",
     "graphql-yoga": "^5.13.5",
     "next": "15.3.3",
+    "prisma": "^6.9.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "vercel": "^43.1.0"
