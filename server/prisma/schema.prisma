@@ -40,8 +40,7 @@ enum ActivityType {
 }
 
 model User {
-  id            String             @id @default(cuid())
-  clerkId       String             @unique
+  id            String             @id 
   name          String
   email         String             @unique
   image         String?
@@ -55,12 +54,13 @@ model User {
 }
 
 model Organization {
-  id         String             @id @default(cuid())
-  name       String
-  createdAt  DateTime           @default(now())
-  members    UserOrganization[]
-  projects   Project[]
-  activities Activity[]
+  id          String             @id @default(cuid())
+  name        String
+  description String
+  createdAt   DateTime           @default(now())
+  members     UserOrganization[]
+  projects    Project[]
+  activities  Activity[]
 }
 
 model UserOrganization {
@@ -74,6 +74,7 @@ model UserOrganization {
 
   @@unique([userId, organizationId])
 }
+
 
 model Project {
   id             String       @id @default(cuid())

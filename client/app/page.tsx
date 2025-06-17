@@ -14,8 +14,8 @@ const LandingPage = () => {
           <div className="mb-4">Welcome back, {user.firstName}!</div>
           <button onClick={() => router.push('/profile')}>
             Go to Profile
+            
           </button>
-          <button className="bg-[var(--background)]" onClick={() => router.push(`/message`)}>Chat</button>
         </div>
       ) : (
         <div>
