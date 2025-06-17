@@ -1,16 +1,8 @@
-import { gql } from 'graphql-tag'
+import { mergeTypeDefs } from '@graphql-tools/merge';
+import { typeDefs as addTaskDefs } from './task.schema';
+import { typeDefs as addOrgDefs } from './org.schema';
 
-export const typeDefs = gql`
-  type Task {
-    id: ID!
-    title: String!
-  }
-
-  type Query {
-    getTasks: [Task!]!
-  }
-
-  type Mutation {
-    createTask(title: String!): Task!
-  }
-`
+export const typeDefs = mergeTypeDefs([
+addTaskDefs,
+addOrgDefs
+])
