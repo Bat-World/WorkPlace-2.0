@@ -7,8 +7,8 @@ const SignUpPage = () => {
             <SignUp
                 routing="hash"
                 signInUrl="/auth/sign-in"
-                afterSignUpUrl="/create-profile"
-                redirectUrl="/create-profile"
+                afterSignUpUrl="/"
+                redirectUrl="/"
             />
         </div>
     );
