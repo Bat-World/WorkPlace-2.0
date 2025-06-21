@@ -25,6 +25,7 @@ const LandingPage = () => {
         </div>
 
       )}
+      <button onClick={() => router.push(`/dashboard`)}>dashboard</button>
     </div>
   );
 }
