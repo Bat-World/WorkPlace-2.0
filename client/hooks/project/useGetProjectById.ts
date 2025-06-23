@@ -38,7 +38,10 @@ export const useGetProjectById = ({
                 tasks {
                   id
                   title
+                  description
                   status
+                  priority
+                  dueDate
                 }
               }
             }

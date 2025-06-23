@@ -8,10 +8,10 @@ import {
 import { Button } from "./ui/button";
 import { DialogHeader } from "./ui/dialog";
 import { Input } from "./ui/input";
-import { ProjectTasks } from "./ProjectTasks";
 
 
-export const Tasks = () => {
+
+export const CreateTask = () => {
   return (
     <div className="max-w-[1348px] mx-auto px-4 sm:px-6 lg:px-8 mt-[20px]">
       <div className="flex justify-between items-center h-16">
@@ -36,8 +36,6 @@ export const Tasks = () => {
           </DialogContent>
         </Dialog>
       </div>
-
-      <ProjectTasks/>
     </div>
   );
 };
