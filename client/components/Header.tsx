@@ -46,7 +46,7 @@ export const Header = () => {
             </div>
 
 
-            <div className="group flex items-center gap-2 cursor-pointer hover:text-white transition">
+            <div className="group flex items-center gap-2 cursor-pointer hover:text-white transition" onClick={() => router.push('/tasks')}>
               <img src="/task.svg" alt="Tasks" className="h-6" />
               <p className="text-xl text-[#A5A5A9] group-hover:text-white transition">
                 Таскууд
