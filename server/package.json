@@ -16,22 +16,31 @@
     "@graphql-tools/merge": "^9.0.24",
     "@graphql-tools/schema": "^10.0.23",
     "@prisma/client": "^6.9.0",
+    "express": "^5.1.0",
+    "express-async-handler": "^1.2.0",
     "graphql": "^16.11.0",
     "graphql-tag": "^2.12.6",
     "graphql-yoga": "^5.13.5",
+    "multer": "^2.0.1",
     "next": "15.3.3",
+    "nodemailer": "^7.0.3",
     "prisma": "^6.9.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
-    "vercel": "^43.1.0"
+    "uuid": "^11.1.0",
+    "vercel": "^43.1.0",
+    "zod": "^3.25.67"
   },
   "devDependencies": {
     "@graphql-codegen/cli": "^5.0.7",
     "@tailwindcss/postcss": "^4",
+    "@types/express": "^5.0.3",
     "@types/graphql": "^14.5.0",
     "@types/node": "^20",
+    "@types/nodemailer": "^6.4.17",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "@types/uuid": "^10.0.0",
     "tailwindcss": "^4",
     "typescript": "^5"
   }
