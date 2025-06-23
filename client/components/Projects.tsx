@@ -13,7 +13,10 @@ import { Input } from "@/components/ui/input";
 import { FileBox, Folder, Timer } from "lucide-react";
 import { useState } from "react";
 import { useUser } from "@clerk/nextjs";
-import { useCreateProject } from "@/hooks/ useCreateProject";
+import { useCreateProject } from "@/hooks/project/ useCreateProject";
+import { useGetProjects } from "@/hooks/project/useGetProjects";
+import { toast } from "react-toastify";
+
 
 export const Projects = () => {
 
@@ -21,10 +24,15 @@ export const Projects = () => {
   const [title, setTitle] = useState('')
   const [description, setDescription] = useState('')
   const { mutate: createProject, isPending } = useCreateProject()
+   const {
+    data: projects,
+    isLoading,
+    isError,
+  } = useGetProjects();
 
   const handleCreate = () => {
     if (!title.trim() || !description.trim()) {
-      alert('Please enter title and description')
+      toast.error('Please enter title and description')
       return
     }
     createProject(
@@ -35,13 +43,13 @@ export const Projects = () => {
       },
       {
         onSuccess: (data) => {
-          alert(`Project "${data.title}" created`)
+          toast.success(`Project "${data.title}" created`)
           setTitle('')
           setDescription('')
         },
         onError: (error) => {
           console.error(error)
-          alert('Failed to create project')
+          toast.error('Failed to create project')
         },
       }
     )
@@ -84,40 +92,50 @@ export const Projects = () => {
         </Dialog>
       </div>
 
-      <div className="w-full flex justify-center mt-[15px]">
-        <div className="w-[1280px] h-[86px] bg-[#141318] border border-[#3D3C41] rounded-xl flex items-center justify-between px-6">
-          <div className="flex items-center gap-4">
-            <img
-              src={"/avatar.svg"}
-              alt="avatar"
-              className="w-[60px] h-[60px] rounded-xl"
-            />
-            <div className="flex flex-col gap-1">
-              <p className="text-white text-[20px] font-semibold leading-6">
-                Swipe marketing project
-              </p>
-              <p className="text-white/50 text-[12px] leading-[17px]">
-                Lets do the exact opposite of the first...
-              </p>
+       <div className="w-full flex flex-col gap-4 mt-6">
+        {isLoading && <p className="text-gray-400">Loading projects...</p>}
+        {isError && (
+          <p className="text-red-500">Failed to load projects. Try again.</p>
+        )}
+
+        {projects?.map((project: any) => (
+          <div
+            key={project.id}
+            className="w-full h-[86px] bg-[#141318] border border-[#3D3C41] rounded-xl flex items-center justify-between px-6"
+          >
+            <div className="flex items-center gap-4">
+              <img
+                src={"/avatar.svg"}
+                alt="avatar"
+                className="w-[60px] h-[60px] rounded-xl"
+              />
+              <div className="flex flex-col gap-1">
+                <p className="text-white text-[20px] font-semibold leading-6">
+                  {project.title}
+                </p>
+                <p className="text-white/50 text-[12px] leading-[17px]">
+                  {project.description ?? "No description"}
+                </p>
+              </div>
+            </div>
+            <div className="flex gap-10 items-center">
+              <div className="flex items-center gap-2 bg-[#101014] rounded-[9px] px-3 h-[36px]">
+                <FileBox color="#FFFFFF" strokeWidth={1.5} />
+                <p className="text-white text-[15px]">14</p>
+              </div>
+              <div className="flex items-center gap-2 bg-[#101014] rounded-[9px] px-3 h-[36px]">
+                <Timer color="#A5A5A9" strokeWidth={1.5} />
+                <p className="text-white/50 text-sm">Jan 28</p>
+              </div>
+            </div>
+            <div className="flex -space-x-2">
+              <div className="w-8 h-8 bg-[#8F8F8F] rounded-full border-2 border-white"></div>
+              <div className="w-8 h-8 bg-[#8F8F8F] rounded-full border-2 border-white"></div>
+              <div className="w-8 h-8 bg-[#8F8F8F] rounded-full border-2 border-white"></div>
+              <div className="w-8 h-8 bg-[#8F8F8F] rounded-full border-2 border-white"></div>
             </div>
           </div>
-          <div className="flex gap-10 items-center">
-            <div className="flex items-center gap-2 bg-[#101014] rounded-[9px] px-3 h-[36px]">
-              <FileBox color="#FFFFFF" strokeWidth={1.5} />
-              <p className="text-white text-[15px]">14</p>
-            </div>
-            <div className="flex items-center gap-2 bg-[#101014] rounded-[9px] px-3 h-[36px]">
-              <Timer color="#A5A5A9" strokeWidth={1.5} />
-              <p className="text-white/50 text-sm">Jan 28</p>
-            </div>
-          </div>
-          <div className="flex -space-x-2">
-            <div className="w-8 h-8 bg-[#8F8F8F] rounded-full border-2 border-white"></div>
-            <div className="w-8 h-8 bg-[#8F8F8F] rounded-full border-2 border-white"></div>
-            <div className="w-8 h-8 bg-[#8F8F8F] rounded-full border-2 border-white"></div>
-            <div className="w-8 h-8 bg-[#8F8F8F] rounded-full border-2 border-white"></div>
-          </div>
-        </div>
+        ))}
       </div>
     </div>
   );

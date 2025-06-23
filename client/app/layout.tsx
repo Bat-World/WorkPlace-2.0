@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { ClerkProvider } from "@clerk/nextjs";
 import Providers from "./providers";
+import { ToastContainer, toast } from 'react-toastify';
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -27,15 +28,26 @@ export default function RootLayout({
   return (
     <ClerkProvider>
       <Providers>
-         <html lang="en" className="bg-black">
-        <body
-          className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-        >
-          {children}
-        </body>
-      </html>
+        <html lang="en" className="bg-black">
+          <body
+            className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+          >
+            {children}
+          </body>
+        </html>
+        <ToastContainer
+          position="bottom-right"
+          autoClose={3000}
+          hideProgressBar={false}
+          closeOnClick
+          pauseOnHover
+          draggable
+          toastClassName="Toastify__toast"
+          progressClassName="Toastify__progress-bar"
+        />
+
       </Providers>
-     
+
     </ClerkProvider>
 
   );
