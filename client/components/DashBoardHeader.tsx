@@ -1,6 +1,12 @@
 "use client";
 
+import { useUser } from "@clerk/nextjs";
+
 export const DashBoardHeader = () => {
+
+  const { user, isSignedIn } = useUser();
+  console.log("username", user?.username);
+
   return (
     <div className="bg-black border-b border-gray-700 px-6 py-4 text-white ">
       <div className="flex items-center justify-between mx-auto max-w-7xl">
@@ -38,6 +44,7 @@ export const DashBoardHeader = () => {
               </p>
             </div>
 
+
             <div className="group flex items-center gap-2 cursor-pointer hover:text-white transition">
               <img src="/task.svg" alt="Tasks" className="h-6" />
               <p className="text-xl text-[#A5A5A9] group-hover:text-white transition">
@@ -55,12 +62,14 @@ export const DashBoardHeader = () => {
 
         <div className="flex items-center gap-3 bg-[#101014] border border-[#26282A] rounded-full px-4 py-2">
           <img
-            src={"/user.svg"}
+            src={user?.imageUrl}
             alt="User"
             className="w-12 h-12 rounded-full border border-[#434043]"
           />
           <div className="flex flex-col">
-            <span className="text-sm">Broklyn Simmons</span>
+            <span className="text-sm">{user?.firstName}</span>
+
+
             <span className="text-xs bg-white text-black px-2 rounded-xl w-fit">
               Admin
             </span>
