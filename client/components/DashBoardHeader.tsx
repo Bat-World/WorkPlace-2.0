@@ -5,7 +5,6 @@ import { useUser } from "@clerk/nextjs";
 export const DashBoardHeader = () => {
 
   const { user, isSignedIn } = useUser();
-  console.log("username", user?.username);
 
   return (
     <div className="bg-black border-b border-gray-700 px-6 py-4 text-white ">

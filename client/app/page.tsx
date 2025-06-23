@@ -1,14 +1,19 @@
 'use client'
 
-import { useUser, useAuth } from '@clerk/nextjs'
+import { useUser } from '@clerk/nextjs'
 import { useRouter } from 'next/navigation'
+import { useEffect } from 'react'
 import { Button } from '@/components/ui/button'
-
 
 export default function DashboardPage() {
   const { user, isSignedIn } = useUser()
-  const { getToken } = useAuth()
   const router = useRouter()
+
+  useEffect(() => {
+    if (isSignedIn) {
+      router.push('/dashboard')
+    }
+  }, [isSignedIn, router])
 
   if (!isSignedIn) {
     return (
@@ -18,7 +23,8 @@ export default function DashboardPage() {
         <Button onClick={() => router.push(`/auth/sign-up`)}>Sign Up</Button>
       </div>
     )
-  } else {
-    router.push("/dashboard")
   }
+
+  
+  return <div className="p-6">Redirecting to dashboard...</div>
 }
