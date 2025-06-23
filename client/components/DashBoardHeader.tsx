@@ -39,7 +39,7 @@ export const DashBoardHeader = () => {
             <div className="group flex items-center gap-2 cursor-pointer hover:text-white transition">
               <img src="/folder.svg" alt="Projects" className="h-6" />
               <p className="text-xl text-[#A5A5A9] group-hover:text-white transition">
-                Төслүүд
+g                Төслүүд
               </p>
             </div>
 
