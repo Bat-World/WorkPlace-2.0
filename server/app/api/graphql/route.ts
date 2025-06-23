@@ -2,21 +2,29 @@ import { createYoga, createSchema } from 'graphql-yoga';
 import { typeDefs } from '@/graphql/typeDefs';
 import { resolvers } from '@/graphql/resolvers';
 import { NextRequest } from 'next/server';
-import { createContext } from '@/context'; 
+import { createContext } from '@/context';
 
-const yoga = createYoga({
+const yoga = createYoga<{
+  req: NextRequest
+}>({
+  graphqlEndpoint: '/api/graphql',
   schema: createSchema({
     typeDefs,
     resolvers,
   }),
-  context: createContext,
-  graphqlEndpoint: '/api/graphql',
+  context: async ({ request }) => await createContext(request),
+  cors: {
+    origin: ['http://localhost:3000', 'http://localhost:3002'], 
+    credentials: true,
+  },
 });
 
 export const POST = async (req: NextRequest) => {
-  return yoga.handleRequest(req, {});
+  return yoga.handleRequest(req, { req });
 };
 
 export const GET = async (req: NextRequest) => {
-  return yoga.handleRequest(req, {});
+  return yoga.handleRequest(req, { req });
 };
+
+
