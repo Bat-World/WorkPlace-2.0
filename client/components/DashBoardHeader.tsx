@@ -6,12 +6,6 @@ export const DashBoardHeader = () => {
 
   const { user, isSignedIn } = useUser();
 
-
-import { useRouter } from "next/navigation";
-import { Projects } from "./Projects";
-
-export const DashBoardHeader = () => {
-  const router = useRouter()
   return (
     <div className="bg-black border-b border-gray-700 px-6 py-4 text-white ">
       <div className="flex items-center justify-between mx-auto max-w-7xl">
@@ -37,15 +31,15 @@ export const DashBoardHeader = () => {
           <div className="flex items-center gap-10">
             <div className="group flex items-center gap-2 cursor-pointer hover:text-white transition">
               <img src="/home.svg" alt="Home" className="h-6" />
-              <p className="text-xl text-[#A5A5A9] group-hover:text-white transition" >
+              <p className="text-xl text-[#A5A5A9] group-hover:text-white transition">
                 Нүүр
               </p>
             </div>
 
             <div className="group flex items-center gap-2 cursor-pointer hover:text-white transition">
               <img src="/folder.svg" alt="Projects" className="h-6" />
-              <p className="text-xl text-[#A5A5A9] group-hover:text-white transition" onClick={() => router.push('/projects')}>
-                Төслүүд
+              <p className="text-xl text-[#A5A5A9] group-hover:text-white transition">
+g                Төслүүд
               </p>
             </div>
 
