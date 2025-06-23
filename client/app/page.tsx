@@ -121,6 +121,7 @@ export default function DashboardPage() {
             </DialogContent>
           </Dialog>
         </div>
+      <button onClick={() => router.push(`/dashboard`)}>dashboard</button>
 
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
           {Array(4)
@@ -148,6 +149,7 @@ export default function DashboardPage() {
             ))}
         </div>
       </div>
+
     </div>
   )
 }
