@@ -13,10 +13,10 @@ const yoga = createYoga<{
     resolvers,
   }),
   context: async ({ request }) => await createContext(request),
-  cors: {
-    origin: ['http://localhost:3000', 'http://localhost:3002'], 
-    credentials: true,
-  },
+cors: {
+  origin: ['http://localhost:3000', 'http://localhost:3001', 'http://remotia-client.vercel.app'],
+  credentials: true,
+}
 });
 
 export const POST = async (req: NextRequest) => {
