@@ -12,17 +12,17 @@ import {
 import { Input } from "@/components/ui/input";
 import { FileBox, Folder, Timer } from "lucide-react";
 import { useState } from "react";
-import { useUser } from "@clerk/nextjs";
 import { useCreateProject } from "@/hooks/project/ useCreateProject";
 import { useGetProjects } from "@/hooks/project/useGetProjects";
 import { toast } from "react-toastify";
+import { useRouter } from "next/navigation";
 
 
 export const Projects = () => {
 
-  const { isSignedIn } = useUser()
   const [title, setTitle] = useState('')
   const [description, setDescription] = useState('')
+  const router = useRouter();
   const { mutate: createProject, isPending } = useCreateProject()
    const {
     data: projects,
@@ -101,7 +101,8 @@ export const Projects = () => {
         {projects?.map((project: any) => (
           <div
             key={project.id}
-            className="w-full h-[86px] bg-[#141318] border border-[#3D3C41] rounded-xl flex items-center justify-between px-6"
+            className="w-full h-[86px] bg-[#141318] border border-[#3D3C41] rounded-xl flex items-center justify-between px-6 cursor-pointer"
+            onClick={() => router.push(`/projectDetail/${project.id}`)}
           >
             <div className="flex items-center gap-4">
               <img

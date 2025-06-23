@@ -4,6 +4,8 @@ import "./globals.css";
 import { ClerkProvider } from "@clerk/nextjs";
 import Providers from "./providers";
 import { ToastContainer, toast } from 'react-toastify';
+import { Header } from "@/components/Header";
+
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -28,6 +30,7 @@ export default function RootLayout({
   return (
     <ClerkProvider>
       <Providers>
+        <Header/>
         <html lang="en" className="bg-black">
           <body
             className={`${geistSans.variable} ${geistMono.variable} antialiased`}

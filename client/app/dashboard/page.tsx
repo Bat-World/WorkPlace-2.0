@@ -1,10 +1,10 @@
-import { DashBoardHeader } from "@/components/DashBoardHeader"
+import { Header } from "@/components/Header"
 
 
 export default function DashBoardPage () {
     return(
     <div>
-        <DashBoardHeader/>
+        <Header/>
     </div>
         
     )
