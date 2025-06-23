@@ -13,11 +13,11 @@ export default function TaskDetail() {
     isError,
   } = useGetProjectById({ projectId });
 
-  if (isLoading) return <p className="text-white">Loading project...</p>;
-  if (isError) return <p className="text-red-500">Failed to load project.</p>;
+  if (isLoading) return <p className="text-white bg-black">Loading project...</p>;
+  if (isError) return <p className="text-red-500 bg-black">Failed to load project.</p>;
 
   return (
-    <div className="text-white">
+    <div className="text-white bg-black">
       <h1 className="text-2xl font-bold mb-2">Project: {project.title}</h1>
       <p className="mb-4 text-gray-400">{project.description}</p>
 
