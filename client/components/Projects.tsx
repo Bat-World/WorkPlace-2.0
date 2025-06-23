@@ -16,6 +16,8 @@ import { useCreateProject } from "@/hooks/project/ useCreateProject";
 import { useGetProjects } from "@/hooks/project/useGetProjects";
 import { toast } from "react-toastify";
 import { useRouter } from "next/navigation";
+import { formatDistanceToNow } from 'date-fns';
+
 
 
 export const Projects = () => {
@@ -24,7 +26,7 @@ export const Projects = () => {
   const [description, setDescription] = useState('')
   const router = useRouter();
   const { mutate: createProject, isPending } = useCreateProject()
-   const {
+  const {
     data: projects,
     isLoading,
     isError,
@@ -56,7 +58,7 @@ export const Projects = () => {
   }
 
   return (
-    <div className="max-w-[1348px] mx-auto px-4 sm:px-6 lg:px-8 mt-[20px]">
+    <div className="max-w-[1348px] mx-auto px-4 sm:px-6 lg:px-8 ">
       <div className="flex justify-between items-center h-16">
         <div className="flex items-center space-x-4">
           <div className="text-2xl font-bold text-white">Төслүүд</div>
@@ -92,7 +94,7 @@ export const Projects = () => {
         </Dialog>
       </div>
 
-       <div className="w-full flex flex-col gap-4 mt-6">
+      <div className="w-full flex flex-col gap-4 mt-6">
         {isLoading && <p className="text-gray-400">Loading projects...</p>}
         {isError && (
           <p className="text-red-500">Failed to load projects. Try again.</p>
@@ -126,7 +128,10 @@ export const Projects = () => {
               </div>
               <div className="flex items-center gap-2 bg-[#101014] rounded-[9px] px-3 h-[36px]">
                 <Timer color="#A5A5A9" strokeWidth={1.5} />
-                <p className="text-white/50 text-sm">Jan 28</p>
+                <p className="text-white/50 text-sm">
+                  {formatDistanceToNow(new Date(project.createdAt), { addSuffix: true })}
+                </p>
+
               </div>
             </div>
             <div className="flex -space-x-2">

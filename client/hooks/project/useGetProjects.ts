@@ -24,6 +24,7 @@ export const useGetProjects = () => {
               getProjects {
                 id
                 title
+                createdAt
               }
             }
           `,
