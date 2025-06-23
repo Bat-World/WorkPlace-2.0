@@ -19,4 +19,12 @@ const yoga = createYoga<{
   },
 });
 
-export { yoga as GET, yoga as POST, yoga as OPTIONS };
+export const POST = async (req: NextRequest) => {
+  return yoga.handleRequest(req, { req });
+};
+
+export const GET = async (req: NextRequest) => {
+  return yoga.handleRequest(req, { req });
+};
+
+
