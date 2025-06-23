@@ -1,11 +1,9 @@
-import { DashBoardHeader } from "@/components/DashBoardHeader";
-import { Projects } from "@/components/Projects";
+import { Projects } from "@/app/projects/_components/Projects";
 
-export default function ProjectsPage () {
-    return(
-        <div className="bg-black">
-            <DashBoardHeader/>
-            <Projects/>
-        </div>
-    )
+export default function ProjectsPage() {
+  return (
+    <div className="w-full h-screen">
+      <Projects />
+    </div>
+  );
 }
