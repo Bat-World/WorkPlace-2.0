@@ -1,10 +1,12 @@
 "use client";
 
 import { useUser } from "@clerk/nextjs";
+import { useRouter } from "next/navigation";
 
 export const DashBoardHeader = () => {
 
   const { user, isSignedIn } = useUser();
+  const router = useRouter();
 
   return (
     <div className="bg-black border-b border-gray-700 px-6 py-4 text-white ">
@@ -36,10 +38,10 @@ export const DashBoardHeader = () => {
               </p>
             </div>
 
-            <div className="group flex items-center gap-2 cursor-pointer hover:text-white transition">
+            <div className="group flex items-center gap-2 cursor-pointer hover:text-white transition" onClick={() => router.push('/projects')}>
               <img src="/folder.svg" alt="Projects" className="h-6" />
-              <p className="text-xl text-[#A5A5A9] group-hover:text-white transition">
-g                Төслүүд
+              <p className="text-xl text-[#A5A5A9] group-hover:text-white transition">               
+                Төслүүд
               </p>
             </div>
 
