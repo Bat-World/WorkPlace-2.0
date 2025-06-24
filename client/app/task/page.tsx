@@ -1,24 +1,5 @@
 import React from "react";
 import Info from "./_components/Info";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Button } from "@/components/ui/button";
-import {
-  Bookmark,
-  BookmarkX,
-  Clock,
-  Dot,
-  Ellipsis,
-  PencilRuler,
-} from "lucide-react";
-import { Card, CardContent } from "@/components/ui/card";
-import {
-  Carousel,
-  CarouselContent,
-  CarouselItem,
-  CarouselNext,
-  CarouselPrevious,
-} from "@/components/ui/carousel";
-import { Separator } from "@/components/ui/separator";
 import Sidebar from "./_components/Sidebar";
 import TaskInfo from "./_components/TaskInfo";
 

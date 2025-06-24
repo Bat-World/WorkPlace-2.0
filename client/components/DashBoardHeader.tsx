@@ -8,13 +8,8 @@ import {
   DropdownMenuContent,
   DropdownMenuGroup,
   DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuPortal,
   DropdownMenuSeparator,
   DropdownMenuShortcut,
-  DropdownMenuSub,
-  DropdownMenuSubContent,
-  DropdownMenuSubTrigger,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -52,7 +47,7 @@ export const DashBoardHeader = () => {
   }));
 
   return (
-    <div className="w-full border-b border-[#252429] flex flex-wrap justify-between items-center py-3 px-4 md:px-10 lg:px-28 xl:px-32 gap-y-2 relative">
+    <div className="w-full border-[#252429] flex flex-wrap justify-between items-center py-3 px-4 md:px-10 lg:px-28 xl:px-32 gap-y-2 relative">
       <div className="flex gap-8 items-center w-60 min-w-[150px]">
         <p className="text-[var(--background)] text-xl">Remotia</p>
         <DropdownMenu>
