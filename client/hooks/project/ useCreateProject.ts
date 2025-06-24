@@ -1,17 +1,24 @@
-import { useMutation } from '@tanstack/react-query'
-import { useAuth } from '@clerk/nextjs'
-import { sendRequest } from '@/lib/sendRequest'
+import { useMutation } from '@tanstack/react-query';
+import { useAuth, useUser } from '@clerk/nextjs';
+import { sendRequest } from '@/lib/sendRequest';
 
 export const useCreateProject = () => {
-  const { getToken } = useAuth()
+  const { getToken } = useAuth();
+  const { user } = useUser(); 
 
   return useMutation({
     mutationFn: async (input: {
-      title: string
-      description: string
-      organizationId: string
+      title: string;
+      description: string;
+      organizationId: string;
     }) => {
-      const token = await getToken()
+      const token = await getToken();
+      const userId = user?.id;
+
+      if (!userId) {
+        throw new Error('User is not loaded or not signed in');
+      }
+
       const res = await sendRequest.post(
         '/api/graphql',
         {
@@ -29,10 +36,13 @@ export const useCreateProject = () => {
           headers: {
             Authorization: `Bearer ${token}`,
             'Content-Type': 'application/json',
+            'x-user-id': userId, 
           },
         }
-      )
-      return res.data.data.createProject
+      );
+
+      return res.data.data.createProject;
     },
-  })
-}
+  });
+};
+
