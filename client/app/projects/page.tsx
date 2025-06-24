@@ -1,11 +1,9 @@
-"use client"
+import { Projects } from "@/app/projects/_components/Projects";
 
-import { Projects } from "@/components/Projects";
-
-export default function ProjectsPage () {
-    return(
-        <div className="bg-black">
-            <Projects/>
-        </div>
-    )
+export default function ProjectsPage() {
+  return (
+    <div className="w-full h-screen">
+      <Projects />
+    </div>
+  );
 }
