@@ -3,6 +3,23 @@ import { gql } from 'graphql-tag';
 export const typeDefs = gql`
   scalar DateTime
 
+  enum Role {
+    ADMIN
+    DIRECTOR
+    MEMBER
+  }
+
+  type OrganizationMember {
+    id: ID!
+    user: User!
+    userId: ID!
+    organization: Organization!
+    organizationId: ID!
+    role: Role!
+    createdAt: DateTime!
+    updatedAt: DateTime!
+  }
+
   type User {
     id: ID!
     email: String!
@@ -15,6 +32,7 @@ export const typeDefs = gql`
     id: ID!
     name: String!
     image: String
+    ownerId: ID!
     members(skip: Int, take: Int): [User!]!
     projects: [Project!]!
   }
@@ -23,6 +41,7 @@ export const typeDefs = gql`
     id: ID!
     title: String!
     description: String
+    status: String
     tasks(skip: Int, take: Int): [Task!]!
     organization: Organization!
     createdAt: DateTime!
@@ -44,6 +63,8 @@ export const typeDefs = gql`
     labels: [Label!]
     createdAt: DateTime!
     updatedAt: DateTime!
+    createdBy: User!
+    # attachments: [Attachment!] # Uncomment and define Attachment type if you want attachments
   }
 
   type Comment {
@@ -79,6 +100,18 @@ export const typeDefs = gql`
     fileUrl: String!
   }
 
+  type Invitation {
+    id: ID!
+    email: String!
+    organizationId: ID!
+    invitedById: ID!
+    token: String!
+    accepted: Boolean!
+    createdAt: DateTime!
+    acceptedAt: DateTime
+    role: Role!
+  }
+
   input CreateTaskInput {
     title: String!
     description: String
@@ -108,6 +141,7 @@ export const typeDefs = gql`
 
   input CreateOrganizationInput {
     name: String!
+    image: String
     userId: ID
   }
 
@@ -128,14 +162,15 @@ export const typeDefs = gql`
   }
 
   type Query {
-    getTasks(userId: ID): [Task!]!
+    getTasks(projectId: ID, userId: ID): [Task!]!
     getTaskById(taskId: ID!, userId: ID): Task
     getReviewTasks(orgId: ID!, skip: Int, take: Int, userId: ID): [Task!]!
-    getProjects(userId: ID): [Project!]!
+    getProjects(userId: ID, orgId: ID): [Project!]!
     getProjectById(projectId: ID!, skip: Int, take: Int, userId: ID): Project
     getOrganizations(userId: ID): [Organization!]!
     getOrganizationById(orgId: ID!, skip: Int, take: Int, userId: ID): Organization
     getMembersByOrgId(orgId: ID!, skip: Int, take: Int, userId: ID): [User!]!
+    getInvitationsByOrgId(orgId: ID!): [Invitation!]!
     getComments(taskId: ID!, skip: Int, take: Int, userId: ID): [Comment!]!
     getLogs(taskId: ID!, userId: ID): [Log!]!
   }
@@ -159,8 +194,11 @@ export const typeDefs = gql`
     uploadFile(taskId: ID!, fileUrl: String!, actingUserId: ID): FileUploadResult!
     createProject(input: CreateProjectInput!): Project!
     createOrganization(input: CreateOrganizationInput!): Organization!
-    inviteMember(input: InviteMemberInput!): InviteResult!
-    acceptInvite(input: AcceptInviteInput!): AcceptInviteResult!
+    inviteMember(input: InviteMemberInput!): Invitation!
+    acceptInvite(input: AcceptInviteInput!): Invitation!
     updateOrganizationImage(input: UpdateOrganizationImageInput!): Organization!
+    updateOrganization(orgId: ID!, name: String!): Organization
+    updateMemberRole(orgId: ID!, memberId: ID!, role: Role!): OrganizationMember
+    removeMember(orgId: ID!, memberId: ID!): Boolean
   }
 `; 

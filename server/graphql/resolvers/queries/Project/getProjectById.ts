@@ -5,12 +5,12 @@ export const getProjectById = async (_: any, args: any, context: any) => {
   const project = await context.prisma.project.findUnique({
     where: { id: projectId },
     include: {
-      organization: { include: { members: true } },
+      organization: { include: { organizationMembers: true } },
       tasks: { skip, take },
     },
   });
   if (!project) throw new Error('Project not found');
-  const isMember = project.organization.members.some((m: any) => m.id === userId);
+  const isMember = project.organization.organizationMembers.some((m: any) => m.userId === userId);
   if (!isMember) throw new Error('Not a member of the organization');
   return project;
 }; 

@@ -7,7 +7,7 @@ interface CreateTaskInput {
   description?: string;
   projectId: string;
   assignedToId?: string;
-  dueDate?: string;
+  dueDate?: Date;
   priority?: string;
 }
 
@@ -22,6 +22,11 @@ export const useCreateTask = () => {
 
       if (!userId) {
         throw new Error("User is not authenticated.");
+      }
+
+      let dueDate = input.dueDate;
+      if (typeof dueDate === "string" && dueDate) {
+        dueDate = new Date(dueDate);
       }
 
       const res = await sendRequest.post(
@@ -42,6 +47,7 @@ export const useCreateTask = () => {
           variables: {
             input: {
               ...input,
+              dueDate: dueDate || undefined,
               userId, 
             },
           },

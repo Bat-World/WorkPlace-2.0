@@ -9,6 +9,7 @@ import { getOrganizationById } from './queries/Organization/getOrganizationById'
 import { getMembersByOrgId } from './queries/Organization/getMembersByOrgId'
 import { getComments } from './queries/Comment/getComments'
 import { getLogs } from './queries/Log/getLogs'
+import { getInvitationsByOrgId } from './queries/Organization/getInvitationsByOrgId'
 
 // Mutations
 import { createTask } from './mutations/Task/createTask'
@@ -26,6 +27,9 @@ import { createOrganization } from './mutations/Organization/createOrganization'
 import { inviteMember } from './mutations/Organization/inviteMember'
 import { acceptInvite } from './mutations/Organization/acceptInvite'
 import { updateOrganizationImage } from './mutations/Organization/updateOrganizationImage'
+import { updateOrganization } from './mutations/Organization/updateOrganization'
+import { updateMemberRole } from "./mutations/Organization/updateMemberRole";
+import { removeMember } from "./mutations/Organization/removeMember";
 
 export const resolvers = {
   Query: {
@@ -37,6 +41,7 @@ export const resolvers = {
     getOrganizations,
     getOrganizationById,
     getMembersByOrgId,
+    getInvitationsByOrgId,
     getComments,
     getLogs,
   },
@@ -56,6 +61,9 @@ export const resolvers = {
     inviteMember,
     acceptInvite,
     updateOrganizationImage,
+    updateOrganization,
+    updateMemberRole,
+    removeMember,
   },
   Organization: {
     members: async (
@@ -91,6 +99,9 @@ export const resolvers = {
   Task: {
     project: async (parent: any, _args: any, context: any) => {
       return context.prisma.project.findUnique({ where: { id: parent.projectId } });
+    },
+    createdBy: async (parent: any, _args: any, context: any) => {
+      return context.prisma.user.findUnique({ where: { id: parent.createdById } });
     },
   },
 }
