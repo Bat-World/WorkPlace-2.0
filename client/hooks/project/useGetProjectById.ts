@@ -30,11 +30,10 @@ export const useGetProjectById = ({
         '/api/graphql',
         {
           query: `
-            query GetProjectById($projectId: ID!, $skip: Int, $take: Int, $userId: ID) {
-              getProjectById(projectId: $projectId, skip: $skip, take: $take, userId: $userId) {
+            query GetTasksByProject($projectId: ID!) {
+              getProjectById(projectId: $projectId) {
                 id
                 title
-                description
                 tasks {
                   id
                   title
@@ -42,15 +41,32 @@ export const useGetProjectById = ({
                   status
                   priority
                   dueDate
+                  assignedTo {
+                    id
+                    name
+                    avatarUrl
+                  }
+                  labels {
+                    id
+                    name
+                    color
+                  }
+                  comments {
+                    id
+                    content
+                    author {
+                      id
+                      name
+                      avatarUrl
+                    }
+                    createdAt
+                  }
                 }
               }
             }
           `,
           variables: {
             projectId,
-            skip,
-            take,
-            userId,
           },
         },
         {
