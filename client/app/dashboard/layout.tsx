@@ -23,8 +23,10 @@ export default function RootLayout({
   return (
     <ClerkProvider>
       <Providers>
+        <html lang="en">
           <DashBoardHeader />
-          {children}
+          <body className="antialiased">{children}</body>
+        </html>
       </Providers>
     </ClerkProvider>
   );
