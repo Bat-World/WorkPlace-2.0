@@ -15,7 +15,6 @@ export const createTask = async (_: any, args: any, context: any) => {
     },
   });
 
-  // Fetch the full task with all fields (including relations)
   return context.prisma.task.findUnique({
     where: { id: newTask.id },
     include: { assignedTo: true },

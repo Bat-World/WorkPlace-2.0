@@ -11,23 +11,17 @@ export const typeDefs = gql`
     role: String
   }
 
-  type Organization {
-    id: ID!
-    name: String!
-    image: String
-    members(skip: Int, take: Int): [User!]!
-    projects: [Project!]!
-  }
-
-  type Project {
-    id: ID!
-    title: String!
-    description: String
-    tasks(skip: Int, take: Int): [Task!]!
-    organization: Organization!
-    createdAt: DateTime!
-    updatedAt: DateTime!
-  }
+type Project {
+  id: ID!
+  title: String!
+  description: String
+  tasks(skip: Int, take: Int): [Task!]!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  createdBy: User!       
+  members: [User!]       
+invitations: [Invitation!]
+}
 
   type Task {
     id: ID!
@@ -45,6 +39,16 @@ export const typeDefs = gql`
     createdAt: DateTime!
     updatedAt: DateTime!
   }
+    type Invitation {
+  id: ID!
+  email: String!
+  token: String!
+  accepted: Boolean!
+  createdAt: DateTime!
+  acceptedAt: DateTime
+  invitedBy: User!
+}
+
 
   type Comment {
     id: ID!
@@ -99,32 +103,21 @@ export const typeDefs = gql`
     userId: ID
   }
 
-  input CreateProjectInput {
-    title: String!
-    description: String
-    organizationId: ID!
-    userId: ID
-  }
+input CreateProjectInput {
+  title: String!
+  description: String
+}
 
-  input CreateOrganizationInput {
-    name: String!
-    userId: ID
-  }
 
-  input InviteMemberInput {
-    orgId: ID!
-    email: String!
-    userId: ID
-  }
+input InviteMemberInput {
+  projectId: ID!
+  email: String!
+  userId: ID
+}
 
   input AcceptInviteInput {
     token: String!
     userId: ID
-  }
-
-  input UpdateOrganizationImageInput {
-    orgId: ID!
-    image: String!
   }
 
   type Query {
@@ -133,9 +126,6 @@ export const typeDefs = gql`
     getReviewTasks(orgId: ID!, skip: Int, take: Int, userId: ID): [Task!]!
     getProjects(userId: ID): [Project!]!
     getProjectById(projectId: ID!, skip: Int, take: Int, userId: ID): Project
-    getOrganizations(userId: ID): [Organization!]!
-    getOrganizationById(orgId: ID!, skip: Int, take: Int, userId: ID): Organization
-    getMembersByOrgId(orgId: ID!, skip: Int, take: Int, userId: ID): [User!]!
     getComments(taskId: ID!, skip: Int, take: Int, userId: ID): [Comment!]!
     getLogs(taskId: ID!, userId: ID): [Log!]!
   }
@@ -158,9 +148,7 @@ export const typeDefs = gql`
     addLog(taskId: ID!, message: String!, actingUserId: ID): Log!
     uploadFile(taskId: ID!, fileUrl: String!, actingUserId: ID): FileUploadResult!
     createProject(input: CreateProjectInput!): Project!
-    createOrganization(input: CreateOrganizationInput!): Organization!
     inviteMember(input: InviteMemberInput!): InviteResult!
     acceptInvite(input: AcceptInviteInput!): AcceptInviteResult!
-    updateOrganizationImage(input: UpdateOrganizationImageInput!): Organization!
   }
 `; 

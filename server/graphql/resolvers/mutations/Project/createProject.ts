@@ -1,8 +1,8 @@
 export const createProject = async (_: any, args: any, context: any) => {
-  const { title, description, organizationId } = args.input;
+  const { title, description } = args.input;
   const userId = context.userId;
 
-  if (!userId) throw new Error('Unauthorized');  
+  if (!userId) throw new Error('Unauthorized');
 
   const existingUser = await context.prisma.user.findUnique({
     where: { id: userId },
@@ -14,8 +14,10 @@ export const createProject = async (_: any, args: any, context: any) => {
     data: {
       title,
       description,
-      organizationId,
       createdById: userId,
+      members: {
+        connect: { id: userId },
+      },
     },
   });
 

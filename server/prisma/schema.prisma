@@ -34,34 +34,37 @@ enum Priority {
   HIGH
 }
 
-model Organization {
-  id          String    @id @default(cuid())
-  name        String
-  image       String?
-  owner       User      @relation("Organization_ownerId", fields: [ownerId], references: [id])
-  ownerId     String
-  members     User[]    @relation("OrgMembers")
-  projects    Project[]
-  invitations Invitation[]
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt
+
+model Project {
+  id             String         @id @default(cuid())
+  title          String
+  description    String?
+  status         ProjectStatus  @default(NOT_STARTED)
+  labels         Label[]
+  tasks          Task[]
+  members        User[]         @relation("ProjectMembers")
+  createdBy      User           @relation("CreatedProjects", fields: [createdById], references: [id])
+  createdById    String
+  invitations    Invitation[]   
+  createdAt      DateTime       @default(now())
+  updatedAt      DateTime       @updatedAt
 }
 
 model Invitation {
-  id            String      @id @default(cuid())
-  email         String
-  organization  Organization @relation(fields: [organizationId], references: [id])
-  organizationId String
-  invitedBy     User        @relation("Invitation_invitedById", fields: [invitedById], references: [id])
-  invitedById   String
-  token         String      @unique
-  accepted      Boolean     @default(false)
-  createdAt     DateTime    @default(now())
-  acceptedAt    DateTime?
+  id          String     @id @default(cuid())
+  email       String
+  project     Project    @relation(fields: [projectId], references: [id]) 
+  projectId   String
+  invitedBy   User       @relation("Invitation_invitedById", fields: [invitedById], references: [id])
+  invitedById String
+  token       String     @unique
+  accepted    Boolean    @default(false)
+  createdAt   DateTime   @default(now())
+  acceptedAt  DateTime?
 }
 
 model User {
-  id               String     @id 
+  id               String     @id
   email            String     @unique
   name             String?
   avatarUrl        String?
@@ -71,30 +74,13 @@ model User {
   logs             Log[]
   comments         Comment[]
   projects         Project[]  @relation("ProjectMembers")
-  createdProjects  Project[]  @relation("CreatedProjects") 
+  createdProjects  Project[]  @relation("CreatedProjects")
+  invitations      Invitation[]   @relation("Invitation_invitedById")
+  reviewedTasks    Task[]         @relation("TaskReviewers")
   createdAt        DateTime   @default(now())
-  updatedAt        DateTime   @updatedAt @default(now())   
-  organizations   Organization[] @relation("OrgMembers")
-  ownedOrgs       Organization[] @relation("Organization_ownerId")
-  invitations     Invitation[]   @relation("Invitation_invitedById")
-  reviewedTasks   Task[]         @relation("TaskReviewers")
+  updatedAt        DateTime   @updatedAt @default(now())
 }
 
-model Project {
-  id          String         @id @default(cuid())
-  title       String
-  description String?
-  status      ProjectStatus  @default(NOT_STARTED)
-  labels      Label[]
-  tasks       Task[]
-  members     User[]         @relation("ProjectMembers")
-  createdBy   User           @relation("CreatedProjects", fields: [createdById], references: [id])
-  createdById String
-  createdAt   DateTime       @default(now())
-  updatedAt   DateTime       @updatedAt
-  organization   Organization @relation(fields: [organizationId], references: [id])
-  organizationId String
-}
 
 model Task {
   id           String     @id @default(cuid())

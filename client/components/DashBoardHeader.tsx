@@ -1,6 +1,5 @@
 "use client";
 
-import { useUser } from "@clerk/nextjs";
 import { useRouter, usePathname } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import {
@@ -27,9 +26,11 @@ import {
   Menu,
 } from "lucide-react";
 import { useState } from "react";
+import { useGetProjects } from "@/hooks/project/useGetProjects";
 
 export const DashBoardHeader = () => {
-  const { user, isSignedIn } = useUser();
+    const { data: projects, isLoading, error } = useGetProjects();
+
   const router = useRouter();
   const pathname = usePathname();
   const [mobileNavOpen, setMobileNavOpen] = useState(false);
