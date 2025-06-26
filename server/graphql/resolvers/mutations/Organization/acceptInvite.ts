@@ -1,37 +1,25 @@
-import { PrismaClient } from "@prisma/client";
-import { GraphQLError } from "graphql";
+export const acceptInvite = async (_: any, args: any, context: any) => {
+  const { token, userId: inputUserId } = args.input;
+  const userId = inputUserId || context?.userId;
+  if (!userId) throw new Error('Unauthorized');
 
-interface IContext {
-  prisma: PrismaClient;
-  userId: string;
-}
+  // Find invitation
+  const invite = await context.prisma.invitation.findUnique({
+    where: { token },
+  });
+  if (!invite || invite.accepted) throw new Error('Invalid or already accepted invitation');
 
-export const acceptInvite = async (
-  _: any,
-  { input }: { input: { token: string } },
-  { prisma, userId }: IContext
-) => {
-  const invitation = await prisma.invitation.findUnique({
-    where: { token: input.token },
-    select: {
-      id: true,
-      accepted: true,
-      organizationId: true,
-    },
+  // Add user to org
+  await context.prisma.organization.update({
+    where: { id: invite.organizationId },
+    data: { members: { connect: { id: userId } } },
   });
-  if (!invitation || invitation.accepted) {
-    throw new GraphQLError("Invalid or already accepted invitation.");
-  }
-  await prisma.organizationMember.create({
-    data: {
-      userId,
-      organizationId: invitation.organizationId,
-      role: "MEMBER",
-    },
-  });
-  const updatedInvitation = await prisma.invitation.update({
-    where: { id: invitation.id },
+
+  // Mark invitation as accepted
+  await context.prisma.invitation.update({
+    where: { token },
     data: { accepted: true, acceptedAt: new Date() },
   });
-  return updatedInvitation;
-};
+
+  return { success: true };
+}; 

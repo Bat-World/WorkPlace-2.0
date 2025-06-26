@@ -1,38 +1,31 @@
-import { PrismaClient } from '@prisma/client';
-import { GraphQLError } from 'graphql';
 import { v4 as uuidv4 } from 'uuid';
 import { sendInviteEmail } from '../../../../src/utils/email';
 
-interface IContext {
-  prisma: PrismaClient;
-  userId: string;
-}
+export const inviteMember = async (_: any, args: any, context: any) => {
+  const { orgId, email, userId: inputUserId } = args.input;
+  const userId = inputUserId || context?.userId;
+  if (!userId) throw new Error('Unauthorized');
 
-export const inviteMember = async (
-  _: any,
-  { input }: { input: { orgId: string; email: string } },
-  { prisma, userId }: IContext
-) => {
-  const membership = await prisma.organizationMember.findUnique({
-    where: {
-      userId_organizationId: {
-        userId,
-        organizationId: input.orgId,
-      },
-    },
+  // Check if user is ADMIN of org (pseudo-code, adjust as needed)
+  const org = await context.prisma.organization.findUnique({
+    where: { id: orgId },
+    include: { owner: true },
   });
-  if (!membership || (membership.role !== 'ADMIN' && membership.role !== 'DIRECTOR')) {
-    throw new GraphQLError('You do not have permission to invite members.');
-  }
+  if (!org || org.ownerId !== userId) throw new Error('Only ADMIN can invite');
+
+  // Create invitation
   const token = uuidv4();
-  const invitation = await prisma.invitation.create({
+  await context.prisma.invitation.create({
     data: {
-      email: input.email,
-      organizationId: input.orgId,
+      email,
+      organizationId: orgId,
       invitedById: userId,
       token,
     },
   });
-  await sendInviteEmail(input.email, token);
-  return invitation;
+
+  // Send email with token
+  await sendInviteEmail(email, token);
+
+  return { success: true };
 }; 

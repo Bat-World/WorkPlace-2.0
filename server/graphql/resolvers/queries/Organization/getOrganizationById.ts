@@ -7,14 +7,10 @@ export const getOrganizationById = async (_: any, args: any, context: any) => {
     include: {
       members: { skip, take },
       projects: true,
-      owner: true,
     },
   });
   if (!org) throw new Error('Organization not found');
   const isMember = org.members.some((m: any) => m.id === userId);
   if (!isMember) throw new Error('Not a member of the organization');
-  return {
-    ...org,
-    ownerId: org.ownerId,
-  };
+  return org;
 }; 
