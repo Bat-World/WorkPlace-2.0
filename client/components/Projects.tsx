@@ -12,43 +12,50 @@ import {
 import { Input } from "@/components/ui/input";
 import { FileBox, Folder, Timer } from "lucide-react";
 import { useState } from "react";
-import { useCreateProject } from "@/hooks/project/useCreateProject";
+import { useCreateProject } from "@/hooks/project/ useCreateProject";
 import { useGetProjects } from "@/hooks/project/useGetProjects";
 import { toast } from "react-toastify";
 import { useRouter } from "next/navigation";
-import { formatDistanceToNow } from "date-fns";
+import { formatDistanceToNow } from 'date-fns';
+
+
 
 export const Projects = () => {
-  const [title, setTitle] = useState("");
-  const [description, setDescription] = useState("");
+
+  const [title, setTitle] = useState('')
+  const [description, setDescription] = useState('')
   const router = useRouter();
-  const { mutate: createProject, isPending } = useCreateProject();
-  const { data: projects, isLoading, isError } = useGetProjects();
+  const { mutate: createProject, isPending } = useCreateProject()
+  const {
+    data: projects,
+    isLoading,
+    isError,
+  } = useGetProjects();
 
   const handleCreate = () => {
     if (!title.trim() || !description.trim()) {
-      toast.error("Please enter title and description");
-      return;
+      toast.error('Please enter title and description')
+      return
     }
     createProject(
       {
         title,
         description,
-        organizationId: "cmc7qevnj0003vtzcekma7gh6",
+        organizationId: 'cmc7qevnj0003vtzcekma7gh6',
       },
       {
         onSuccess: (data) => {
-          toast.success(`Project "${data.title}" created`);
-          setTitle("");
-          setDescription("");
+          toast.success(`Project "${data.title}" created`)
+          setTitle('')
+          setDescription('')
         },
         onError: (error) => {
-          console.error(error);
-          toast.error("Failed to create project");
+          console.error(error)
+          toast.error('Failed to create project')
         },
       }
-    );
-  };
+    )
+  }
 
   return (
     <div className="max-w-[1348px] mx-auto px-4 sm:px-6 lg:px-8 ">
@@ -58,7 +65,7 @@ export const Projects = () => {
           <div className="text-sm text-gray-500">/ Projects</div>
         </div>
         <Dialog>
-          <DialogTrigger asChild>
+          <DialogTrigger asChild >
             <Button className="bg-[#2FC285]">+ Төсөл үүсгэх</Button>
           </DialogTrigger>
           <DialogContent>
@@ -67,11 +74,8 @@ export const Projects = () => {
               <DialogDescription>Enter project details below</DialogDescription>
             </DialogHeader>
             <div className="space-y-4 mt-4">
-              <Input
-                placeholder="Project Title"
-                value={title}
-                onChange={(e) => setTitle(e.target.value)}
-              />
+              <Input placeholder="Project Title" value={title}
+                onChange={(e) => setTitle(e.target.value)} />
               <Input
                 placeholder="Project Description"
                 value={description}
@@ -82,8 +86,9 @@ export const Projects = () => {
                 onClick={handleCreate}
                 disabled={isPending}
               >
-                {isPending ? "Creating..." : "Create"}
+                {isPending ? 'Creating...' : 'Create'}
               </Button>
+
             </div>
           </DialogContent>
         </Dialog>
@@ -124,10 +129,9 @@ export const Projects = () => {
               <div className="flex items-center gap-2 bg-[#101014] rounded-[9px] px-3 h-[36px]">
                 <Timer color="#A5A5A9" strokeWidth={1.5} />
                 <p className="text-white/50 text-sm">
-                  {formatDistanceToNow(new Date(project.createdAt), {
-                    addSuffix: true,
-                  })}
+                  {formatDistanceToNow(new Date(project.createdAt), { addSuffix: true })}
                 </p>
+
               </div>
             </div>
             <div className="flex -space-x-2">

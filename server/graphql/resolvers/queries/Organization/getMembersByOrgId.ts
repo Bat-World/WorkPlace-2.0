@@ -1,14 +1,13 @@
 export const getMembersByOrgId = async (_: any, args: any, context: any) => {
-  const { orgId } = args;
-  const orgMembers = await context.prisma.organizationMember.findMany({
-    where: { organizationId: orgId },
-    include: { user: true }
+  const { orgId, skip = 0, take = 10, userId: argUserId } = args;
+  const userId = argUserId || context?.userId;
+  if (!userId) throw new Error('Unauthorized');
+  const org = await context.prisma.organization.findUnique({
+    where: { id: orgId },
+    include: { members: { skip, take } },
   });
-  return orgMembers.map((m: any) => ({
-    id: m.user.id,
-    name: m.user.name,
-    email: m.user.email,
-    avatarUrl: m.user.avatarUrl,
-    role: m.role,
-  }));
+  if (!org) throw new Error('Organization not found');
+  const isMember = org.members.some((m: any) => m.id === userId);
+  if (!isMember) throw new Error('Not a member of the organization');
+  return org.members;
 }; 
