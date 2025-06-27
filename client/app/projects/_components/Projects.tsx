@@ -5,14 +5,12 @@ import {
   Dialog,
   DialogClose,
   DialogContent,
-  DialogDescription,
-  DialogFooter,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
-import { Clock, FileBox, Folder, Plus, Timer } from "lucide-react";
+import { Clock, FileBox, Plus } from "lucide-react";
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -25,8 +23,12 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import Link from "next/link";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
+import { useGetProjects } from "@/hooks/project/useGetProjects";
 
 export const Projects = () => {
+
+   const { data: projects, isLoading, error } = useGetProjects();
+
   return (
     <div className="w-full flex flex-col justify-center px-4 md:px-10 lg:px-28 xl:px-32">
       <div className="w-full mt-10 flex justify-between items-center">
@@ -49,23 +51,6 @@ export const Projects = () => {
           </p>
         </div>
         <div className="flex justify-end gap-6">
-          <div className="*:data-[slot=avatar]:ring-background flex -space-x-2 *:data-[slot=avatar]:ring-2 *:data-[slot=avatar]:grayscale dark">
-            <Avatar>
-              <AvatarImage src="https://github.com/shadcn.png" alt="@shadcn" />
-              <AvatarFallback>CN</AvatarFallback>
-            </Avatar>
-            <Avatar>
-              <AvatarImage src="https://github.com/leerob.png" alt="@leerob" />
-              <AvatarFallback>LR</AvatarFallback>
-            </Avatar>
-            <Avatar>
-              <AvatarImage
-                src="https://github.com/evilrabbit.png"
-                alt="@evilrabbit"
-              />
-              <AvatarFallback>ER</AvatarFallback>
-            </Avatar>
-          </div>
           <Dialog>
             <form>
               <DialogTrigger asChild>
@@ -164,6 +149,7 @@ export const Projects = () => {
           </div>
         </div>
       </div>
+      <div className="w-70 h-70 bg-white"></div>
     </div>
   );
 };

@@ -115,6 +115,13 @@ input InviteMemberInput {
   email: String!
 }
 
+type AcceptInviteResult {
+  message: String!
+  projectId: String!
+}
+
+
+
 input AcceptInviteInput {
   token: String!
 }
@@ -149,6 +156,7 @@ input AcceptInviteInput {
     uploadFile(taskId: ID!, fileUrl: String!, actingUserId: ID): FileUploadResult!
     createProject(input: CreateProjectInput!): Project!
     inviteMember(input: InviteMemberInput!): Invitation!
-    acceptInvite(input: AcceptInviteInput!): AcceptInviteResult!
+   acceptInvite(input: AcceptInviteInput!): AcceptInvitationResult!
+
   }
 `; 

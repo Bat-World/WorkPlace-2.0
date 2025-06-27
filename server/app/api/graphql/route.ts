@@ -12,11 +12,9 @@ const yoga = createYoga<{
     typeDefs,
     resolvers,
   }),
-  context: async ({ request }) => await createContext(request),
-cors: {
-  origin: ['http://localhost:3000', 'http://localhost:3001', 'http://remotia-client.vercel.app'],
-  credentials: true,
-}
+  context: async ({ request, req }) => {
+    return await createContext(request);
+  },
 });
 
 export const POST = async (req: NextRequest) => {
@@ -28,15 +26,7 @@ export const GET = async (req: NextRequest) => {
 };
 
 export const OPTIONS = async (req: NextRequest) => {
-  return new Response(null, {
-    status: 204,
-    headers: {
-      'Access-Control-Allow-Origin': req.headers.get('origin') || '*',
-      'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
-        'Access-Control-Allow-Headers': 'Content-Type, Authorization, x-user-id',
-      'Access-Control-Allow-Credentials': 'true',
-    },
-  });
+  return yoga.handleRequest(req, { req });
 };
 
 
