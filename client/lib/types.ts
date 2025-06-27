@@ -3,7 +3,14 @@ export interface Project {
   title: string;
   description?: string;
   createdAt: string;
-  tasks?: any[];  
+  createdBy: {
+    id: string;
+    user?: {
+      name?: string;
+      avatarUrl?: string;
+    };
+  };
+  tasks?: any[];
   members?: {
     id: string;
     role: string;

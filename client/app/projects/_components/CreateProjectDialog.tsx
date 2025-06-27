@@ -29,7 +29,7 @@ const CreateProjectDialog = () => {
       await createProject.mutateAsync({ title, description });
       setTitle("");
       setDescription("");
-      window.location.reload(); 
+      window.location.reload();
     } catch (error) {
       console.error("Error creating project:", error);
     }
@@ -78,7 +78,7 @@ const CreateProjectDialog = () => {
               <Button
                 type="submit"
                 className="flex-1 py-5 rounded-xl"
-                disabled={createProject.isLoading}
+                disabled={createProject.isPending} // Changed from isLoading to isPending
               >
                 Үүсгэх
               </Button>

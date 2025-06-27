@@ -9,7 +9,7 @@ export default clerkMiddleware(async (auth, req) => {
   const isPublic = publicPaths.includes(pathname) || pathname.startsWith("/_next");
 
   if (!userId && !isPublic) {
-    const signInUrl = new URL("/sign-in", req.url);
+    const signInUrl = new URL("/auth/sign-in", req.url);
     return NextResponse.redirect(signInUrl);
   }
 

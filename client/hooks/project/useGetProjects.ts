@@ -4,7 +4,7 @@ import { sendRequest } from '@/lib/sendRequest';
 
 export const useGetProjects = () => {
   const { getToken } = useAuth();
-  const { user } = useUser(); 
+  const { user } = useUser();
 
   return useQuery({
     queryKey: ['projects'],
@@ -21,12 +21,24 @@ export const useGetProjects = () => {
         {
           query: `
             query GetProjects {
-              getProjects {
-                id
-                title
-                createdAt
-              }
-            }
+  getProjects {
+    id
+    title
+    description
+    createdAt
+    createdBy { id }
+    tasks { id } 
+    members {
+      id
+      user {
+        id
+        name
+        avatarUrl
+      }
+    }
+  }
+}
+
           `,
         },
         {
@@ -40,6 +52,6 @@ export const useGetProjects = () => {
 
       return res.data.data.getProjects;
     },
-    enabled: !!user?.id, 
+    enabled: !!user?.id,
   });
 };

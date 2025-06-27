@@ -15,13 +15,21 @@ type Project {
   id: ID!
   title: String!
   description: String
-  tasks(skip: Int, take: Int): [Task!]!
+  tasks(skip: Int, take: Int): [Task!]
   createdAt: DateTime!
   updatedAt: DateTime!
-  createdBy: User!       
-  members: [User!]       
-invitations: [Invitation!]
+  createdBy: User!
+  members: [ProjectMember!]!
+  invitations: [Invitation!]
 }
+
+type ProjectMember {
+  id: ID!
+  role: String!
+  user: User
+}
+
+
 
   type Task {
     id: ID!
@@ -126,6 +134,7 @@ type AcceptInviteResult {
 input AcceptInviteInput {
   token: String!
 }
+  
 
 
   type Query {
