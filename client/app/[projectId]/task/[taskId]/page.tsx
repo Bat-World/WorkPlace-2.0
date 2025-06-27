@@ -1,5 +1,5 @@
 import { DashBoardHeader } from "@/components/DashBoardHeader";
-import { TaskHeader } from "@/app/task/[taskId]/_components/TaskHeader";
+import { TaskHeader } from "./_components/TaskHeader";
 
 export default function TaskPage() {
     return (
