@@ -1,4 +1,3 @@
-
 import { getTasks } from './queries/Task/getTasks'
 import { getTaskById } from './queries/Task/getTaskById'
 import { getReviewTasks } from './queries/Task/getReviewTasks'
@@ -19,7 +18,7 @@ import { addLog } from './mutations/Task/addLog'
 import { uploadFile } from './mutations/Task/uploadFile'
 import { createProject } from './mutations/Project/createProject'
 import { inviteMember } from './mutations/Project/inviteMembers'
-import { acceptInvitation } from './mutations/Project/acceptInvitation'
+import { acceptInvitation as acceptInvite } from './mutations/Project/acceptInvitation'
 
 
 export const resolvers = {
@@ -45,7 +44,7 @@ export const resolvers = {
     uploadFile,
     createProject,
     inviteMember,
-    acceptInvitation
+    acceptInvite
   },
   Project: {
     createdBy: async (parent: any, _args: any, context: any) => {
