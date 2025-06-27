@@ -24,7 +24,6 @@ export default function RootLayout({
     <ClerkProvider>
       <Providers>
         <html lang="en">
-          <DashBoardHeader />
           <body className="antialiased">{children}</body>
         </html>
       </Providers>
