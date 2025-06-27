@@ -51,9 +51,11 @@ export const resolvers = {
       return context.prisma.user.findUnique({ where: { id: parent.createdById } });
     },
     members: async (parent: any, _args: any, context: any) => {
-      return context.prisma.project
-        .findUnique({ where: { id: parent.id } })
-        .members();
+      const projectMembers = await context.prisma.projectMember.findMany({
+        where: { projectId: parent.id },
+        include: { user: true }
+      });
+      return projectMembers.map((pm: { user: any }) => pm.user);
     },
     invitations: async (parent: any, _args: any, context: any) => {
       return context.prisma.invitation.findMany({

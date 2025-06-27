@@ -19,8 +19,16 @@ export const createProject = async (_: any, args: any, context: any) => {
     },
   });
 
-  // Create the ProjectMember record
-  try {
+  // Ensure the creator is a member (ADMIN)
+  const existingMember = await context.prisma.projectMember.findUnique({
+    where: {
+      userId_projectId: {
+        userId,
+        projectId: newProject.id,
+      },
+    },
+  });
+  if (!existingMember) {
     await context.prisma.projectMember.create({
       data: {
         userId,
@@ -28,9 +36,6 @@ export const createProject = async (_: any, args: any, context: any) => {
         role: 'ADMIN',
       },
     });
-  } catch (error) {
-    console.log('Error creating ProjectMember:', error);
-    // Continue even if ProjectMember creation fails
   }
 
   return newProject;
