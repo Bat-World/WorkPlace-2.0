@@ -8,18 +8,20 @@ datasource db {
 }
 
 model Project {
-  id            String          @id @default(cuid())
-  description   String?
-  createdById   String
-  createdAt     DateTime        @default(now())
-  status        ProjectStatus   @default(NOT_STARTED)
-  title         String
-  updatedAt     DateTime        @updatedAt
-  invitations   Invitation[]
-  labels        Label[]
-  createdBy     User            @relation("CreatedProjects", fields: [createdById], references: [id])
-  ProjectMember ProjectMember[]
-  tasks         Task[]
+  id          String        @id @default(cuid())
+  title       String
+  description String?
+  status      ProjectStatus @default(NOT_STARTED)
+  createdById String
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+
+  // Relations
+  createdBy   User            @relation("CreatedProjects", fields: [createdById], references: [id])
+  invitations Invitation[]
+  labels      Label[]
+  tasks       Task[]
+  members     ProjectMember[] @relation("ProjectMembers")
 }
 
 model ProjectMember {
@@ -29,10 +31,10 @@ model ProjectMember {
   projectId String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  project   Project  @relation(fields: [projectId], references: [id])
   user      User     @relation(fields: [userId], references: [id])
+  project   Project  @relation("ProjectMembers", fields: [projectId], references: [id])
 
-  @@unique([userId, projectId])
+  @@unique([userId, projectId]) // prevent duplicate members
 }
 
 model Invitation {

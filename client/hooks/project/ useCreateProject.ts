@@ -9,13 +9,14 @@ export const useCreateProject = () => {
   return useMutation({
     mutationFn: async (input: {
       title: string;
-      description: string;
+      description?: string;
+      invitees?: string[];
     }) => {
       const token = await getToken();
       const userId = user?.id;
 
       if (!userId) {
-        throw new Error('User is not loaded or not signed in');
+        throw new Error('User is not signed in');
       }
 
       const res = await sendRequest.post(
@@ -34,7 +35,6 @@ export const useCreateProject = () => {
         {
           headers: {
             Authorization: `Bearer ${token}`,
-            'Content-Type': 'application/json',
             'x-user-id': userId,
           },
         }

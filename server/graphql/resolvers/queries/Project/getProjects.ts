@@ -4,12 +4,12 @@ export const getProjects = async (_: any, args: any, context: any) => {
 
   return context.prisma.project.findMany({
     where: {
-      ProjectMember: {
-        some: { userId }
-      }
+      members: {
+        some: { userId },
+      },
     },
     include: {
-      ProjectMember: true,
+      members: true,
       createdBy: true,
     },
     orderBy: {
