@@ -30,10 +30,18 @@ export const createProject = async (
   });
 
 
-  for (const email of invitees) {
-    const token = uuidv4();
+  // Ensure the creator is a member (ADMIN)
+  const existingMember = await context.prisma.projectMember.findUnique({
+    where: {
+      userId_projectId: {
+        userId,
+        projectId: newProject.id,
+      },
+    },
+  });
+  if (!existingMember) {
+    await context.prisma.projectMember.create({
 
-    await prisma.invitation.create({
       data: {
         email,
         token,
@@ -42,7 +50,6 @@ export const createProject = async (
       },
     });
 
-    await sendInviteEmail(email, token);
   }
 
   return project;

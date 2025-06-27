@@ -98,6 +98,7 @@ type Invitation {
     assignedToId: ID
     dueDate: DateTime
     priority: String
+    status: String
     userId: ID
   }
 

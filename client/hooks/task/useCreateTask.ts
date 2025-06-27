@@ -9,6 +9,7 @@ interface CreateTaskInput {
   assignedToId?: string;
   dueDate?: string;
   priority?: string;
+  status?: string;
 }
 
 export const useCreateTask = () => {
@@ -35,6 +36,7 @@ export const useCreateTask = () => {
                 description
                 dueDate
                 priority
+                status
                 createdAt
               }
             }
