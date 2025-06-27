@@ -4,19 +4,16 @@ export const getProjects = async (_: any, args: any, context: any) => {
 
   return context.prisma.project.findMany({
     where: {
-      members: {
-        some: {
-          id: userId,
-        },
-      },
+      ProjectMember: {
+        some: { userId }
+      }
     },
     include: {
-      tasks: true,        // optional: include if you need related data
-      createdBy: true,    // optional: see project creator
-      invitations: true,  // optional: if you're tracking project invites
+      ProjectMember: true,
+      createdBy: true,
     },
     orderBy: {
-      updatedAt: 'desc',  // optional: sort by most recent
+      createdAt: 'desc',
     },
   });
 };

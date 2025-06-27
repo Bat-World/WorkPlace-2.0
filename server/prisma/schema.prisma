@@ -7,10 +7,119 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model Project {
+  id            String          @id @default(cuid())
+  description   String?
+  createdById   String
+  createdAt     DateTime        @default(now())
+  status        ProjectStatus   @default(NOT_STARTED)
+  title         String
+  updatedAt     DateTime        @updatedAt
+  invitations   Invitation[]
+  labels        Label[]
+  createdBy     User            @relation("CreatedProjects", fields: [createdById], references: [id])
+  ProjectMember ProjectMember[]
+  tasks         Task[]
+}
+
+model ProjectMember {
+  id        String   @id @default(cuid())
+  role      Role     @default(MEMBER)
+  userId    String
+  projectId String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  project   Project  @relation(fields: [projectId], references: [id])
+  user      User     @relation(fields: [userId], references: [id])
+
+  @@unique([userId, projectId])
+}
+
+model Invitation {
+  id          String    @id @default(cuid())
+  email       String
+  invitedById String
+  token       String    @unique
+  accepted    Boolean   @default(false)
+  createdAt   DateTime  @default(now())
+  acceptedAt  DateTime?
+  projectId   String
+  invitedBy   User      @relation("Invitation_invitedById", fields: [invitedById], references: [id])
+  project     Project   @relation(fields: [projectId], references: [id])
+}
+
+model User {
+  id              String          @id
+  name            String?
+  email           String          @unique
+  avatarUrl       String?
+  createdAt       DateTime        @default(now())
+  role            Role            @default(MEMBER)
+  updatedAt       DateTime        @default(now()) @updatedAt
+  comments        Comment[]
+  invitations     Invitation[]    @relation("Invitation_invitedById")
+  logs            Log[]
+  createdProjects Project[]       @relation("CreatedProjects")
+  ProjectMember   ProjectMember[]
+  tasks           Task[]          @relation("AssignedTasks")
+  createdTasks    Task[]          @relation("CreatedTasks")
+  reviewedTasks   Task[]          @relation("TaskReviewers")
+}
+
+model Task {
+  id           String     @id @default(cuid())
+  title        String
+  description  String?
+  status       TaskStatus @default(TODO)
+  projectId    String
+  assignedToId String?
+  createdById  String
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+  dueDate      DateTime?
+  priority     Priority   @default(MEDIUM)
+  comments     Comment[]
+  logs         Log[]
+  assignedTo   User?      @relation("AssignedTasks", fields: [assignedToId], references: [id])
+  createdBy    User       @relation("CreatedTasks", fields: [createdById], references: [id])
+  project      Project    @relation(fields: [projectId], references: [id])
+  labels       Label[]    @relation("LabelToTask")
+  reviewers    User[]     @relation("TaskReviewers")
+}
+
+model Label {
+  id        String   @id @default(cuid())
+  name      String
+  color     String
+  projectId String?
+  project   Project? @relation(fields: [projectId], references: [id])
+  tasks     Task[]   @relation("LabelToTask")
+}
+
+model Comment {
+  id        String   @id @default(cuid())
+  content   String
+  taskId    String
+  authorId  String
+  createdAt DateTime @default(now())
+  author    User     @relation(fields: [authorId], references: [id])
+  task      Task     @relation(fields: [taskId], references: [id])
+}
+
+model Log {
+  id        String   @id @default(cuid())
+  message   String
+  userId    String
+  taskId    String
+  createdAt DateTime @default(now())
+  task      Task     @relation(fields: [taskId], references: [id])
+  user      User     @relation(fields: [userId], references: [id])
+}
+
 enum Role {
   ADMIN
-  DIRECTOR
   MEMBER
+  DIRECTOR
 }
 
 enum ProjectStatus {
@@ -32,121 +141,4 @@ enum Priority {
   LOW
   MEDIUM
   HIGH
-}
-
-
-model Project {
-  id             String         @id @default(cuid())
-  title          String
-  description    String?
-  status         ProjectStatus  @default(NOT_STARTED)
-  labels         Label[]
-  tasks          Task[]
-  createdBy      User           @relation("CreatedProjects", fields: [createdById], references: [id])
-  createdById    String
-  invitations    Invitation[]   
-  createdAt      DateTime       @default(now())
-  updatedAt      DateTime       @updatedAt
-
-  ProjectMember ProjectMember[]
-}
-
-model ProjectMember {
-  id        String   @id @default(cuid())
-  role      Role     @default(MEMBER)
-
-  user      User     @relation(fields: [userId], references: [id])
-  userId    String
-
-  project   Project  @relation(fields: [projectId], references: [id])
-  projectId String
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  @@unique([userId, projectId]) // Prevent duplicate memberships
-}
-
-
-model Invitation {
-  id          String     @id @default(cuid())
-  email       String
-  project     Project    @relation(fields: [projectId], references: [id]) 
-  projectId   String
-  invitedBy   User       @relation("Invitation_invitedById", fields: [invitedById], references: [id])
-  invitedById String
-  token       String     @unique
-  accepted    Boolean    @default(false)
-  createdAt   DateTime   @default(now())
-  acceptedAt  DateTime?
-}
-
-model User {
-  id               String     @id
-  email            String     @unique
-  name             String?
-  avatarUrl        String?
-  role             Role       @default(MEMBER)
-  tasks            Task[]     @relation("AssignedTasks")
-  createdTasks     Task[]     @relation("CreatedTasks")
-  logs             Log[]
-  comments         Comment[]
-  createdProjects  Project[]  @relation("CreatedProjects")
-  invitations      Invitation[]   @relation("Invitation_invitedById")
-  reviewedTasks    Task[]         @relation("TaskReviewers")
-  createdAt        DateTime   @default(now())
-  updatedAt        DateTime   @updatedAt @default(now())
-
-  ProjectMember ProjectMember[]
-}
-
-
-model Task {
-  id           String     @id @default(cuid())
-  title        String
-  description  String?
-  status       TaskStatus @default(TODO)
-  priority     Priority   @default(MEDIUM)
-  dueDate      DateTime?
-  project      Project    @relation(fields: [projectId], references: [id])
-  projectId    String
-  assignedTo   User?      @relation("AssignedTasks", fields: [assignedToId], references: [id])
-  assignedToId String?
-  createdBy    User       @relation("CreatedTasks", fields: [createdById], references: [id])
-  createdById  String
-  comments     Comment[]
-  logs         Log[]
-  labels       Label[]
-  createdAt    DateTime   @default(now())
-  updatedAt    DateTime   @updatedAt
-  reviewers    User[]   @relation("TaskReviewers")
-}
-
-model Label {
-  id        String   @id @default(cuid())
-  name      String
-  color     String
-  project   Project? @relation(fields: [projectId], references: [id])
-  projectId String?
-  tasks     Task[]
-}
-
-model Comment {
-  id        String   @id @default(cuid())
-  content   String
-  author    User     @relation(fields: [authorId], references: [id])
-  authorId  String
-  task      Task     @relation(fields: [taskId], references: [id])
-  taskId    String
-  createdAt DateTime @default(now())
-}
-
-model Log {
-  id        String   @id @default(cuid())
-  message   String
-  user      User     @relation(fields: [userId], references: [id])
-  userId    String
-  task      Task     @relation(fields: [taskId], references: [id])
-  taskId    String
-  createdAt DateTime @default(now())
 }

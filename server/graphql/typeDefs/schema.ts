@@ -73,6 +73,10 @@ type Invitation {
     success: Boolean!
   }
 
+  type AcceptInviteResult {
+    message: String!
+    projectId: String!
+  }
 
   type FileUploadResult {
     success: Boolean!
@@ -102,6 +106,7 @@ type Invitation {
 input CreateProjectInput {
   title: String!
   description: String
+  userId: ID
 }
 
 
@@ -116,7 +121,7 @@ input AcceptInviteInput {
 
 
   type Query {
-    getTasks(userId: ID): [Task!]!
+    getTasks(userId: ID, projectId: ID): [Task!]!
     getTaskById(taskId: ID!, userId: ID): Task
     getReviewTasks(orgId: ID!, skip: Int, take: Int, userId: ID): [Task!]!
     getProjects(userId: ID): [Project!]!

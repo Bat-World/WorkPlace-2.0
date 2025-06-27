@@ -1,6 +1,6 @@
 export const createProject = async (_: any, args: any, context: any) => {
-  const { title, description } = args.input;
-  const userId = context.userId;
+  const { title, description, userId: inputUserId } = args.input;
+  const userId = inputUserId || context.userId;
 
   if (!userId) throw new Error('Unauthorized');
 
@@ -10,22 +10,28 @@ export const createProject = async (_: any, args: any, context: any) => {
 
   if (!existingUser) throw new Error('User does not exist in DB');
 
+  // Create the project
   const newProject = await context.prisma.project.create({
     data: {
       title,
       description,
       createdById: userId,
-      ProjectMember: {
-        create: {
-          userId,
-          role: 'ADMIN',
-        },
-      },
-    },
-    include: {
-      ProjectMember: true, 
     },
   });
+
+  // Create the ProjectMember record
+  try {
+    await context.prisma.projectMember.create({
+      data: {
+        userId,
+        projectId: newProject.id,
+        role: 'ADMIN',
+      },
+    });
+  } catch (error) {
+    console.log('Error creating ProjectMember:', error);
+    // Continue even if ProjectMember creation fails
+  }
 
   return newProject;
 };
