@@ -11,7 +11,7 @@ export default function DashboardPage() {
 
   useEffect(() => {
     if (isSignedIn) {
-      router.push('/dashboard')
+      router.push('/projects')
     }
   }, [isSignedIn, router])
 
