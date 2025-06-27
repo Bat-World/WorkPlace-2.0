@@ -156,7 +156,6 @@ input AcceptInviteInput {
     uploadFile(taskId: ID!, fileUrl: String!, actingUserId: ID): FileUploadResult!
     createProject(input: CreateProjectInput!): Project!
     inviteMember(input: InviteMemberInput!): Invitation!
-   acceptInvite(input: AcceptInviteInput!): AcceptInvitationResult!
-
+    acceptInvite(input: AcceptInviteInput!): AcceptInviteResult!
   }
 `; 
