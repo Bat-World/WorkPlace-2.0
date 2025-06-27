@@ -107,8 +107,9 @@ type Invitation {
 input CreateProjectInput {
   title: String!
   description: String
-  userId: ID
+  invitees: [String!]
 }
+
 
 
 input InviteMemberInput {

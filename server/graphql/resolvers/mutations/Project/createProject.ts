@@ -1,23 +1,34 @@
-export const createProject = async (_: any, args: any, context: any) => {
-  const { title, description, userId: inputUserId } = args.input;
-  const userId = inputUserId || context.userId;
+import { v4 as uuidv4 } from "uuid";
+import { sendInviteEmail } from "../../../../src/utils/email";
 
-  if (!userId) throw new Error('Unauthorized');
+export const createProject = async (
+  _: any,
+  args: { input: { title: string; description?: string; invitees?: string[] } },
+  context: any
+) => {
+  const { userId, prisma } = context;
+  if (!userId) throw new Error("Unauthorized");
 
-  const existingUser = await context.prisma.user.findUnique({
-    where: { id: userId },
-  });
+  const { title, description, invitees = [] } = args.input;
 
-  if (!existingUser) throw new Error('User does not exist in DB');
-
-  // Create the project
-  const newProject = await context.prisma.project.create({
+  const project = await prisma.project.create({
     data: {
       title,
       description,
       createdById: userId,
+      members: {
+        create: {
+          userId,
+          role: "ADMIN",
+        },
+      },
+    },
+    include: {
+      members: true,
+      createdBy: true,
     },
   });
+
 
   // Ensure the creator is a member (ADMIN)
   const existingMember = await context.prisma.projectMember.findUnique({
@@ -30,13 +41,16 @@ export const createProject = async (_: any, args: any, context: any) => {
   });
   if (!existingMember) {
     await context.prisma.projectMember.create({
+
       data: {
-        userId,
-        projectId: newProject.id,
-        role: 'ADMIN',
+        email,
+        token,
+        projectId: project.id,
+        invitedById: userId,
       },
     });
+
   }
 
-  return newProject;
+  return project;
 };
