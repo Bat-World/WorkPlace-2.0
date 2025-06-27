@@ -15,9 +15,15 @@ export const createProject = async (_: any, args: any, context: any) => {
       title,
       description,
       createdById: userId,
-      members: {
-        connect: { id: userId },
+      ProjectMember: {
+        create: {
+          userId,
+          role: 'ADMIN',
+        },
       },
+    },
+    include: {
+      ProjectMember: true, 
     },
   });
 

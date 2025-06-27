@@ -42,13 +42,31 @@ model Project {
   status         ProjectStatus  @default(NOT_STARTED)
   labels         Label[]
   tasks          Task[]
-  members        User[]         @relation("ProjectMembers")
   createdBy      User           @relation("CreatedProjects", fields: [createdById], references: [id])
   createdById    String
   invitations    Invitation[]   
   createdAt      DateTime       @default(now())
   updatedAt      DateTime       @updatedAt
+
+  ProjectMember ProjectMember[]
 }
+
+model ProjectMember {
+  id        String   @id @default(cuid())
+  role      Role     @default(MEMBER)
+
+  user      User     @relation(fields: [userId], references: [id])
+  userId    String
+
+  project   Project  @relation(fields: [projectId], references: [id])
+  projectId String
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([userId, projectId]) // Prevent duplicate memberships
+}
+
 
 model Invitation {
   id          String     @id @default(cuid())
@@ -73,12 +91,13 @@ model User {
   createdTasks     Task[]     @relation("CreatedTasks")
   logs             Log[]
   comments         Comment[]
-  projects         Project[]  @relation("ProjectMembers")
   createdProjects  Project[]  @relation("CreatedProjects")
   invitations      Invitation[]   @relation("Invitation_invitedById")
   reviewedTasks    Task[]         @relation("TaskReviewers")
   createdAt        DateTime   @default(now())
   updatedAt        DateTime   @updatedAt @default(now())
+
+  ProjectMember ProjectMember[]
 }
 
 

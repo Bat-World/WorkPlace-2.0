@@ -4,13 +4,12 @@ import { sendRequest } from '@/lib/sendRequest';
 
 export const useCreateProject = () => {
   const { getToken } = useAuth();
-  const { user } = useUser(); 
+  const { user } = useUser();
 
   return useMutation({
     mutationFn: async (input: {
       title: string;
       description: string;
-      organizationId: string;
     }) => {
       const token = await getToken();
       const userId = user?.id;
@@ -36,7 +35,7 @@ export const useCreateProject = () => {
           headers: {
             Authorization: `Bearer ${token}`,
             'Content-Type': 'application/json',
-            'x-user-id': userId, 
+            'x-user-id': userId,
           },
         }
       );
@@ -45,4 +44,3 @@ export const useCreateProject = () => {
     },
   });
 };
-

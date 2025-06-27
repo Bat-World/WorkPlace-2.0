@@ -39,16 +39,15 @@ invitations: [Invitation!]
     createdAt: DateTime!
     updatedAt: DateTime!
   }
-    type Invitation {
-  id: ID!
+
+
+type Invitation {
+  id: String!
   email: String!
   token: String!
   accepted: Boolean!
-  createdAt: DateTime!
-  acceptedAt: DateTime
-  invitedBy: User!
+  createdAt: String!
 }
-
 
   type Comment {
     id: ID!
@@ -110,9 +109,8 @@ input CreateProjectInput {
 
 
 input InviteMemberInput {
-  projectId: ID!
+  projectId: String!
   email: String!
-  userId: ID
 }
 
   input AcceptInviteInput {
@@ -148,7 +146,7 @@ input InviteMemberInput {
     addLog(taskId: ID!, message: String!, actingUserId: ID): Log!
     uploadFile(taskId: ID!, fileUrl: String!, actingUserId: ID): FileUploadResult!
     createProject(input: CreateProjectInput!): Project!
-    inviteMember(input: InviteMemberInput!): InviteResult!
+    inviteMember(input: InviteMemberInput!): Invitation!
     acceptInvite(input: AcceptInviteInput!): AcceptInviteResult!
   }
 `; 
