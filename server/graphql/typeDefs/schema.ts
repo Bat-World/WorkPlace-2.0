@@ -73,9 +73,6 @@ type Invitation {
     success: Boolean!
   }
 
-  type AcceptInviteResult {
-    success: Boolean!
-  }
 
   type FileUploadResult {
     success: Boolean!
@@ -113,10 +110,10 @@ input InviteMemberInput {
   email: String!
 }
 
-  input AcceptInviteInput {
-    token: String!
-    userId: ID
-  }
+input AcceptInviteInput {
+  token: String!
+}
+
 
   type Query {
     getTasks(userId: ID): [Task!]!

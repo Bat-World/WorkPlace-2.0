@@ -19,6 +19,7 @@ import { addLog } from './mutations/Task/addLog'
 import { uploadFile } from './mutations/Task/uploadFile'
 import { createProject } from './mutations/Project/createProject'
 import { inviteMember } from './mutations/Project/inviteMembers'
+import { acceptInvitation } from './mutations/Project/acceptInvitation'
 
 
 export const resolvers = {
@@ -43,7 +44,8 @@ export const resolvers = {
     addLog,
     uploadFile,
     createProject,
-    inviteMember
+    inviteMember,
+    acceptInvitation
   },
   Project: {
     createdBy: async (parent: any, _args: any, context: any) => {
