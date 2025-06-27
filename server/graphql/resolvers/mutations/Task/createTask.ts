@@ -6,6 +6,7 @@ export const createTask = async (_: any, args: any, context: any) => {
     assignedToId,
     dueDate,
     priority,
+    status,
     userId: inputUserId,
   } = args.input;
   const userId = inputUserId || context?.userId;
@@ -64,6 +65,7 @@ export const createTask = async (_: any, args: any, context: any) => {
       assignedToId: validatedAssignedToId,
       dueDate,
       priority,
+      status,
       createdById: validatedCreatedById,
     },
   });
