@@ -3,54 +3,97 @@ import { sendInviteEmail } from "../../../../src/utils/email";
 
 export const createProject = async (
   _: any,
-  args: { input: { title: string; description?: string; invitees?: string[] } },
+  args: { input: { title: string; description?: string; invitees?: string[]; labels?: string[] } },
   context: any
 ) => {
   const { userId, prisma } = context;
   if (!userId) throw new Error("Unauthorized");
 
-  const { title, description, invitees = [] } = args.input;
+  const { title, description, invitees = [], labels = [] } = args.input;
 
-  const project = await prisma.project.create({
-    data: {
-      title,
-      description,
-      createdById: userId,
-      members: {
-        create: {
-          userId,
-          role: "ADMIN",
+  try {
+    const project = await prisma.$transaction(async (tx: { project: { create: (arg0: { data: { title: string; description: string | undefined; createdById: any; members: { create: { userId: any; role: string; }; }; }; include: { members: boolean; createdBy: boolean; labels: boolean; }; }) => any; update: (arg0: { where: { id: any; }; data: { labels: { connect: { id: any; }[]; }; }; }) => any; findUnique: (arg0: { where: { id: any; }; include: { labels: boolean; }; }) => any; }; label: { findFirst: (arg0: { where: { name: { equals: string; mode: string; }; }; }) => any; create: (arg0: { data: { name: string; color: string; }; }) => any; }; }) => {
+      const project = await tx.project.create({
+        data: {
+          title,
+          description,
+          createdById: userId,
+          members: {
+            create: {
+              userId,
+              role: "ADMIN",
+            },
+          },
         },
-      },
-    },
-    include: {
-      members: true,
-      createdBy: true,
-    },
-  });
+        include: {
+          members: true,
+          createdBy: true,
+          labels: true, 
+        },
+      });
 
+      if (labels.length > 0) {
+        const labelRecords = await Promise.all(
+          labels.map(async (labelName) => {
+            console.log(`Searching for label: ${labelName}`); 
+            let label = await tx.label.findFirst({
+              where: { name: { equals: labelName, mode: "insensitive" } },
+            });
+            if (!label) {
+              console.log(`Creating new label: ${labelName}`); 
+              label = await tx.label.create({
+                data: { name: labelName, color: "#000000" }, 
+              });
+              console.log(`Created label ID: ${label.id}`); 
+            } else {
+              console.log(`Found existing label ID: ${label.id}`); 
+            }
+            return label;
+          })
+        );
 
-  // Ensure the creator is a member (ADMIN)
-  const existingMember = await context.prisma.projectMember.findUnique({
-    where: {
-      userId_projectId: {
-        userId,
-        projectId: newProject.id,
-      },
-    },
-  });
-  if (!existingMember) {
-    await context.prisma.projectMember.create({
+        console.log("Connecting labels:", labelRecords.map((l) => l.id)); 
+        await tx.project.update({
+          where: { id: project.id },
+          data: {
+            labels: {
+              connect: labelRecords.map((label) => ({ id: label.id })),
+            },
+          },
+        });
 
-      data: {
-        email,
-        token,
-        projectId: project.id,
-        invitedById: userId,
-      },
+        // Verify the connection
+        const updatedProject = await tx.project.findUnique({
+          where: { id: project.id },
+          include: { labels: true },
+        });
+        console.log("Updated project labels:", updatedProject?.labels);
+      }
+
+      return project;
     });
 
-  }
+    // Invite members
+    await Promise.all(
+      invitees.map(async (email) => {
+        const token = uuidv4();
 
-  return project;
+        await prisma.invitation.create({
+          data: {
+            email,
+            projectId: project.id,
+            invitedById: userId,
+            token,
+          },
+        });
+
+        await sendInviteEmail(email, token);
+      })
+    );
+
+    return project;
+  } catch (error) {
+    console.error("Error in createProject:", error);
+    throw new Error("Failed to create project due to an unexpected error.");
+  }
 };

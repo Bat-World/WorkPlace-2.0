@@ -19,4 +19,9 @@ export interface Project {
       avatarUrl?: string;
     };
   }[];
+labels: {
+  id: string;
+  name: string;
+}[];
+
 }

@@ -19,27 +19,35 @@ export const useGetProjects = () => {
       const res = await sendRequest.post(
         '/api/graphql',
         {
-          query: `
-            query GetProjects {
-  getProjects {
-    id
-    title
-    description
-    createdAt
-    createdBy { id }
-    tasks { id } 
-    members {
+        query: `
+  query GetProjects {
+    getProjects {
       id
-      user {
+      title
+      description
+      createdAt
+      updatedAt
+      labels {
+        id
+        name
+      }
+      members {
+        role
+        user {
+          id
+          email
+          avatarUrl
+        }
+      }
+      createdBy {
         id
         name
         avatarUrl
       }
     }
   }
-}
-
-          `,
+`
+,
         },
         {
           headers: {

@@ -11,6 +11,7 @@ export const useCreateProject = () => {
       title: string;
       description?: string;
       invitees?: string[];
+        labels?: string[];
     }) => {
       const token = await getToken();
       const userId = user?.id;

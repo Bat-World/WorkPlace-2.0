@@ -41,4 +41,3 @@ export const inviteMember = async (
 
   return invitation;
 };
-

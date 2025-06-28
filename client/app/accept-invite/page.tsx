@@ -1,8 +1,9 @@
 'use client';
 
 import { useSearchParams, useRouter } from 'next/navigation';
-import { useAcceptInvite } from '@/hooks/project/useAcceptInvitation';
 import { useEffect } from 'react';
+import { useAcceptInvite } from '@/hooks/project/useAcceptInvitation';
+import { useInvitationDetails } from '@/hooks/project/useInvitationDetails';
 import { useUser } from '@clerk/nextjs';
 import { toast } from 'react-toastify';
 
@@ -10,25 +11,58 @@ export default function AcceptInvitePage() {
   const searchParams = useSearchParams();
   const router = useRouter();
   const token = searchParams.get('token');
-  const { user, isSignedIn } = useUser();
-  const { mutate, isLoading, isSuccess, error, data } = useAcceptInvite();
+  const { user, isSignedIn, isLoaded } = useUser();
+
+  
+  useEffect(() => {
+    if (isLoaded && !isSignedIn) {
+      const returnTo = `/accept-invite?token=${token}`;
+      router.push(`/sign-in?redirect_url=${encodeURIComponent(returnTo)}`);
+    }
+  }, [isLoaded, isSignedIn, token, router]);
+
+  const {
+    data: invitation,
+    isLoading,
+    error,
+  } = useInvitationDetails(token);
+  const {
+    mutate,
+    isPending: isAccepting,
+    isSuccess,
+    data: acceptData,
+    error: acceptError,
+  } = useAcceptInvite();
+
+  const handleAccept = () => {
+    if (token) mutate({ token });
+  };
 
   useEffect(() => {
-    if (token && isSignedIn && user?.id) {
-      mutate({ token });
+    if (isSuccess && acceptData?.projectId) {
+      toast.success(acceptData.message);
+      router.push(`/${acceptData.projectId}/dashboard`);
     }
-  }, [token, isSignedIn, user?.id]);
+  }, [isSuccess, acceptData, router]);
 
-  useEffect(() => {
-    if (isSuccess && data?.projectId) {
-      toast.success(data.message);
-      router.push(`/dashboard/${data.projectId}`);
-    }
-  }, [isSuccess, data, router]);
+  if (!isLoaded || !isSignedIn) return null; 
+  if (isLoading) return <p className="text-white">Loading invitation details...</p>;
+  if (error) return <p className="text-red-500">Invalid or expired invitation.</p>;
+  if (acceptError) return <p className="text-red-500">Something went wrong: {String(acceptError)}</p>;
 
-  if (!isSignedIn) return <p className="text-white">Please sign in to accept the invite.</p>;
-  if (isLoading) return <p className="text-white">Accepting invitation...</p>;
-  if (error) return <p className="text-red-500">Something went wrong: {String(error)}</p>;
+  return (
+    <div className="max-w-md mx-auto mt-10 p-6 bg-white shadow-lg rounded-lg">
+      <h1 className="text-xl font-bold mb-4">You're invited to join a project!</h1>
+      <p className="mb-2"><strong>Project:</strong> {invitation?.projectTitle}</p>
+      <p className="mb-4"><strong>Invited by:</strong> {invitation?.invitedByEmail}</p>
 
-  return null;
+      <button
+        onClick={handleAccept}
+        disabled={isAccepting}
+        className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
+      >
+        {isAccepting ? 'Accepting...' : 'Accept Invitation'}
+      </button>
+    </div>
+  );
 }
