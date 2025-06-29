@@ -26,43 +26,63 @@ export const useGetProjectById = ({
         throw new Error('User is not loaded or not signed in');
       }
 
-      const res = await sendRequest.post(
-        '/api/graphql',
-        {
-          query: `
-            query GetProjectById($projectId: ID!, $skip: Int, $take: Int, $userId: ID) {
-              getProjectById(projectId: $projectId, skip: $skip, take: $take, userId: $userId) {
-                id
-                title
-                description
-                tasks {
+      try {
+        const res = await sendRequest.post(
+          '/api/graphql',
+          {
+            query: `
+              query GetProjectById($projectId: ID!, $skip: Int, $take: Int, $userId: ID) {
+                getProjectById(projectId: $projectId, skip: $skip, take: $take, userId: $userId) {
                   id
                   title
                   description
-                  status
-                  priority
-                  dueDate
+                  avatarUrl
+                  members {
+                    id
+                    role
+                    userId
+                    user {
+                      id
+                      name
+                      email
+                      avatarUrl
+                    }
+                  }
+                  tasks {
+                    id
+                    title
+                    description
+                    status
+                    priority
+                    dueDate
+                  }
                 }
               }
-            }
-          `,
-          variables: {
-            projectId,
-            skip,
-            take,
-            userId,
+            `,
+            variables: {
+              projectId,
+              skip,
+              take,
+              userId,
+            },
           },
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            'Content-Type': 'application/json',
-            'x-user-id': userId,
-          },
-        }
-      );
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+              'Content-Type': 'application/json',
+              'x-user-id': userId,
+            },
+          }
+        );
 
-      return res.data.data.getProjectById;
+        if (res.data.errors) {
+          throw new Error(res.data.errors[0]?.message || 'GraphQL error');
+        }
+
+        return res.data.data.getProjectById;
+      } catch (error) {
+        throw error;
+      }
     },
     enabled: !!user?.id && !!projectId,
   });

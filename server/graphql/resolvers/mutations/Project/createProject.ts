@@ -3,13 +3,14 @@ import { sendInviteEmail } from "../../../../src/utils/email";
 
 export const createProject = async (
   _: any,
-  args: { input: { title: string; description?: string; invitees?: string[] } },
+  args: { input: { title: string; description?: string; invitees?: string[]; userId?: string } },
   context: any
 ) => {
-  const { userId, prisma } = context;
+  const { userId: contextUserId, prisma } = context;
+  const { title, description, invitees = [], userId: inputUserId } = args.input;
+  
+  const userId = contextUserId || inputUserId;
   if (!userId) throw new Error("Unauthorized");
-
-  const { title, description, invitees = [] } = args.input;
 
   const project = await prisma.project.create({
     data: {
@@ -24,33 +25,12 @@ export const createProject = async (
       },
     },
     include: {
-      members: true,
+      members: {
+        include: { user: true }
+      },
       createdBy: true,
     },
   });
-
-
-  // Ensure the creator is a member (ADMIN)
-  const existingMember = await context.prisma.projectMember.findUnique({
-    where: {
-      userId_projectId: {
-        userId,
-        projectId: newProject.id,
-      },
-    },
-  });
-  if (!existingMember) {
-    await context.prisma.projectMember.create({
-
-      data: {
-        email,
-        token,
-        projectId: project.id,
-        invitedById: userId,
-      },
-    });
-
-  }
 
   return project;
 };

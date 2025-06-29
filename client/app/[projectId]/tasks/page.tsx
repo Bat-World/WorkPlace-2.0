@@ -5,26 +5,31 @@ import KanbanColumn from "./_components/KanbanColumn";
 import Info from "./_components/Info";
 import { useGetTasksByProject } from "@/hooks/task/useGetTasksByProject";
 import { useUpdateTaskStatus } from "@/hooks/task/useUpdateTaskStatus";
-import { organizeTasksByStatus, KanbanTask, KanbanColumn as KanbanColumnType } from "@/lib/taskUtils";
+import {
+  organizeTasksByStatus,
+  KanbanTask,
+  KanbanColumn as KanbanColumnType,
+} from "@/lib/taskUtils";
 import { useParams } from "next/navigation";
+import KanbanSkeleton from "@/components/Skeletons/KanbanSekeleton";
 
 const columnOrder = ["todo", "doing", "review", "done"];
 
 // Map column IDs to task statuses
 const columnToStatus: Record<string, string> = {
   todo: "TODO",
-  doing: "DOING", 
+  doing: "DOING",
   review: "REVIEW",
-  done: "DONE"
+  done: "DONE",
 };
 
 export default function KanbanPage() {
   const params = useParams();
   const projectId = params.projectId as string;
-  
+
   const { data: apiTasks, isLoading, error } = useGetTasksByProject(projectId);
   const updateTaskStatus = useUpdateTaskStatus();
-  
+
   const [tasks, setTasks] = useState<Record<string, KanbanTask>>({});
   const [columns, setColumns] = useState<Record<string, KanbanColumnType>>({
     todo: { id: "todo", title: "To Do", taskIds: [] },
@@ -37,7 +42,8 @@ export default function KanbanPage() {
   // Transform API data to Kanban format when data changes
   useEffect(() => {
     if (apiTasks) {
-      const { tasks: kanbanTasks, columns: kanbanColumns } = organizeTasksByStatus(apiTasks);
+      const { tasks: kanbanTasks, columns: kanbanColumns } =
+        organizeTasksByStatus(apiTasks);
       setTasks(kanbanTasks);
       setColumns(kanbanColumns);
     }
@@ -53,10 +59,10 @@ export default function KanbanPage() {
       destination.index === source.index
     )
       return;
-    
+
     const startCol = columns[source.droppableId];
     const endCol = columns[destination.droppableId];
-    
+
     // Optimistically update the UI
     if (startCol === endCol) {
       const newTaskIds = [...startCol.taskIds];
@@ -102,6 +108,8 @@ export default function KanbanPage() {
       comments: 0,
       attachments: 0,
       assignees: [],
+      labels: [],
+      status: "DOING",
     };
     setTasks((prev) => ({ ...prev, [id]: newTask }));
     setColumns((prev) => {
@@ -116,16 +124,18 @@ export default function KanbanPage() {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen px-20 flex items-center justify-center">
-        <div className="text-lg">Loading tasks...</div>
+      <div className="px-20 flex flex-col items-center justify-center">
+        <Info />
+        <KanbanSkeleton />
       </div>
     );
   }
 
   if (error) {
     return (
-      <div className="min-h-screen px-20 flex items-center justify-center">
-        <div className="text-lg text-red-600">Error loading tasks: {error.message}</div>
+      <div className="px-20 flex flex-col items-center justify-center">
+        <p>Өө алдаа гарлаа</p>
+        <KanbanSkeleton />
       </div>
     );
   }
@@ -133,6 +143,7 @@ export default function KanbanPage() {
   return (
     <div className="min-h-screen px-20">
       <Info />
+
       <DragDropContext onDragEnd={onDragEnd}>
         <div className="grid grid-cols-1 md:grid-cols-4 mt-10">
           {columnOrder.map((colId) => (

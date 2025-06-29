@@ -12,7 +12,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { FileBox, Folder, Timer } from "lucide-react";
 import { useState } from "react";
-import { useCreateProject } from "@/hooks/project/ useCreateProject";
+import { useCreateProject } from "@/hooks/project/useCreateProject";
 import { useGetProjects } from "@/hooks/project/useGetProjects";
 import { toast } from "react-toastify";
 import { useRouter } from "next/navigation";
@@ -41,11 +41,10 @@ export const Projects = () => {
       {
         title,
         description,
-        organizationId: 'cmc7qevnj0003vtzcekma7gh6',
       },
       {
         onSuccess: (data) => {
-          toast.success(`Project "${data.title}" created`)
+          // No success toast - it's instant now!
           setTitle('')
           setDescription('')
         },

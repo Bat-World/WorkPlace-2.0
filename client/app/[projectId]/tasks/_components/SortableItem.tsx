@@ -3,6 +3,35 @@ import { Draggable } from "@hello-pangea/dnd";
 import { EllipsisVertical, MessageCircleMore, User } from "lucide-react";
 import { Paperclip } from "lucide-react";
 import type { KanbanTask } from "@/lib/taskUtils";
+import { formatDate } from "@/utils/DateFormatter";
+import TaskAction from "./TaskAction";
+import { formatTaskDate } from "@/utils/TaskDateFormatter";
+
+const getPriorityText = (priority: string): string => {
+  switch (priority) {
+    case "high":
+      return "Яаралтай";
+    case "medium":
+      return "Чухал";
+    case "low":
+      return "Энгийн";
+    default:
+      return priority;
+  }
+};
+
+const getPriorityStyles = (priority: string): string => {
+  switch (priority) {
+    case "high":
+      return "bg-[#450B2B] border border-[#5A2241] text-[#FCC3EC]";
+    case "medium":
+      return "bg-[#201302] border border-[#372B15] text-[#F9D769]";
+    case "low":
+      return "bg-[#191C45] border border-[#32316B] text-[#B5BFF3]";
+    default:
+      return "bg-[#272A33] text-[var(--background)]";
+  }
+};
 
 const SortableItem = React.memo(
   ({
@@ -14,10 +43,12 @@ const SortableItem = React.memo(
     index: number;
     isNew?: boolean;
   }) => {
-    // Don't render if task is not available
     if (!task) {
       return null;
     }
+
+    const priorityText = getPriorityText(task.priority);
+    const priorityStyles = getPriorityStyles(task.priority);
 
     return (
       <Draggable draggableId={task.id} index={index}>
@@ -33,21 +64,25 @@ const SortableItem = React.memo(
             <div className="w-full flex mb-3 items-center justify-between">
               <div className="flex gap-2">
                 <span
-                  className={`text-xs rounded-full px-3 py-1.5 ${
-                    task.priority === "high"
-                      ? "bg-[#450B2B] border border-[#5A2241] text-[#FCC3EC]"
-                      : task.priority === "medium"
-                      ? "bg-[#201302] border border-[#372B15] text-[#F9D769]"
-                      : "bg-[#191C45] border border-[#32316B] text-[#B5BFF3]"
-                  }`}
+                  className={`text-xs rounded-full px-3 py-1.5 ${priorityStyles}`}
                 >
-                  {task.priority}
+                  {priorityText}
                 </span>
-                <span className="text-xs rounded-full px-3 py-1.5 bg-[#272A33] text-[var(--background)]">
-                  {task.label}
-                </span>
+                {task.labels.slice(0, 2).map((label) => (
+                  <span
+                    key={label.id}
+                    className="text-xs rounded-full px-3 py-1.5 bg-[#272A33] text-[var(--background)]"
+                    style={{
+                      backgroundColor: label.color + "20",
+                      border: `1px solid ${label.color}`,
+                      color: label.color,
+                    }}
+                  >
+                    {label.name}
+                  </span>
+                ))}
               </div>
-              <EllipsisVertical className="w-5 stroke-[var(--background)] cursor-pointer" />
+              <TaskAction taskId={task.id} />
             </div>
             <div className="flex justify-between items-center mb-1">
               <span className="text-lg font-semibold text-[var(--background)]">
@@ -57,6 +92,11 @@ const SortableItem = React.memo(
             <div className="text-sm font-light text-[var(--background)]/50 mb-2">
               {task.description}
             </div>
+            {task.dueDate && (
+              <div className="text-xs font-light text-[var(--background)]/50 mb-2">
+                {formatTaskDate(task.dueDate)}
+              </div>
+            )}
             <div className="flex items-center gap-4 mt-3">
               <span className="text-sm text-[var(--background)] flex items-center gap-1.5">
                 <Paperclip className="w-4" /> {task.comments}

@@ -14,7 +14,7 @@ import { Input } from "@/components/ui/input";
 import { Plus } from "lucide-react";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { useCreateProject } from "@/hooks/project/ useCreateProject";
+import { useCreateProject } from "@/hooks/project/useCreateProject";
 
 const CreateProjectDialog = () => {
   const [title, setTitle] = useState("");

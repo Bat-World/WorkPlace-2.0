@@ -3,11 +3,12 @@ export const createTask = async (_: any, args: any, context: any) => {
     title,
     description,
     projectId,
-    assignedToId,
+    assignedToId, // Keep for backward compatibility but convert to assignees
     dueDate,
     priority,
     status,
     userId: inputUserId,
+    labels,
   } = args.input;
   const userId = inputUserId || context?.userId;
 
@@ -45,24 +46,16 @@ export const createTask = async (_: any, args: any, context: any) => {
     validatedCreatedById = 'default-user-id';
   }
 
-  // Validate that the assigned user exists if assignedToId is provided
-  let validatedAssignedToId = assignedToId;
-  if (assignedToId) {
-    const assignedUser = await context.prisma.user.findUnique({
-      where: { id: assignedToId },
-    });
-    if (!assignedUser) {
-      // If the assigned user doesn't exist, set it to null
-      validatedAssignedToId = null;
-    }
-  }
+  // Prepare assignees data - convert assignedToId to assignees array
+  const assigneesData = assignedToId ? { connect: [{ id: assignedToId }] } : undefined;
 
+  // Create the task
   const newTask = await context.prisma.task.create({
     data: {
       title,
       description,
       projectId,
-      assignedToId: validatedAssignedToId,
+      assignees: assigneesData,
       dueDate,
       priority,
       status,
@@ -70,8 +63,37 @@ export const createTask = async (_: any, args: any, context: any) => {
     },
   });
 
+  // Handle labels if provided
+  if (labels && labels.length > 0) {
+    for (const labelName of labels) {
+      // Find or create label
+      let label = await context.prisma.label.findFirst({
+        where: { name: labelName, projectId },
+      });
+      
+      if (!label) {
+        label = await context.prisma.label.create({
+          data: {
+            name: labelName,
+            color: '#2FC285', // Default color
+            projectId,
+          },
+        });
+      }
+
+      // Connect label to task
+      await context.prisma.task.update({
+        where: { id: newTask.id },
+        data: { labels: { connect: { id: label.id } } },
+      });
+    }
+  }
+
   return context.prisma.task.findUnique({
     where: { id: newTask.id },
-    include: { assignedTo: true },
+    include: { 
+      assignees: true,
+      labels: true,
+    },
   });
 };

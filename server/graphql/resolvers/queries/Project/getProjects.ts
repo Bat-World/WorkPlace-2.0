@@ -2,7 +2,7 @@ export const getProjects = async (_: any, args: any, context: any) => {
   const userId = args.userId || context?.userId;
   if (!userId) throw new Error('Unauthorized');
 
-  return context.prisma.project.findMany({
+  const projects = await context.prisma.project.findMany({
     where: {
       members: {
         some: { userId },
@@ -16,4 +16,10 @@ export const getProjects = async (_: any, args: any, context: any) => {
       createdAt: 'desc',
     },
   });
+
+  // Explicitly include avatarUrl in the response
+  return projects.map((project: any) => ({
+    ...project,
+    avatarUrl: project.avatarUrl,
+  }));
 };

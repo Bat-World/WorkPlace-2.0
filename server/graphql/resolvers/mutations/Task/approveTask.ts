@@ -3,21 +3,39 @@ export const approveTask = async (_: any, args: any, context: any) => {
   const userId = argUserId || context?.userId;
   if (!userId) throw new Error('Unauthorized');
 
-  // Fetch task and project/org for RBAC
   const task = await context.prisma.task.findUnique({
     where: { id: taskId },
-    include: { project: { include: { organization: true } } },
+    include: { 
+      project: { 
+        include: { 
+          members: { include: { user: true } } 
+        } 
+      },
+      reviewers: true 
+    },
   });
+  
   if (!task) throw new Error('Task not found');
-  if (task.project.organization.ownerId !== userId) {
-    throw new Error('Only ADMIN can approve task');
+  
+  // Check if user is a reviewer of the task
+  const isReviewer = task.reviewers.some((r: any) => r.id === userId);
+  if (!isReviewer) throw new Error('Only reviewers can approve tasks');
+  
+  // Check if user is ADMIN in the project
+  const projectMember = task.project.members.find((m: any) => m.userId === userId);
+  if (!projectMember || projectMember.role !== 'ADMIN') {
+    throw new Error('Only ADMIN reviewers can approve tasks');
   }
-  if (task.status !== 'REVIEW') throw new Error('Task must be in REVIEW to approve');
 
-  // Update status to DONE
   const updatedTask = await context.prisma.task.update({
     where: { id: taskId },
-    data: { status: 'DONE' },
+    data: { status: 'APPROVED' },
+    include: {
+      project: { include: { members: { include: { user: true } } } },
+      reviewers: true,
+      assignees: true,
+      createdBy: true,
+    },
   });
 
   return updatedTask;

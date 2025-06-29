@@ -1,7 +1,10 @@
 import React from "react";
 import { Droppable } from "@hello-pangea/dnd";
 import SortableItem from "./SortableItem";
-import type { KanbanColumn as KanbanColumnType, KanbanTask } from "@/lib/taskUtils";
+import type {
+  KanbanColumn as KanbanColumnType,
+  KanbanTask,
+} from "@/lib/taskUtils";
 
 const KanbanColumn = ({
   column,
@@ -34,11 +37,6 @@ const KanbanColumn = ({
         <span className="text-base text-[var(--background)]/50">
           {column.taskIds.length}
         </span>
-        {/* {column.id === "done" && (
-          <span className="text-xs bg-red-100 text-red-700 px-2 py-0.5 rounded">
-            Батлагдсан таскууд
-          </span>
-        )} */}
       </h2>
       <Droppable droppableId={column.id} isDropDisabled={column.id === "done"}>
         {(provided, snapshot) => (
@@ -54,9 +52,7 @@ const KanbanColumn = ({
             }`}
           >
             {column.taskIds.length === 0 && (
-              <div className="text-sm text-gray-400 mb-2">
-                No tasks available.
-              </div>
+              <div className="text-sm text-gray-400 mb-2"></div>
             )}
             {column.taskIds.map((taskId, idx) => (
               <SortableItem

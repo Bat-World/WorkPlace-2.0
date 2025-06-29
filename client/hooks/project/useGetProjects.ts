@@ -25,11 +25,13 @@ export const useGetProjects = () => {
     id
     title
     description
+    avatarUrl
     createdAt
     createdBy { id }
     tasks { id } 
     members {
       id
+      role
       user {
         id
         name

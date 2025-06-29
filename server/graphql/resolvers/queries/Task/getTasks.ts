@@ -17,7 +17,8 @@ export const getTasks = async (_: any, args: any, context: any) => {
   return context.prisma.task.findMany({
     where: whereClause,
     include: {
-      assignedTo: true,
+      assignees: true,
+      labels: true,
       project: {
         select: {
           id: true,
