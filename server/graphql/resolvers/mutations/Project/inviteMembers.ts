@@ -183,4 +183,3 @@ export const cancelInvitation = async (
 
   return true;
 };
-

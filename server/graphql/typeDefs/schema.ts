@@ -50,6 +50,7 @@ type Project {
   createdBy: User!
   members: [ProjectMember!]!
   invitations: [Invitation!]
+  labels: [Label!]!
 }
 
 type ProjectMember {
@@ -116,11 +117,11 @@ type Invitation {
     createdAt: DateTime!
   }
 
-  type Label {
-    id: ID!
-    name: String!
-    color: String!
-  }
+ type Label {
+  id: ID!
+  name: String!
+  projects: [Project!]!
+}
 
   type InviteResult {
     success: Boolean!
@@ -166,7 +167,7 @@ input CreateProjectInput {
   title: String!
   description: String
   invitees: [String!]
-  userId: ID
+  labels: [String!]
 }
 
 
@@ -186,6 +187,13 @@ type AcceptInviteResult {
 input AcceptInviteInput {
   token: String!
 }
+
+type InvitationDetails {
+  projectId: String!
+  projectTitle: String!
+  invitedByEmail: String!
+}
+
   
 
 
@@ -199,6 +207,7 @@ input AcceptInviteInput {
     getPendingInvitations(projectId: ID!, userId: ID): [Invitation!]!
     getComments(taskId: ID!, skip: Int, take: Int, userId: ID): [Comment!]!
     getLogs(taskId: ID!, userId: ID): [Log!]!
+    getInvitationByToken(token: String!): InvitationDetails
   }
 
   type Mutation {

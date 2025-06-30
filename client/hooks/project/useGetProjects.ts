@@ -19,6 +19,7 @@ export const useGetProjects = () => {
       const res = await sendRequest.post(
         '/api/graphql',
         {
+<<<<<<< HEAD
           query: `
             query GetProjects {
   getProjects {
@@ -33,15 +34,37 @@ export const useGetProjects = () => {
       id
       role
       user {
+=======
+        query: `
+  query GetProjects {
+    getProjects {
+      id
+      title
+      description
+      createdAt
+      updatedAt
+      labels {
+        id
+        name
+      }
+      members {
+        role
+        user {
+          id
+          email
+          avatarUrl
+        }
+      }
+      createdBy {
+>>>>>>> main
         id
         name
         avatarUrl
       }
     }
   }
-}
-
-          `,
+`
+,
         },
         {
           headers: {

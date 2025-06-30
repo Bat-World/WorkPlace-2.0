@@ -33,6 +33,7 @@ import { updateMemberRole } from './mutations/Project/updateMemberRole'
 import { removeMember } from './mutations/Project/removeMember'
 import { declineInvite } from './mutations/Project/declineInvite'
 import { manageAssignees } from './mutations/Task/manageAssignees'
+import { getInvitationByToken } from './mutations/Project/getInvitationByToken'
 
 
 export const resolvers = {
@@ -46,6 +47,7 @@ export const resolvers = {
     getPendingInvitations,
     getComments,
     getLogs,
+    getInvitationByToken
   },
   Mutation: {
     createTask,
