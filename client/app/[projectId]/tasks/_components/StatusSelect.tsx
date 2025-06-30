@@ -15,7 +15,6 @@ const StatusSelect = ({ value, onChange }: StatusSelectProps) => (
         <SelectItem value="TODO">Not started</SelectItem>
         <SelectItem value="DOING">Doing</SelectItem>
         <SelectItem value="REVIEW">Review</SelectItem>
-        <SelectItem value="DONE">Done</SelectItem>
       </SelectGroup>
     </SelectContent>
   </Select>

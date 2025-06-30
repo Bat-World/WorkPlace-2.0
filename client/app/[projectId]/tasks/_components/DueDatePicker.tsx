@@ -6,7 +6,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
 import { ChevronDownIcon } from "lucide-react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Input } from "@/components/ui/input";
 
 interface DueDatePickerProps {
@@ -16,6 +16,43 @@ interface DueDatePickerProps {
 
 const DueDatePicker = ({ value, onChange }: DueDatePickerProps) => {
   const [open, setOpen] = useState(false);
+  const [timeValue, setTimeValue] = useState("10:30:00");
+
+  // Update time value when the date value changes
+  useEffect(() => {
+    if (value) {
+      const hours = value.getHours().toString().padStart(2, '0');
+      const minutes = value.getMinutes().toString().padStart(2, '0');
+      setTimeValue(`${hours}:${minutes}:00`);
+    } else {
+      setTimeValue("10:30:00");
+    }
+  }, [value]);
+
+  const handleDateSelect = (date: Date | undefined) => {
+    if (date && timeValue) {
+      // Combine the selected date with the time
+      const [hours, minutes] = timeValue.split(":");
+      const combinedDate = new Date(date);
+      combinedDate.setHours(parseInt(hours), parseInt(minutes), 0, 0);
+      onChange(combinedDate);
+    } else {
+      onChange(date);
+    }
+    setOpen(false);
+  };
+
+  const handleTimeChange = (newTime: string) => {
+    setTimeValue(newTime);
+    if (value && newTime) {
+      // Update the existing date with new time
+      const [hours, minutes] = newTime.split(":");
+      const updatedDate = new Date(value);
+      updatedDate.setHours(parseInt(hours), parseInt(minutes), 0, 0);
+      onChange(updatedDate);
+    }
+  };
+
   return (
     <div className="w-full flex mt-3 items-center gap-3">
       <p className="text-[var(--foreground)]/50 text-base w-20">Due date</p>
@@ -39,10 +76,7 @@ const DueDatePicker = ({ value, onChange }: DueDatePickerProps) => {
               mode="single"
               selected={value}
               captionLayout="dropdown"
-              onSelect={(date) => {
-                onChange(date);
-                setOpen(false);
-              }}
+              onSelect={handleDateSelect}
             />
           </PopoverContent>
         </Popover>
@@ -50,7 +84,8 @@ const DueDatePicker = ({ value, onChange }: DueDatePickerProps) => {
           type="time"
           id="time-picker"
           step="1"
-          defaultValue="10:30:00"
+          value={timeValue}
+          onChange={(e) => handleTimeChange(e.target.value)}
           className="bg-background appearance-none [&::-webkit-calendar-picker-indicator]:hidden [&::-webkit-calendar-picker-indicator]:appearance-none"
         />
       </div>

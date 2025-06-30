@@ -31,7 +31,7 @@ interface FormState {
   description: string;
   priority: string;
   status: string;
-  assignee: string;
+  assignee: string[];
   labels: string[];
   labelInput: string;
   date: Date | undefined;
@@ -42,7 +42,7 @@ const initialForm: FormState = {
   description: "",
   priority: "",
   status: "",
-  assignee: "",
+  assignee: [],
   labels: [],
   labelInput: "",
   date: undefined,
@@ -67,10 +67,11 @@ const CreateTaskDialog = () => {
         title: form.title,
         description: form.description,
         projectId,
-        assignedToId: form.assignee || undefined,
+        assigneeIds: form.assignee.length > 0 ? form.assignee : undefined,
         dueDate: form.date ? form.date.toISOString() : undefined,
         priority: form.priority || undefined,
         status: form.status || undefined,
+        labels: form.labels.length > 0 ? form.labels : undefined,
       },
       {
         onSuccess: () => {
@@ -89,9 +90,9 @@ const CreateTaskDialog = () => {
           <Plus /> Таск үүсгэх
         </Button>
       </DialogTrigger>
-      <DialogContent className="sm:max-w-[40rem] bg-[#141318] border-[#2A2A2A] dark text-[var(--foreground)] rounded-3xl p-8">
+      <DialogContent className="sm:max-w-[40rem] bg-[#141318]/0 backdrop-blur-2xl border-[#2A2A2A] dark text-[var(--foreground)] rounded-3xl p-8">
         <DialogHeader>
-          <DialogTitle className="text-[var(--foreground)]/50">
+          <DialogTitle className="text-[var(--foreground)]/50 font-medium text-base">
             Шинэ таск үүсгэх
           </DialogTitle>
         </DialogHeader>
@@ -101,7 +102,7 @@ const CreateTaskDialog = () => {
             value={form.title}
             onChange={(e) => handleChange("title", e.target.value)}
             placeholder="Title"
-            className="bg-transparent text-3xl font-semibold border-transparent focus-visible:ring-0 outline-none"
+            className="bg-transparent text-3xl font-semibold border-transparent focus-visible:ring-0 outline-none my-2"
             required
           />
           <PrioritySelect
@@ -110,7 +111,7 @@ const CreateTaskDialog = () => {
           />
           <AssigneeDropdown
             value={form.assignee}
-            onChange={(v: string) => handleChange("assignee", v)}
+            onChange={(v: string[]) => handleChange("assignee", v)}
             members={members}
             loading={membersLoading}
           />

@@ -1,7 +1,11 @@
 import { Input } from "@/components/ui/input";
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
 import { Button } from "@/components/ui/button";
-import { Tags } from "lucide-react";
+import { Tags, X } from "lucide-react";
 import { KeyboardEvent, useState } from "react";
 
 interface LabelsInputProps {
@@ -11,7 +15,12 @@ interface LabelsInputProps {
   setInput: (input: string) => void;
 }
 
-const LabelsInput = ({ labels, input, setLabels, setInput }: LabelsInputProps) => {
+const LabelsInput = ({
+  labels,
+  input,
+  setLabels,
+  setInput,
+}: LabelsInputProps) => {
   const [open, setOpen] = useState(false);
   const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
     if ((e.key === "Enter" || e.key === ",") && input.trim()) {
@@ -22,7 +31,8 @@ const LabelsInput = ({ labels, input, setLabels, setInput }: LabelsInputProps) =
       setInput("");
     }
   };
-  const handleRemove = (label: string) => setLabels(labels.filter((l) => l !== label));
+  const handleRemove = (label: string) =>
+    setLabels(labels.filter((l) => l !== label));
   return (
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
@@ -30,7 +40,10 @@ const LabelsInput = ({ labels, input, setLabels, setInput }: LabelsInputProps) =
           <Tags /> Labels
         </Button>
       </PopoverTrigger>
-      <PopoverContent align="start" className="w-70 dark mt-1 bg-[#141318] rounded-xl">
+      <PopoverContent
+        align="start"
+        className="w-70 dark mt-1 bg-[#141318] rounded-xl"
+      >
         <div className="flex flex-col justify-center items-center gap-3 w-full">
           <Input
             name="labels"
@@ -49,19 +62,23 @@ const LabelsInput = ({ labels, input, setLabels, setInput }: LabelsInputProps) =
                 {label}
                 <button
                   type="button"
-                  className="ml-1 text-[#2FC285] hover:text-red-500"
+                  className="ml-1 text-[var(--foreground)]/50 hover:text-red-500 cursor-pointer"
                   onClick={() => handleRemove(label)}
                 >
-                  ×
+                  <X className="w-3" />
                 </button>
               </span>
             ))}
           </div>
-          <p className="text-[var(--foreground)]/50 text-xs">Press Enter or comma to create a new tag</p>
+          {labels.length <= 0 && (
+            <p className="text-[var(--foreground)]/50 text-xs">
+              Press Enter or comma to create a new tag
+            </p>
+          )}
         </div>
       </PopoverContent>
     </Popover>
   );
 };
 
-export default LabelsInput; 
+export default LabelsInput;

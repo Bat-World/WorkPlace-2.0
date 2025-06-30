@@ -11,16 +11,21 @@ export interface Task {
   dueDate: string | null;
   createdAt: string;
   updatedAt: string;
-  assignedTo: {
+  assignees: Array<{
     id: string;
     email: string;
     name: string | null;
     avatarUrl: string | null;
-  } | null;
+  }>;
   project: {
     id: string;
     title: string;
   };
+  labels: Array<{
+    id: string;
+    name: string;
+    color: string;
+  }>;
 }
 
 interface GetTasksByProjectResponse {
@@ -55,7 +60,7 @@ export const useGetTasksByProject = (projectId: string) => {
                 dueDate
                 createdAt
                 updatedAt
-                assignedTo {
+                assignees {
                   id
                   email
                   name
@@ -64,6 +69,11 @@ export const useGetTasksByProject = (projectId: string) => {
                 project {
                   id
                   title
+                }
+                labels {
+                  id
+                  name
+                  color
                 }
               }
             }

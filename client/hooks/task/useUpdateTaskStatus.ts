@@ -3,13 +3,9 @@ import { useAuth, useUser } from "@clerk/nextjs";
 import { sendRequest } from "@/lib/sendRequest";
 import type { Task } from "./useGetTasksByProject";
 
-interface UpdateTaskInput {
-  status?: string;
-  title?: string;
-  description?: string;
-  priority?: string;
-  dueDate?: string;
-  assignedToId?: string;
+interface UpdateTaskStatusInput {
+  status: string;
+  assigneeIds?: string[];
 }
 
 interface UpdateTaskResponse {
@@ -22,7 +18,7 @@ export const useUpdateTaskStatus = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: async ({ taskId, input, projectId }: { taskId: string; input: UpdateTaskInput; projectId: string }) => {
+    mutationFn: async ({ taskId, input, projectId }: { taskId: string; input: UpdateTaskStatusInput; projectId: string }) => {
       const token = await getToken();
       const userId = user?.id;
 
@@ -42,7 +38,7 @@ export const useUpdateTaskStatus = () => {
                 status
                 priority
                 dueDate
-                assignedTo {
+                assignees {
                   id
                   email
                   name

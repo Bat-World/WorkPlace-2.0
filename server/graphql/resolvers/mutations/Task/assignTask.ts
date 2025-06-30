@@ -17,8 +17,12 @@ export const assignTask = async (_: any, args: any, context: any) => {
   // Assign user
   const updatedTask = await context.prisma.task.update({
     where: { id: taskId },
-    data: { assignedToId: assigneeId },
-    include: { assignedTo: true },
+    data: { 
+      assignees: {
+        set: [{ id: assigneeId }]
+      }
+    },
+    include: { assignees: true },
   });
 
   return updatedTask;

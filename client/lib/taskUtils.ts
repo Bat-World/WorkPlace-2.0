@@ -1,14 +1,46 @@
-import { Task as APITask } from '@/hooks/task/useGetTasksByProject';
+export const formatTaskForKanban = (task: any) => {
+  return {
+    id: task.id,
+    title: task.title,
+    description: task.description,
+    status: task.status,
+    priority: task.priority,
+    dueDate: task.dueDate,
+    assignees: task.assignees || [],
+    labels: task.labels || [],
+    project: task.project,
+  };
+};
 
+export const formatAssigneeForDisplay = (assignee: any) => {
+  return {
+    id: assignee.id,
+    name: assignee.name || assignee.email,
+    avatarUrl: assignee.avatarUrl || undefined,
+  };
+};
+
+// Types for Kanban board
 export interface KanbanTask {
   id: string;
   title: string;
   description: string;
-  priority: "low" | "medium" | "high";
+  priority: string;
   label: string;
   comments: number;
   attachments: number;
-  assignees: Array<{ id: string; name: string; avatarUrl?: string }>;
+  assignees: Array<{
+    id: string;
+    name: string;
+    avatarUrl?: string;
+  }>;
+  labels: Array<{
+    id: string;
+    name: string;
+    color: string;
+  }>;
+  dueDate?: string;
+  status: string;
 }
 
 export interface KanbanColumn {
@@ -17,24 +49,8 @@ export interface KanbanColumn {
   taskIds: string[];
 }
 
-export const transformAPITaskToKanban = (task: APITask): KanbanTask => {
-  return {
-    id: task.id,
-    title: task.title,
-    description: task.description || "",
-    priority: (task.priority.toLowerCase() as "low" | "medium" | "high") || "medium",
-    label: task.project.title,
-    comments: 0, // TODO: Add comments count when available
-    attachments: 0, // TODO: Add attachments count when available
-    assignees: task.assignedTo ? [{
-      id: task.assignedTo.id,
-      name: task.assignedTo.name || task.assignedTo.email,
-      avatarUrl: task.assignedTo.avatarUrl || undefined,
-    }] : [],
-  };
-};
-
-export const organizeTasksByStatus = (tasks: APITask[]) => {
+// Function to organize tasks by status for Kanban board
+export const organizeTasksByStatus = (tasks: any[]) => {
   const kanbanTasks: Record<string, KanbanTask> = {};
   const columns: Record<string, KanbanColumn> = {
     todo: { id: "todo", title: "To Do", taskIds: [] },
@@ -43,23 +59,43 @@ export const organizeTasksByStatus = (tasks: APITask[]) => {
     done: { id: "done", title: "Done", taskIds: [] },
   };
 
-  tasks.forEach(task => {
-    const kanbanTask = transformAPITaskToKanban(task);
+  tasks.forEach((task) => {
+    const kanbanTask: KanbanTask = {
+      id: task.id,
+      title: task.title,
+      description: task.description || "",
+      priority: task.priority?.toLowerCase() || "medium",
+      label: task.labels?.[0]?.name || "No Label",
+      comments: 0, // This would need to be fetched separately
+      attachments: task.attachments?.length || 0,
+      assignees: task.assignees?.map((assignee: any) => ({
+        id: assignee.id,
+        name: assignee.name || assignee.email,
+        avatarUrl: assignee.avatarUrl,
+      })) || [],
+      labels: task.labels?.map((label: any) => ({
+        id: label.id,
+        name: label.name,
+        color: label.color,
+      })) || [],
+      dueDate: task.dueDate,
+      status: task.status,
+    };
+
     kanbanTasks[task.id] = kanbanTask;
 
-    // Map API status to column
-    const status = task.status.toLowerCase();
-    if (status === 'todo' || status === 'not_started') {
-      columns.todo.taskIds.push(task.id);
-    } else if (status === 'doing' || status === 'in_progress') {
-      columns.doing.taskIds.push(task.id);
-    } else if (status === 'review') {
-      columns.review.taskIds.push(task.id);
-    } else if (status === 'done' || status === 'completed') {
-      columns.done.taskIds.push(task.id);
-    } else {
-      // Default to todo for unknown statuses
-      columns.todo.taskIds.push(task.id);
+    // Map task status to column
+    const statusToColumn: Record<string, string> = {
+      TODO: "todo",
+      DOING: "doing",
+      REVIEW: "review",
+      DONE: "done",
+      APPROVED: "done",
+    };
+
+    const columnId = statusToColumn[task.status] || "todo";
+    if (columns[columnId]) {
+      columns[columnId].taskIds.push(task.id);
     }
   });
 

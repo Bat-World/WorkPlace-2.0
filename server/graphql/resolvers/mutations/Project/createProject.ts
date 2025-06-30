@@ -3,13 +3,15 @@ import { sendInviteEmail } from "../../../../src/utils/email";
 
 export const createProject = async (
   _: any,
-  args: { input: { title: string; description?: string; invitees?: string[]; labels?: string[] } },
+  args: { input: { title: string; description?: string; invitees?: string[]; userId?: string } },
   context: any
 ) => {
-  const { userId, prisma } = context;
+  const { userId: contextUserId, prisma } = context;
+  const { title, description, invitees = [], userId: inputUserId } = args.input;
+  
+  const userId = contextUserId || inputUserId;
   if (!userId) throw new Error("Unauthorized");
 
-  const { title, description, invitees = [], labels = [] } = args.input;
 
   try {
     const project = await prisma.$transaction(async (tx: { project: { create: (arg0: { data: { title: string; description: string | undefined; createdById: any; members: { create: { userId: any; role: string; }; }; }; include: { members: boolean; createdBy: boolean; labels: boolean; }; }) => any; update: (arg0: { where: { id: any; }; data: { labels: { connect: { id: any; }[]; }; }; }) => any; findUnique: (arg0: { where: { id: any; }; include: { labels: boolean; }; }) => any; }; label: { findFirst: (arg0: { where: { name: { equals: string; mode: string; }; }; }) => any; create: (arg0: { data: { name: string; color: string; }; }) => any; }; }) => {

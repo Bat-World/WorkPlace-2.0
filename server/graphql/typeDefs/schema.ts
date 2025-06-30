@@ -3,6 +3,34 @@ import { gql } from 'graphql-tag';
 export const typeDefs = gql`
   scalar DateTime
 
+  enum TaskStatus {
+    TODO
+    DOING
+    REVIEW
+    APPROVED
+    DONE
+  }
+
+  enum Priority {
+    LOW
+    MEDIUM
+    HIGH
+  }
+
+  enum Role {
+    ADMIN
+    MEMBER
+    DIRECTOR
+  }
+
+  enum ProjectStatus {
+    NOT_STARTED
+    IN_PROGRESS
+    REVIEW
+    APPROVED
+    DONE
+  }
+
   type User {
     id: ID!
     email: String!
@@ -15,6 +43,7 @@ type Project {
   id: ID!
   title: String!
   description: String
+  avatarUrl: String
   tasks(skip: Int, take: Int): [Task!]
   createdAt: DateTime!
   updatedAt: DateTime!
@@ -27,6 +56,7 @@ type Project {
 type ProjectMember {
   id: ID!
   role: String!
+  userId: ID!
   user: User
 }
 
@@ -36,17 +66,20 @@ type ProjectMember {
     id: ID!
     title: String!
     description: String
-    status: String
-    priority: String
-    dueDate: DateTime
+    body: String
+    attachments: [String!]!
+    status: TaskStatus!
+    priority: Priority!
+    dueDate: String
+    createdAt: String!
+    updatedAt: String!
     project: Project!
-    assignedTo: User
-    reviewers: [User!]
-    comments(skip: Int, take: Int): [Comment!]
-    logs: [Log!]
-    labels: [Label!]
-    createdAt: DateTime!
-    updatedAt: DateTime!
+    createdBy: User!
+    assignees: [User!]!
+    reviewers: [User!]!
+    labels: [Label!]!
+    comments: [Comment!]!
+    logs: [Log!]!
   }
 
 
@@ -62,6 +95,18 @@ type Invitation {
     id: ID!
     content: String!
     author: User!
+    createdAt: DateTime!
+    parentId: ID
+    replies: [Comment!]
+    likes: [CommentLike!]
+    likeCount: Int!
+    isLikedByUser: Boolean!
+  }
+
+  type CommentLike {
+    id: ID!
+    user: User!
+    comment: Comment!
     createdAt: DateTime!
   }
 
@@ -95,21 +140,26 @@ type Invitation {
   input CreateTaskInput {
     title: String!
     description: String
+    body: String
+    attachments: [String!]
     projectId: ID!
-    assignedToId: ID
+    assigneeIds: [ID!]
     dueDate: DateTime
     priority: String
     status: String
     userId: ID
+    labels: [String!]
   }
 
   input UpdateTaskInput {
     title: String
     description: String
+    body: String
+    attachments: [String!]
     status: String
     dueDate: DateTime
     priority: String
-    assignedToId: ID
+    assigneeIds: [ID!]
     userId: ID
   }
 
@@ -153,6 +203,8 @@ type InvitationDetails {
     getReviewTasks(orgId: ID!, skip: Int, take: Int, userId: ID): [Task!]!
     getProjects(userId: ID): [Project!]!
     getProjectById(projectId: ID!, skip: Int, take: Int, userId: ID): Project
+    getProjectMembers(projectId: ID!, userId: ID): [ProjectMember!]!
+    getPendingInvitations(projectId: ID!, userId: ID): [Invitation!]!
     getComments(taskId: ID!, skip: Int, take: Int, userId: ID): [Comment!]!
     getLogs(taskId: ID!, userId: ID): [Log!]!
     getInvitationByToken(token: String!): InvitationDetails
@@ -161,9 +213,12 @@ type InvitationDetails {
   type Mutation {
     createTask(input: CreateTaskInput!): Task!
     updateTask(taskId: ID!, input: UpdateTaskInput!): Task!
+    deleteTask(taskId: ID!, userId: ID): Task!
     approveTask(taskId: ID!, userId: ID): Task!
     assignTask(taskId: ID!, userId: ID!, actingUserId: ID): Task!
+    manageAssignees(taskId: ID!, assigneeIds: [ID!]!, actingUserId: ID): Task!
     addReviewer(taskId: ID!, userId: ID!, actingUserId: ID): Task!
+    manageReviewers(taskId: ID!, reviewerIds: [ID!]!, actingUserId: ID): Task!
     addLabel(
       taskId: ID!
       labelId: ID
@@ -172,11 +227,20 @@ type InvitationDetails {
       actingUserId: ID!
     ): Task!
     addDeadline(taskId: ID!, dueDate: DateTime!, actingUserId: ID): Task!
-    addComment(taskId: ID!, content: String!, actingUserId: ID): Comment!
+    addComment(taskId: ID!, content: String!, actingUserId: ID, parentId: ID): Comment!
+    likeComment(commentId: ID!, actingUserId: ID): CommentLike!
+    unlikeComment(commentId: ID!, actingUserId: ID): Boolean!
     addLog(taskId: ID!, message: String!, actingUserId: ID): Log!
     uploadFile(taskId: ID!, fileUrl: String!, actingUserId: ID): FileUploadResult!
     createProject(input: CreateProjectInput!): Project!
+    updateProject(projectId: ID!, title: String!): Project!
     inviteMember(input: InviteMemberInput!): Invitation!
     acceptInvite(input: AcceptInviteInput!): AcceptInviteResult!
+    updateProjectAvatar(projectId: ID!, avatarUrl: String!): Project!
+    updateMemberRole(memberId: ID!, role: String!): ProjectMember!
+    removeMember(memberId: ID!): ProjectMember!
+    declineInvite(input: AcceptInviteInput!): AcceptInviteResult!
+    resendInvitation(invitationId: ID!): Invitation!
+    cancelInvitation(invitationId: ID!): Boolean!
   }
 `; 

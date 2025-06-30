@@ -14,7 +14,7 @@ import { Input } from "@/components/ui/input";
 import { Plus, XCircle, Loader2 } from "lucide-react";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { useCreateProject } from "@/hooks/project/ useCreateProject";
+import { useCreateProject } from "@/hooks/project/useCreateProject";
 import { motion, AnimatePresence } from "framer-motion";
 import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";

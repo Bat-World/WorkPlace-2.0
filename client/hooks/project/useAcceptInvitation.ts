@@ -50,3 +50,40 @@ export const useAcceptInvite = () => {
     },
   });
 };
+
+export const useDeclineInvite = () => {
+  const { getToken } = useAuth();
+  const { user } = useUser();
+
+  return useMutation({
+    mutationFn: async (token: string): Promise<AcceptInviteResponse> => {
+      const authToken = await getToken();
+      const userId = user?.id;
+      if (!userId) {
+        throw new Error('User is not loaded or not signed in');
+      }
+      const res = await sendRequest.post(
+        '/api/graphql',
+        {
+          query: `
+            mutation DeclineInvite($token: String!) {
+              declineInvite(token: $token) {
+                message
+                projectId
+              }
+            }
+          `,
+          variables: { token },
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${authToken}`,
+            'Content-Type': 'application/json',
+            'x-user-id': userId,
+          },
+        }
+      );
+      return res.data.data.declineInvite;
+    },
+  });
+};

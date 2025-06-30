@@ -4,9 +4,14 @@ import { sendRequest } from "@/lib/sendRequest";
 
 export interface ProjectMember {
   id: string;
-  email: string;
-  name?: string;
-  avatarUrl?: string;
+  role: string;
+  userId: string;
+  user: {
+    id: string;
+    email: string;
+    name?: string;
+    avatarUrl?: string;
+  };
 }
 
 export const useGetProjectMembers = (projectId: string) => {
@@ -23,9 +28,12 @@ export const useGetProjectMembers = (projectId: string) => {
         "/api/graphql",
         {
           query: `
-            query GetProjectById($projectId: ID!, $userId: ID) {
-              getProjectById(projectId: $projectId, userId: $userId) {
-                members {
+            query GetProjectMembers($projectId: ID!, $userId: ID) {
+              getProjectMembers(projectId: $projectId, userId: $userId) {
+                id
+                role
+                userId
+                user {
                   id
                   email
                   name
@@ -44,7 +52,7 @@ export const useGetProjectMembers = (projectId: string) => {
           },
         }
       );
-      return res.data.data.getProjectById?.members || [];
+      return res.data.data.getProjectMembers || [];
     },
     enabled: !!projectId && !!user?.id,
   });

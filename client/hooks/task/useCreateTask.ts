@@ -1,20 +1,25 @@
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useAuth, useUser } from "@clerk/nextjs";
 import { sendRequest } from "@/lib/sendRequest";
 
 interface CreateTaskInput {
   title: string;
   description?: string;
+  body?: string;
+  attachments?: string[];
   projectId: string;
-  assignedToId?: string;
+  assigneeIds?: string[];
   dueDate?: string;
   priority?: string;
   status?: string;
+  userId?: string;
+  labels?: string[];
 }
 
 export const useCreateTask = () => {
   const { user } = useUser();
   const { getToken } = useAuth();
+  const queryClient = useQueryClient();
 
   return useMutation({
     mutationFn: async (input: CreateTaskInput) => {
@@ -38,6 +43,11 @@ export const useCreateTask = () => {
                 priority
                 status
                 createdAt
+                labels {
+                  id
+                  name
+                  color
+                }
               }
             }
           `,
@@ -58,6 +68,12 @@ export const useCreateTask = () => {
       );
 
       return res.data.data.createTask;
+    },
+    onSuccess: (data, variables) => {
+      // Invalidate and refetch tasks for the specific project
+      queryClient.invalidateQueries({
+        queryKey: ["tasks", variables.projectId],
+      });
     },
   });
 };

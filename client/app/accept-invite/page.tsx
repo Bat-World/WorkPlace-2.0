@@ -1,5 +1,13 @@
-'use client';
+import { Suspense } from "react";
+import AcceptInvitePage from "./AcceptInvitePage";
 
+<<<<<<< HEAD
+export default function Page() {
+  return (
+    <Suspense fallback={<p className="text-white">Loading...</p>}>
+      <AcceptInvitePage />
+    </Suspense>
+=======
 import { useSearchParams, useRouter } from 'next/navigation';
 import { useEffect } from 'react';
 import { useAcceptInvite } from '@/hooks/project/useAcceptInvitation';
@@ -64,5 +72,6 @@ export default function AcceptInvitePage() {
         {isAccepting ? 'Accepting...' : 'Accept Invitation'}
       </button>
     </div>
+>>>>>>> main
   );
 }
