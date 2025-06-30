@@ -15,7 +15,7 @@ export const uploadRouter = {
     .middleware(async () => {
       return { uploadedAt: new Date() };
     })
-    .onUploadComplete(async ({ metadata, file }) => {}),
+    .onUploadComplete(async ({ metadata, file }: { metadata: any; file: any }) => {}),
   
   projectAvatars: f({
     image: { maxFileSize: "4MB", maxFileCount: 1 },
@@ -23,7 +23,7 @@ export const uploadRouter = {
     .middleware(async () => {
       return { uploadedAt: new Date() };
     })
-    .onUploadComplete(async ({ metadata, file }) => {
+    .onUploadComplete(async ({ metadata, file }: { metadata: any; file: any }) => {
       return { url: file.url };
     }),
 } satisfies FileRouter;

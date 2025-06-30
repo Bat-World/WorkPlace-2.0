@@ -9,7 +9,11 @@ interface ActionButtonsProps {
   isCurrentUserAdmin: boolean;
 }
 
-const ActionButtons = ({ task, canApprove, isCurrentUserAdmin }: ActionButtonsProps) => {
+const ActionButtons = ({
+  task,
+  canApprove,
+  isCurrentUserAdmin,
+}: ActionButtonsProps) => {
   const approveTaskMutation = useApproveTask();
 
   const handleApproveTask = async () => {
@@ -45,4 +49,4 @@ const ActionButtons = ({ task, canApprove, isCurrentUserAdmin }: ActionButtonsPr
   );
 };
 
-export default ActionButtons; 
+export default ActionButtons;

@@ -126,7 +126,7 @@ export default function KanbanPage() {
     return (
       <div className="px-20 flex flex-col items-center justify-center">
         <Info />
-        <KanbanSkeleton />
+        <p>test</p>
       </div>
     );
   }
@@ -134,8 +134,7 @@ export default function KanbanPage() {
   if (error) {
     return (
       <div className="px-20 flex flex-col items-center justify-center">
-        <p>Өө алдаа гарлаа</p>
-        <KanbanSkeleton />
+        <p>Өө алдаа гарлаа {error.message || String(error)}</p>
       </div>
     );
   }

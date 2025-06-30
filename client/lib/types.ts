@@ -2,6 +2,7 @@ export interface Project {
   id: string;
   title: string;
   description?: string;
+  avatarUrl?: string;
   createdAt: string;
   createdBy: {
     id: string;
