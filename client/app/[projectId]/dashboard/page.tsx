@@ -1,33 +1,47 @@
 'use client';
 
-import { useGetProjects } from "@/hooks/project/useGetProjects";
+import { useParams } from "next/navigation";
+import { useGetDashboardStats } from "@/hooks/project/useGetDashboardStats";
+import { useGetReviewTasksByProject } from "@/hooks/project/useGetReviewTasksByProject";
+import { DashboardStatsCards } from "./_components/StatsCards";
+import ClosedTasksAreaChart from "./_components/Chart";
+import ReviewTasksCard from "./_components/TasksToReview";
+import DashboardSkeleton from "./_components/Skeleton";
 
 export default function DashboardPage() {
-  const { data: projects, isLoading, error } = useGetProjects();
+  const { projectId } = useParams() as { projectId: string };
 
-  if (isLoading) return <p className="text-gray-500">Loading projects...</p>;
-  if (error) return <p className="text-red-500">Error: {(error as Error).message}</p>;
+  const { data: statsData, isPending: isStatsLoading } = useGetDashboardStats(projectId);
+  const { data: reviewData, isPending: isReviewLoading } = useGetReviewTasksByProject(projectId);
+
+  const isLoading = isStatsLoading || isReviewLoading;
 
   return (
-    <div className="p-6">
-      <h1 className="text-2xl font-bold mb-4">Your Projects</h1>
-      {projects?.length ? (
-        <ul className="space-y-4">
-          {projects.map((project: any) => (
-            <li
-              key={project.id}
-              className="p-4 rounded border shadow-sm hover:bg-gray-50 transition"
-            >
-              <h2 className="text-lg font-semibold">{project.title}</h2>
-              <p className="text-sm text-gray-500">
-                Created at: {new Date(project.createdAt).toLocaleDateString()}
-              </p>
-            </li>
-          ))}
-        </ul>
-      ) : (
-        <p className="text-gray-500">You don’t have any projects yet.</p>
-      )}
+    <div className="w-full px-6 flex justify-center">
+      <div className="max-w-6xl w-full">
+        <h2 className="text-white text-2xl font-semibold mt-6">Dashboard Overview</h2>
+
+        {isLoading ? (
+          <DashboardSkeleton />
+        ) : (
+          <>
+            <DashboardStatsCards
+              totalTasks={statsData.totalTasks}
+              inProgressTasks={statsData.inProgressTasks}
+              reviewReadyTasks={statsData.reviewReadyTasks}
+            />
+
+            <div className="grid grid-cols-1 xl:grid-cols-3 gap-6 mt-6">
+              <div className="col-span-1 xl:col-span-2">
+                <ClosedTasksAreaChart />
+              </div>
+              <div className="col-span-1">
+                <ReviewTasksCard />
+              </div>
+            </div>
+          </>
+        )}
+      </div>
     </div>
   );
 }

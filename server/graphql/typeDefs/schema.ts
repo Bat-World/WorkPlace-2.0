@@ -60,6 +60,12 @@ type ProjectMember {
   user: User
 }
 
+type DashboardStats {
+  totalTasks: Int!
+  inProgressTasks: Int!
+  reviewReadyTasks: Int!
+  doneTasks: Int!
+}
 
 
   type Task {
@@ -75,9 +81,9 @@ type ProjectMember {
     updatedAt: String!
     project: Project!
     createdBy: User!
-    assignees: [User!]!
-    reviewers: [User!]!
-    labels: [Label!]!
+    assignees: [User!]
+    reviewers: [User!]
+    labels: [Label!]
     comments: [Comment!]!
     logs: [Log!]!
   }
@@ -209,6 +215,8 @@ type InvitationDetails {
     getComments(taskId: ID!, skip: Int, take: Int, userId: ID): [Comment!]!
     getLogs(taskId: ID!, userId: ID): [Log!]!
     getInvitationByToken(token: String!): InvitationDetails
+    getDashboardStats(projectId: String!): DashboardStats!
+    getReviewTasksByProject(projectId: ID!, userId: ID): [Task!]!
   }
 
   type Mutation {

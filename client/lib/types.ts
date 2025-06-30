@@ -26,3 +26,29 @@ labels: {
 }[];
 
 }
+
+export interface Task {
+  id: string;
+  title: string;
+  description: string | null;
+  status: string;
+  priority: string;
+  dueDate: string | null;
+  createdAt: string;
+  updatedAt: string;
+  assignees: Array<{
+    id: string;
+    email: string;
+    name: string | null;
+    avatarUrl: string | null;
+  }>;
+  project: {
+    id: string;
+    title: string;
+  };
+  labels: Array<{
+    id: string;
+    name: string;
+    color: string;
+  }>;
+}
