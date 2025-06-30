@@ -1,11 +1,11 @@
-import { createYoga, createSchema } from 'graphql-yoga';
-import { typeDefs } from '@/graphql/typeDefs';
-import { resolvers } from '@/graphql/resolvers';
-import { NextRequest } from 'next/server';
-import { createContext } from '@/context';
+import { createYoga, createSchema } from "graphql-yoga";
+import { typeDefs } from "@/graphql/typeDefs";
+import { resolvers } from "@/graphql/resolvers";
+import { NextRequest } from "next/server";
+import { createContext } from "@/context";
 
-// Explicitly define the merged context type
-import type { YogaInitialContext } from 'graphql-yoga';
+
+import type { YogaInitialContext } from "graphql-yoga";
 
 type IContext = Awaited<ReturnType<typeof createContext>>;
 type YogaContext = IContext & { req: NextRequest } & YogaInitialContext;
@@ -13,7 +13,7 @@ type YogaContext = IContext & { req: NextRequest } & YogaInitialContext;
 const yoga = createYoga<{
   req: NextRequest;
 }>({
-  graphqlEndpoint: '/api/graphql',
+  graphqlEndpoint: "/api/graphql",
   schema: createSchema({
     typeDefs,
     resolvers,
@@ -23,9 +23,9 @@ const yoga = createYoga<{
     return { ...customContext, req } as YogaContext;
   },
   cors: {
-    origin: ['http://localhost:3000', 'http://localhost:3001', 'http://remotia-client.vercel.app'],
+    origin: ["http://localhost:3000", "https://remotia-client.vercel.app"],
     credentials: true,
-  }
+  },
 });
 
 export const POST = async (req: NextRequest) => {
@@ -40,13 +40,10 @@ export const OPTIONS = async (req: NextRequest) => {
   return new Response(null, {
     status: 204,
     headers: {
-      'Access-Control-Allow-Origin': req.headers.get('origin') || '*',
-      'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
-      'Access-Control-Allow-Headers': 'Content-Type, Authorization, x-user-id',
-      'Access-Control-Allow-Credentials': 'true',
+      "Access-Control-Allow-Origin": req.headers.get("origin") || "*",
+      "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
+      "Access-Control-Allow-Headers": "Content-Type, Authorization, x-user-id",
+      "Access-Control-Allow-Credentials": "true",
     },
   });
 };
-
-
-
