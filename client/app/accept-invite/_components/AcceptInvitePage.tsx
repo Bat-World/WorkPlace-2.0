@@ -41,7 +41,7 @@ export default function AcceptInviteClient() {
   useEffect(() => {
     if (isSuccess && acceptData?.projectId) {
       toast.success(acceptData.message);
-      router.push(`/${acceptData.projectId}/dashboard`);
+      router.push(`/projects`);
     }
   }, [isSuccess, acceptData, router]);
 
