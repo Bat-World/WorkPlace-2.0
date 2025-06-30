@@ -34,7 +34,9 @@ const CreateProjectDialog = () => {
     return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
   };
 
-  const handleAddEmail = (e: React.KeyboardEvent<HTMLInputElement> | React.MouseEvent) => {
+  const handleAddEmail = (
+    e: React.KeyboardEvent<HTMLInputElement> | React.MouseEvent
+  ) => {
     e.preventDefault();
     if (currentEmail.trim() && isValidEmail(currentEmail.trim())) {
       setEmails([...emails, currentEmail.trim()]);
@@ -44,9 +46,11 @@ const CreateProjectDialog = () => {
     }
   };
 
-  const handleAddLabel = (e: React.KeyboardEvent<HTMLInputElement> | React.MouseEvent) => {
+  const handleAddLabel = (
+    e: React.KeyboardEvent<HTMLInputElement> | React.MouseEvent
+  ) => {
     e.preventDefault();
-    if (currentLabel.trim() && currentLabel.length <= 20) { 
+    if (currentLabel.trim() && currentLabel.length <= 20) {
       setLabels([...labels, currentLabel.trim()]);
       setCurrentLabel("");
     } else if (currentLabel.trim()) {
@@ -70,7 +74,12 @@ const CreateProjectDialog = () => {
     }
 
     try {
-      await createProject.mutateAsync({ title, description, invitees: emails, labels });
+      await createProject.mutateAsync({
+        title,
+        description,
+        invitees: emails,
+        labels,
+      });
       setTitle("");
       setDescription("");
       setEmails([]);
@@ -88,11 +97,14 @@ const CreateProjectDialog = () => {
     <div className="flex justify-end gap-6">
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogTrigger asChild>
-          <Button variant="secondary" className="text-[var(--background)] flex items-center gap-2">
+          <Button
+            variant="secondary"
+            className="text-[var(--background)] flex items-center gap-2"
+          >
             <Plus className="h-5 w-5" /> Төсөл үүсгэх
           </Button>
         </DialogTrigger>
-        <DialogContent className="sm:max-w-[425px] bg-[#141318] border-[#2A2A2A] dark text-[var(--foreground)] rounded-2xl">
+        <DialogContent className="sm:max-w-xl bg-[#141318] border-[#3D3C41] dark text-[var(--foreground)] rounded-2xl">
           <form onSubmit={handleSubmit}>
             <DialogHeader>
               <DialogTitle>Шинэ төсөл үүсгэх</DialogTitle>
@@ -132,7 +144,7 @@ const CreateProjectDialog = () => {
                   <Button
                     type="button"
                     onClick={handleAddEmail}
-                    className="bg-blue-600 hover:bg-blue-700 text-white rounded-xl"
+                    className="bg-[var(--foreground)]/10 text-white rounded-lg hover:bg-[var(--foreground)]/20 transition-colors"
                   >
                     нэмэх
                   </Button>
@@ -172,7 +184,7 @@ const CreateProjectDialog = () => {
                   <Button
                     type="button"
                     onClick={handleAddLabel}
-                    className="bg-blue-600 hover:bg-blue-700 text-white rounded-xl"
+                    className="bg-[var(--foreground)]/10 text-white rounded-lg hover:bg-[var(--foreground)]/20 transition-colors"
                   >
                     нэмэх
                   </Button>
@@ -210,13 +222,14 @@ const CreateProjectDialog = () => {
               </DialogClose>
               <Button
                 type="submit"
-                className="flex-1 py-5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white flex items-center justify-center gap-2"
+                variant={"secondary"}
+                className="flex-1 py-5 rounded-xl text-white flex items-center justify-center gap-2"
                 disabled={createProject.isPending || !title}
               >
                 {createProject.isPending ? (
                   <>
                     <Loader2 className="h-5 w-5 animate-spin" />
-                    Creating...
+                    Үүсгэж байна...
                   </>
                 ) : (
                   "Үүсгэх"

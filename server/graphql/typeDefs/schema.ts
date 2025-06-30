@@ -120,6 +120,7 @@ type Invitation {
  type Label {
   id: ID!
   name: String!
+  color: String!
   projects: [Project!]!
 }
 

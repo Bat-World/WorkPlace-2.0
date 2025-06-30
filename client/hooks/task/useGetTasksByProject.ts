@@ -32,6 +32,11 @@ interface GetTasksByProjectResponse {
   getTasks: Task[];
 }
 
+interface GraphQLResponse<T> {
+  data?: T;
+  errors?: Array<{ message: string; locations?: any[]; path?: string[] }>;
+}
+
 export const useGetTasksByProject = (projectId: string) => {
   const { user } = useUser();
   const { getToken } = useAuth();
@@ -46,7 +51,9 @@ export const useGetTasksByProject = (projectId: string) => {
         throw new Error("User is not authenticated.");
       }
 
-      const res = await sendRequest.post<{ data: GetTasksByProjectResponse }>(
+      console.log('Making GraphQL request with:', { projectId, userId });
+
+      const res = await sendRequest.post<GraphQLResponse<GetTasksByProjectResponse>>(
         "/api/graphql",
         {
           query: `
@@ -91,6 +98,23 @@ export const useGetTasksByProject = (projectId: string) => {
           },
         }
       );
+
+      console.log('GraphQL response:', res.data);
+
+      if (res.data.errors) {
+        console.error('GraphQL errors:', res.data.errors);
+        throw new Error(`GraphQL Error: ${res.data.errors[0]?.message || 'Unknown error'}`);
+      }
+
+      if (!res.data.data) {
+        console.error('No data in response:', res.data);
+        throw new Error('No data received from server');
+      }
+
+      if (!res.data.data.getTasks) {
+        console.error('getTasks is undefined in response:', res.data.data);
+        throw new Error('getTasks is undefined in response');
+      }
 
       return res.data.data.getTasks;
     },

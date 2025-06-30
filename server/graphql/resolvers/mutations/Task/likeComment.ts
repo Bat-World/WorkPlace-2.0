@@ -8,7 +8,7 @@ export const likeComment = async (_: any, args: any, context: any) => {
     where: { id: commentId },
     include: { task: { include: { project: true } } },
   });
-  if (!comment) throw new Error('Comment not found');
+  if (!comment) throw new Error(`Comment not found: ${commentId}`);
 
   // Check if user is a member of the project
   const projectMember = await context.prisma.projectMember.findUnique({

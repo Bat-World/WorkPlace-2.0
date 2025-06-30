@@ -1,25 +1,25 @@
-import { useQuery } from '@tanstack/react-query';
-import { useAuth, useUser } from '@clerk/nextjs';
-import { sendRequest } from '@/lib/sendRequest';
+import { useQuery } from "@tanstack/react-query";
+import { useAuth, useUser } from "@clerk/nextjs";
+import { sendRequest } from "@/lib/sendRequest";
 
 export const useGetProjects = () => {
   const { getToken } = useAuth();
   const { user } = useUser();
 
   return useQuery({
-    queryKey: ['projects'],
+    queryKey: ["projects"],
     queryFn: async () => {
       const token = await getToken();
       const userId = user?.id;
 
       if (!userId) {
-        throw new Error('User is not loaded or not signed in');
+        throw new Error("User is not loaded or not signed in");
       }
 
       const res = await sendRequest.post(
-        '/api/graphql',
+        "/api/graphql",
         {
-        query: `
+          query: `
   query GetProjects {
     getProjects {
       id
@@ -27,6 +27,7 @@ export const useGetProjects = () => {
       description
       createdAt
       updatedAt
+      avatarUrl
       labels {
         id
         name
@@ -46,14 +47,13 @@ export const useGetProjects = () => {
       }
     }
   }
-`
-,
+`,
         },
         {
           headers: {
             Authorization: `Bearer ${token}`,
-            'Content-Type': 'application/json',
-            'x-user-id': userId,
+            "Content-Type": "application/json",
+            "x-user-id": userId,
           },
         }
       );
