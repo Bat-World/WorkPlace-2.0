@@ -16,7 +16,7 @@ import { ProjectGrid } from "./ProjectGrid";
 import ProjectGridSkeleton from "./ProjectGridSkeleton";
 
 export const Projects = () => {
-  const { data: projects, isPending } = useGetProjects();
+  const { data: projects = [], isPending } = useGetProjects() as { data: Project[]; isPending: boolean };
   const { user } = useUser();
   const router = useRouter();
 
