@@ -79,9 +79,6 @@ const CreateProjectDialog = () => {
       setCurrentLabel("");
       toast.success("Project created successfully!");
       setOpen(false);
-      setTimeout(() => {
-        router.refresh();
-      }, 300);
     } catch (error) {
       toast.error("Error creating project: " + String(error));
     }

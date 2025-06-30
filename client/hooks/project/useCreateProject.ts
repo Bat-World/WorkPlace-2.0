@@ -1,17 +1,18 @@
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useAuth, useUser } from '@clerk/nextjs';
 import { sendRequest } from '@/lib/sendRequest';
 
 export const useCreateProject = () => {
   const { getToken } = useAuth();
   const { user } = useUser();
+  const queryClient = useQueryClient();
 
   return useMutation({
     mutationFn: async (input: {
       title: string;
       description?: string;
       invitees?: string[];
-        labels?: string[];
+      labels?: string[];
     }) => {
       const token = await getToken();
       const userId = user?.id;
@@ -43,5 +44,8 @@ export const useCreateProject = () => {
 
       return res.data.data.createProject;
     },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['projects'] });
+    },
   });
-}; 
+};
