@@ -11,11 +11,9 @@ import {
   KanbanColumn as KanbanColumnType,
 } from "@/lib/taskUtils";
 import { useParams } from "next/navigation";
-import KanbanSkeleton from "@/components/Skeletons/KanbanSekeleton";
+
 
 const columnOrder = ["todo", "doing", "review", "done"];
-
-// Map column IDs to task statuses
 const columnToStatus: Record<string, string> = {
   todo: "TODO",
   doing: "DOING",
@@ -24,22 +22,23 @@ const columnToStatus: Record<string, string> = {
 };
 
 export default function KanbanPage() {
+
+
   const params = useParams();
   const projectId = params.projectId as string;
-
   const { data: apiTasks, isLoading, error } = useGetTasksByProject(projectId);
   const updateTaskStatus = useUpdateTaskStatus();
-
   const [tasks, setTasks] = useState<Record<string, KanbanTask>>({});
   const [columns, setColumns] = useState<Record<string, KanbanColumnType>>({
-    todo: { id: "todo", title: "To Do", taskIds: [] },
-    doing: { id: "doing", title: "In Progress", taskIds: [] },
-    review: { id: "review", title: "Review", taskIds: [] },
-    done: { id: "done", title: "Done", taskIds: [] },
+ todo: { id: "todo", title: "Хийх", taskIds: [] },
+  doing: { id: "doing", title: "Яг одоо хийгдэж байна", taskIds: [] },
+  review: { id: "review", title: "Шалгах", taskIds: [] },
+  done: { id: "done", title: "Дууссан", taskIds: [] },
   });
   const [newTaskId, setNewTaskId] = useState<string | null>(null);
 
-  // Transform API data to Kanban format when data changes
+ const projectTitle = apiTasks?.[0]?.project?.title ?? "Төслийн нэр";
+
   useEffect(() => {
     if (apiTasks) {
       const { tasks: kanbanTasks, columns: kanbanColumns } =
@@ -125,7 +124,9 @@ export default function KanbanPage() {
   if (isLoading) {
     return (
       <div className="px-20 flex flex-col items-center justify-center">
-        <Info />
+      <Info projectName={projectTitle} />
+
+
         <p>test</p>
       </div>
     );
@@ -141,7 +142,8 @@ export default function KanbanPage() {
 
   return (
     <div className="min-h-screen px-20">
-      <Info />
+     <Info projectName={apiTasks?.[0]?.project?.title || "Төслийн нэр"} />
+
 
       <DragDropContext onDragEnd={onDragEnd}>
         <div className="grid grid-cols-1 md:grid-cols-4 mt-10">

@@ -69,12 +69,6 @@ export const DashBoardHeader = () => {
           href: `/${projectId}/dashboard`,
         },
         {
-          id: "projects",
-          label: "Төслүүд",
-          icon: FolderDot,
-          href: `/projects`,
-        },
-        {
           id: "tasks",
           label: "Таскууд",
           icon: PackageCheck,

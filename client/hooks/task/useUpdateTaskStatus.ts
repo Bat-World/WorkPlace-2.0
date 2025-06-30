@@ -1,7 +1,7 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useAuth, useUser } from "@clerk/nextjs";
 import { sendRequest } from "@/lib/sendRequest";
-import type { Task } from "./useGetTasksByProject";
+import { Task } from "@/lib/types";
 
 interface UpdateTaskStatusInput {
   status: string;

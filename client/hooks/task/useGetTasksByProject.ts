@@ -1,32 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { useAuth, useUser } from "@clerk/nextjs";
 import { sendRequest } from "@/lib/sendRequest";
-
-export interface Task {
-  id: string;
-  title: string;
-  description: string | null;
-  status: string;
-  priority: string;
-  dueDate: string | null;
-  createdAt: string;
-  updatedAt: string;
-  assignees: Array<{
-    id: string;
-    email: string;
-    name: string | null;
-    avatarUrl: string | null;
-  }>;
-  project: {
-    id: string;
-    title: string;
-  };
-  labels: Array<{
-    id: string;
-    name: string;
-    color: string;
-  }>;
-}
+import { Task } from "@/lib/types";
 
 interface GetTasksByProjectResponse {
   getTasks: Task[];
@@ -98,8 +73,6 @@ export const useGetTasksByProject = (projectId: string) => {
           },
         }
       );
-
-      console.log('GraphQL response:', res.data);
 
       if (res.data.errors) {
         console.error('GraphQL errors:', res.data.errors);

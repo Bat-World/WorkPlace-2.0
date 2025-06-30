@@ -3,10 +3,7 @@
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
-  DialogClose,
   DialogContent,
-  DialogDescription,
-  DialogFooter,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
@@ -18,7 +15,6 @@ import { useCreateTask } from "@/hooks/task/useCreateTask";
 import { useParams } from "next/navigation";
 import {
   useGetProjectMembers,
-  ProjectMember,
 } from "@/hooks/project/useGetProjectMembers";
 import AssigneeDropdown from "./AssigneeDropdown";
 import PrioritySelect from "./PrioritySelect";
@@ -101,7 +97,7 @@ const CreateTaskDialog = () => {
             name="title"
             value={form.title}
             onChange={(e) => handleChange("title", e.target.value)}
-            placeholder="Title"
+            placeholder="Нэр"
             className="bg-transparent text-3xl font-semibold border-transparent focus-visible:ring-0 outline-none my-2"
             required
           />
@@ -136,7 +132,7 @@ const CreateTaskDialog = () => {
           </div>
           <div className="w-full flex flex-col mt-6">
             <p className="text-[var(--foreground)] text-lg font-semibold">
-              Description
+              Тайлбар
             </p>
             <Textarea
               name="description"
