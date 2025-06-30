@@ -36,17 +36,17 @@ export const GET = async (req: NextRequest) => {
   return yoga.handleRequest(req, { req });
 };
 
-export const OPTIONS = async (req: NextRequest) => {
-  return new Response(null, {
-    status: 204,
-    headers: {
-      'Access-Control-Allow-Origin': req.headers.get('origin') || '*',
-      'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
-      'Access-Control-Allow-Headers': 'Content-Type, Authorization, x-user-id',
-      'Access-Control-Allow-Credentials': 'true',
-    },
-  });
-};
+// export const OPTIONS = async (req: NextRequest) => {
+//   return new Response(null, {
+//     status: 204,
+//     headers: {
+//       'Access-Control-Allow-Origin': req.headers.get('origin') || '*',
+//       'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
+//       'Access-Control-Allow-Headers': 'Content-Type, Authorization, x-user-id',
+//       'Access-Control-Allow-Credentials': 'true',
+//     },
+//   });
+// };
 
 
 
