@@ -1,13 +1,20 @@
 import { generateReactHelpers } from "@uploadthing/react";
-import type { OurFileRouter } from "../../server/app/api/uploadthing/core";
 
-export const { useUploadThing, uploadFiles } = generateReactHelpers<OurFileRouter>({
-  url: "http://localhost:3001/api/uploadthing",
+const uploadThingUrl = process.env.NEXT_PUBLIC_BACKEND_URL 
+  ? `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/uploadthing`
+  : "http://localhost:3001/api/uploadthing";
+
+export const { useUploadThing, uploadFiles } = generateReactHelpers<any>({
+  url: uploadThingUrl,
 });
 
 export const deleteUploadThingFile = async (fileKey: string): Promise<boolean> => {
   try {
-    const response = await fetch("http://localhost:3001/api/uploadthing/delete", {
+    const deleteUrl = process.env.NEXT_PUBLIC_BACKEND_URL 
+      ? `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/uploadthing/delete`
+      : "http://localhost:3001/api/uploadthing/delete";
+
+    const response = await fetch(deleteUrl, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
