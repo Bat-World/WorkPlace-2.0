@@ -1,5 +1,11 @@
-import AcceptInviteClient from "./_components/AcceptInvitePage";
+
+import { Suspense } from 'react';
+import AcceptInviteClient from './_components/AcceptInvitePage';
 
 export default function AcceptInvitePage() {
-  return <AcceptInviteClient />;
+  return (
+    <Suspense fallback={<div className="text-white">Loading...</div>}>
+      <AcceptInviteClient />
+    </Suspense>
+  );
 }
