@@ -15,8 +15,10 @@ export const uploadRouter = {
     .middleware(async () => {
       return { uploadedAt: new Date() };
     })
-    .onUploadComplete(async ({ metadata, file }) => {}),
-  
+    .onUploadComplete(async ({ metadata, file }) => {
+      // Optional: Save file to DB or log it
+    }),
+
   projectAvatars: f({
     image: { maxFileSize: "4MB", maxFileCount: 1 },
   })

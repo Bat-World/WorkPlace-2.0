@@ -1,8 +1,8 @@
 import { generateReactHelpers } from "@uploadthing/react";
-import type { OurFileRouter } from "../../server/app/api/uploadthing/core";
+import type { OurFileRouter } from "@shared/uploadthing";
 
 export const { useUploadThing, uploadFiles } = generateReactHelpers<OurFileRouter>({
-  url: "http://localhost:3001/api/uploadthing",
+  url: "http://localhost:3001/api/uploadthing", // Change to your backend domain on prod
 });
 
 export const deleteUploadThingFile = async (fileKey: string): Promise<boolean> => {
@@ -24,4 +24,4 @@ export const deleteUploadThingFile = async (fileKey: string): Promise<boolean> =
   } catch (error) {
     return false;
   }
-}; 
+};
