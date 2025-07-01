@@ -25,7 +25,7 @@ export const DashboardStatsCards = ({
       icon: <Clock3 className="w-5 h-5" />,
     },
     {
-      label: "Шалгуурхад бэлэн",
+      label: "Шалгуулахад бэлэн",
       value: reviewReadyTasks,
       icon: <FolderKanban className="w-5 h-5" />,
     },
