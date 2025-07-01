@@ -75,7 +75,7 @@ const CreateTaskDialog = () => {
       description: "Энэ нь демо зориулалттай туршилтын таск юм.",
       priority: "HIGH",
       status: "IN_PROGRESS",
-      assignee: members.length > 0 ? [members[0].user.id] : [],
+      assigneeIds: members.length > 0 ? [members[0].user.id] : [],
       labels: ["фронтэнд", "алдаа"],
       labelInput: "",
       date: new Date(Date.now() + 3 * 24 * 60 * 60 * 1000),

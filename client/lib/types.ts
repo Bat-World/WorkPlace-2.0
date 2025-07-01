@@ -85,7 +85,7 @@ export interface FormState {
   description: string;
   priority: string;
   status: string;
-  assignee: string[];
+  assigneeIds: string[];
   labels: string[];
   labelInput: string;
   date: Date | undefined;
