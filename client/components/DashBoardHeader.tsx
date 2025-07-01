@@ -30,6 +30,7 @@ import { useGetProjects } from "@/hooks/project/useGetProjects";
 import { useGetProjectById } from "@/hooks/project/useGetProjectById";
 import { useUser, useClerk } from "@clerk/nextjs";
 import ManageProjects from "./Header/ManageProjects";
+import { Skeleton } from "./ui/skeleton";
 
 export const DashBoardHeader = () => {
   const { data: projects, isLoading, error } = useGetProjects();
@@ -97,93 +98,97 @@ export const DashBoardHeader = () => {
   };
 
   return (
-    <div className="w-full border-[#252429] flex flex-wrap justify-between items-center py-3 px-4 md:px-10 lg:px-28 xl:px-32 gap-y-2 relative">
+    <div className="w-full border-[#252429] flex flex-wrap justify-between items-center py-6 px-4 md:px-10 lg:px-28 xl:px-32 gap-y-2 relative">
       <div className="flex gap-8 items-center w-60 min-w-[150px]">
         <p className="text-[var(--background)] text-xl">Remotia</p>
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button
-              variant="outline"
-              className="flex gap-3 bg-transparent py-5 text-base text-[var(--background)] border-none hover:bg-transparent hover:text-[var(--background)] focus-visible:ring-0"
-            >
-              <div
-                className="w-6 h-auto aspect-square bg-cover bg-center rounded-sm"
-                style={{
-                  backgroundImage: currentProjectData?.avatarUrl
-                    ? `url(${currentProjectData.avatarUrl})`
-                    : `url(https://yt3.googleusercontent.com/ytc/AIdro_ncrXPzrg5_WVvTEx_w3El2dorNHS7r9AMO8Mph8l7Z_dU=s900-c-k-c0x00ffffff-no-rj)`,
-                }}
-              />
-              {currentProjectData?.title || "Loading..."}
-              <ChevronDown className="stroke-[var(--background)]/50 ml-1" />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent
-            className="w-64 bg-[#141318] text-[var(--foreground)] border-[#2A2A2A] dark"
-            align="start"
-          >
-            <DropdownMenuGroup>
-              <DropdownMenuItem
-                onSelect={(e) => e.preventDefault()}
-                className="flex items-center"
+        {projectId && (
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button
+                variant="outline"
+                className="flex gap-3 bg-transparent py-5 text-base text-[var(--background)] border-none hover:bg-transparent hover:text-[var(--background)] focus-visible:ring-0"
               >
                 <div
-                  className="w-5 h-auto aspect-square bg-cover bg-center rounded-sm"
+                  className="w-6 h-auto aspect-square bg-cover bg-center rounded-sm"
                   style={{
-                    backgroundImage: `url(${
-                      currentProjectData?.avatarUrl ||
-                      "https://img.clerk.com/eyJ0eXBlIjoiZGVmYXVsdCIsImlpZCI6Imluc18xbHlXRFppb2JyNjAwQUtVZVFEb1NsckVtb00iLCJyaWQiOiJvcmdfMnlPbDNOWHdQV2tIQ25pM1VxSFhETVkzcnExIiwiaW5pdGlhbHMiOiI0In0?width=80"
-                    })`,
+                    backgroundImage: currentProjectData?.avatarUrl
+                      ? `url(${currentProjectData.avatarUrl})`
+                      : `url(https://img.clerk.com/eyJ0eXBlIjoiZGVmYXVsdCIsImlpZCI6Imluc18xbHlXRFppb2JyNjAwQUtVZVFEb1NsckVtb00iLCJyaWQiOiJvcmdfMndDaWZDNld6dGpxNXhIc015YllrQ2xuTGpLIiwiaW5pdGlhbHMiOiJTIn0?width=160)`,
                   }}
                 />
-                <div className="flex flex-col ml-1">
-                  {currentProjectData?.title}
-                </div>
-                {isAdmin && (
-                  <DropdownMenuShortcut>
-                    <ManageProjects />
-                  </DropdownMenuShortcut>
+                {currentProjectData?.title || (
+                  <Skeleton className="w-20 h-6 rounded-sm bg-gray-500" />
                 )}
-              </DropdownMenuItem>
-            </DropdownMenuGroup>
-            <DropdownMenuSeparator />
-
-            {/* Other Projects */}
-            {otherProjects.length > 0 && (
-              <>
-                {otherProjects.map((project: any, index: number) => (
-                  <DropdownMenuItem
-                    key={project.id}
-                    className="group my-2"
-                    onClick={() => handleProjectSelect(project.id)}
-                  >
-                    <div
-                      className="w-5 h-auto aspect-square bg-cover bg-center rounded-sm"
-                      style={{
-                        backgroundImage: `url(${
-                          project.avatarUrl ||
-                          "https://img.clerk.com/eyJ0eXBlIjoiZGVmYXVsdCIsImlpZCI6Imluc18xbHlXRFppb2JyNjAwQUtVZVFEb1NsckVtb00iLCJyaWQiOiJvcmdfMnlPbDNOWHdQV2tIQ25pM1VxSFhETVkzcnExIiwiaW5pdGlhbHMiOiI0In0?width=80"
-                        })`,
-                      }}
-                    />
-                    {project.title}
+                <ChevronDown className="stroke-[var(--background)]/50 ml-1" />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent
+              className="w-64 bg-[#141318] text-[var(--foreground)] border-[#2A2A2A] dark"
+              align="start"
+            >
+              <DropdownMenuGroup>
+                <DropdownMenuItem
+                  onSelect={(e) => e.preventDefault()}
+                  className="flex items-center"
+                >
+                  <div
+                    className="w-5 h-auto aspect-square bg-cover bg-center rounded-sm"
+                    style={{
+                      backgroundImage: `url(${
+                        currentProjectData?.avatarUrl ||
+                        "https://img.clerk.com/eyJ0eXBlIjoiZGVmYXVsdCIsImlpZCI6Imluc18xbHlXRFppb2JyNjAwQUtVZVFEb1NsckVtb00iLCJyaWQiOiJvcmdfMnlPbDNOWHdQV2tIQ25pM1VxSFhETVkzcnExIiwiaW5pdGlhbHMiOiI0In0?width=80"
+                      })`,
+                    }}
+                  />
+                  <div className="flex flex-col ml-1">
+                    {currentProjectData?.title}
+                  </div>
+                  {isAdmin && (
                     <DropdownMenuShortcut>
-                      <ArrowRight className="opacity-0 group-hover:opacity-100 transition-all" />
+                      <ManageProjects />
                     </DropdownMenuShortcut>
-                  </DropdownMenuItem>
-                ))}
-              </>
-            )}
+                  )}
+                </DropdownMenuItem>
+              </DropdownMenuGroup>
+              <DropdownMenuSeparator />
 
-            <DropdownMenuSeparator />
-            <DropdownMenuItem className="text-[var(--foreground)]/50 hover:text-[var(--foreground)] group transition-all">
-              <div className="w-6 h-6 rounded-full bg-[#2A2A2A] flex justify-center items-center border-1 border-dashed">
-                <Plus className="w-3! group-hover:stroke-[var(--foreground)] transition-all" />
-              </div>
-              Project үүсгэх
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
+              {/* Other Projects */}
+              {otherProjects.length > 0 && (
+                <>
+                  {otherProjects.map((project: any, index: number) => (
+                    <DropdownMenuItem
+                      key={project.id}
+                      className="group my-2"
+                      onClick={() => handleProjectSelect(project.id)}
+                    >
+                      <div
+                        className="w-5 h-auto aspect-square bg-cover bg-center rounded-sm"
+                        style={{
+                          backgroundImage: `url(${
+                            project.avatarUrl ||
+                            "https://img.clerk.com/eyJ0eXBlIjoiZGVmYXVsdCIsImlpZCI6Imluc18xbHlXRFppb2JyNjAwQUtVZVFEb1NsckVtb00iLCJyaWQiOiJvcmdfMnlPbDNOWHdQV2tIQ25pM1VxSFhETVkzcnExIiwiaW5pdGlhbHMiOiI0In0?width=80"
+                          })`,
+                        }}
+                      />
+                      {project.title}
+                      <DropdownMenuShortcut>
+                        <ArrowRight className="opacity-0 group-hover:opacity-100 transition-all" />
+                      </DropdownMenuShortcut>
+                    </DropdownMenuItem>
+                  ))}
+                </>
+              )}
+
+              {/* <DropdownMenuSeparator />
+              <DropdownMenuItem className="text-[var(--foreground)]/50 hover:text-[var(--foreground)] group transition-all">
+                <div className="w-6 h-6 rounded-full bg-[#2A2A2A] flex justify-center items-center border-1 border-dashed">
+                  <Plus className="w-3! group-hover:stroke-[var(--foreground)] transition-all" />
+                </div>
+                Project үүсгэх
+              </DropdownMenuItem> */}
+            </DropdownMenuContent>
+          </DropdownMenu>
+        )}
       </div>
       {/* nav */}
       {navItems.length > 0 && (

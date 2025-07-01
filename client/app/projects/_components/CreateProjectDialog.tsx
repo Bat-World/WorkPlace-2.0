@@ -135,7 +135,7 @@ const CreateProjectDialog = () => {
                 <div className="flex items-center gap-2">
                   <Input
                     id="invitees"
-                    placeholder="Enter email and press Enter"
+                    placeholder="гишүүн@mail.com"
                     value={currentEmail}
                     onChange={(e) => setCurrentEmail(e.target.value)}
                     onKeyDown={(e) => e.key === "Enter" && handleAddEmail(e)}
@@ -146,7 +146,7 @@ const CreateProjectDialog = () => {
                     onClick={handleAddEmail}
                     className="bg-[var(--foreground)]/10 text-white rounded-lg hover:bg-[var(--foreground)]/20 transition-colors"
                   >
-                    нэмэх
+                    Нэмэх
                   </Button>
                 </div>
                 <div className="flex flex-wrap gap-2 mt-2">
@@ -171,11 +171,11 @@ const CreateProjectDialog = () => {
                 </div>
               </div>
               <div className="grid gap-3 mt-2">
-                <Label htmlFor="labels">Labels</Label>
+                <Label htmlFor="labels">Шошгууд</Label>
                 <div className="flex items-center gap-2">
                   <Input
                     id="labels"
-                    placeholder="Enter label and press Enter"
+                    placeholder="Шинэ шошго үүсгэхийн тулд Enter дээр дарна уу"
                     value={currentLabel}
                     onChange={(e) => setCurrentLabel(e.target.value)}
                     onKeyDown={(e) => e.key === "Enter" && handleAddLabel(e)}
@@ -186,7 +186,7 @@ const CreateProjectDialog = () => {
                     onClick={handleAddLabel}
                     className="bg-[var(--foreground)]/10 text-white rounded-lg hover:bg-[var(--foreground)]/20 transition-colors"
                   >
-                    нэмэх
+                    Нэмэх
                   </Button>
                 </div>
                 <div className="flex flex-wrap gap-2 mt-2">

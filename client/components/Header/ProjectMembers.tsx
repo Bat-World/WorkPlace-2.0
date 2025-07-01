@@ -72,7 +72,7 @@ export const ProjectMembers = ({
       queryClient.invalidateQueries({
         queryKey: ["pendingInvitations", projectId],
       });
-      toast.success("Invitation sent successfully!");
+      toast.success("Амжилттай урилга илгээгдлээ");
     },
   });
 
@@ -119,7 +119,7 @@ export const ProjectMembers = ({
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["project", projectId] });
-      toast.success("Member role updated successfully!");
+      toast.success("Гишүүний эрх амжилттай солигдлоо");
     },
   });
 
@@ -152,7 +152,7 @@ export const ProjectMembers = ({
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["project", projectId] });
-      toast.success("Member removed successfully!");
+      toast.success("Амжилттай хасагдлаа");
     },
   });
 
@@ -168,7 +168,7 @@ export const ProjectMembers = ({
 
   const handleInviteMember = async () => {
     if (!inviteEmail.trim()) {
-      toast.error("Please enter an email address");
+      toast.error("Имэйл хаяг оруулна уу");
       return;
     }
     try {
@@ -176,7 +176,7 @@ export const ProjectMembers = ({
       setInviteEmail("");
     } catch (error) {
       console.error("Error inviting member:", error);
-      toast.error("Failed to send invitation");
+      toast.error("Алдаа гарлаа");
     }
   };
 
@@ -185,17 +185,17 @@ export const ProjectMembers = ({
       await updateMemberRole.mutateAsync({ memberId, role });
     } catch (error) {
       console.error("Error updating role:", error);
-      toast.error("Failed to update member role");
+      toast.error("Алдаа гарлаа");
     }
   };
 
   const handleRemoveMember = async (memberId: string) => {
-    if (confirm("Are you sure you want to remove this member?")) {
+    if (confirm("Та хасахдаа итгэлтэй байна уу?")) {
       try {
         await removeMember.mutateAsync(memberId);
       } catch (error) {
         console.error("Error removing member:", error);
-        toast.error("Failed to remove member");
+        toast.error("Алдаа гарлаа");
       }
     }
   };
@@ -203,21 +203,21 @@ export const ProjectMembers = ({
   const handleResendInvitation = async (invitationId: string) => {
     try {
       await resendInvitation.mutateAsync(invitationId);
-      toast.success("Invitation resent successfully!");
+      toast.success("Амжилттай дахин илгээгдлээ");
     } catch (error) {
       console.error("Error resending invitation:", error);
-      toast.error("Failed to resend invitation");
+      toast.error("Алдаа гарлаа");
     }
   };
 
   const handleCancelInvitation = async (invitationId: string) => {
-    if (confirm("Are you sure you want to cancel this invitation?")) {
+    if (confirm("Та цуцлахдаа итгэлтэй байна уу?")) {
       try {
         await cancelInvitation.mutateAsync(invitationId);
         toast.success("Invitation cancelled successfully!");
       } catch (error) {
         console.error("Error cancelling invitation:", error);
-        toast.error("Failed to cancel invitation");
+        toast.error("Алдаа гарлаа");
       }
     }
   };
@@ -249,7 +249,7 @@ export const ProjectMembers = ({
                     Имэйл
                   </TableHead>
                   <TableHead className="text-[var(--foreground)]">
-                    Role
+                    Эрх
                   </TableHead>
                   {canManageMembers && (
                     <TableHead className="text-[var(--foreground)]"></TableHead>

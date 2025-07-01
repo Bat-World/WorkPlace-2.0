@@ -6,6 +6,21 @@ import type {
   KanbanTask,
 } from "@/lib/taskUtils";
 
+const getColumnColor = (columnId: string): string => {
+  switch (columnId) {
+    case "todo":
+      return "bg-[#BA3E3E]";
+    case "doing":
+      return "bg-[#F9D769]";
+    case "review":
+      return "bg-[#6B83FF]";
+    case "done":
+      return "bg-[#2FC285]";
+    default:
+      return "bg-gray-500";
+  }
+};
+
 const KanbanColumn = ({
   column,
   tasks,
@@ -15,7 +30,6 @@ const KanbanColumn = ({
   tasks: Record<string, KanbanTask>;
   newTaskId: string | null;
 }) => {
-  // Don't render if column is not available yet
   if (!column) {
     return (
       <div className="rounded-xl p-3 min-h-[400px] flex flex-col">
@@ -33,6 +47,11 @@ const KanbanColumn = ({
   return (
     <div className="rounded-xl p-3 min-h-[400px] flex flex-col">
       <h2 className="font-semibold text-lg mb-4 text-[var(--background)] flex items-center gap-2">
+        <div
+          className={`w-2 h-auto aspect-square rounded-full ${getColumnColor(
+            column.id
+          )}`}
+        ></div>
         {column.title}
         <span className="text-base text-[var(--background)]/50">
           {column.taskIds.length}
@@ -60,6 +79,7 @@ const KanbanColumn = ({
                 task={tasks[taskId]}
                 index={idx}
                 isNew={newTaskId === taskId}
+                isDragDisabled={column.id === "done"}
               />
             ))}
             {provided.placeholder}

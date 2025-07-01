@@ -3,8 +3,8 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import { ClerkProvider } from "@clerk/nextjs";
 import Providers from "./providers";
-import { ToastContainer } from 'react-toastify';
-import { Unbounded } from "next/font/google"; 
+import { ToastContainer } from "react-toastify";
+import { Unbounded } from "next/font/google";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -27,21 +27,23 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
- return (
+  return (
     <html lang="en" className={`${unbounded.variable} scroll-smooth`}>
       <body className="antialiased">
         <ClerkProvider>
           <Providers>
             {children}
             <ToastContainer
-              position="bottom-right"
-              autoClose={3000}
+              position="bottom-center"
+              autoClose={5000}
               hideProgressBar={false}
-              closeOnClick
-              pauseOnHover
+              newestOnTop={false}
+              closeOnClick={false}
+              rtl={false}
+              pauseOnFocusLoss
               draggable
-              toastClassName="Toastify__toast"
-              progressClassName="Toastify__progress-bar"
+              pauseOnHover
+              theme="dark"
             />
           </Providers>
         </ClerkProvider>

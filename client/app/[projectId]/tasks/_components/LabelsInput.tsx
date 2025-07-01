@@ -37,7 +37,7 @@ const LabelsInput = ({
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
         <Button variant="outline">
-          <Tags /> Labels
+          <Tags /> Шошгууд
         </Button>
       </PopoverTrigger>
       <PopoverContent
@@ -48,7 +48,7 @@ const LabelsInput = ({
           <Input
             name="labels"
             className="focus-visible:ring-0 w-full"
-            placeholder="Type label and press Enter or comma"
+            placeholder=""
             value={input}
             onChange={(e) => setInput(e.target.value)}
             onKeyDown={handleKeyDown}
@@ -72,7 +72,7 @@ const LabelsInput = ({
           </div>
           {labels.length <= 0 && (
             <p className="text-[var(--foreground)]/50 text-xs">
-              Press Enter or comma to create a new tag
+              Утгаа оруулсны дараа Enter дарна уу.
             </p>
           )}
         </div>

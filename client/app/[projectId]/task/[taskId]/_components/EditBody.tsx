@@ -62,6 +62,7 @@ import {
 } from "@dnd-kit/sortable";
 import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
+import { formatTaskDate } from "@/utils/TaskDateFormatter";
 
 interface FileItem {
   id: string;
@@ -758,7 +759,7 @@ const EditBody = ({ onBack }: { onBack: () => void }) => {
                 {task.createdBy.name}
               </p>
               <p className="text-[var(--background)]/50 text-base">
-                {formatDate(task.createdAt)}
+                {formatTaskDate(task.createdAt)}
               </p>
             </div>
             <div className="flex gap-2">
