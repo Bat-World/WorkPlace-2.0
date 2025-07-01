@@ -25,7 +25,7 @@ export default function TaskAction({ taskId }: TaskActionProps) {
   const deleteTaskMutation = useDeleteTask();
 
   const handleDelete = async () => {
-    if (confirm("Are you sure you want to delete this task?")) {
+    if (confirm("Та усгахдаа итгэлтэй байна уу?")) {
       try {
         await deleteTaskMutation.mutateAsync(taskId);
         // No success toast - it's instant now!

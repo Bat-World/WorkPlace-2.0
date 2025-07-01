@@ -118,8 +118,7 @@ export const useSidebarLogic = () => {
     (r: any) => r.id === user?.id
   );
   const canApprove =
-    isCurrentUserAdmin &&
-    isCurrentUserReviewer &&
+    (isCurrentUserAdmin || isCurrentUserReviewer) &&
     (task?.status === "REVIEW" || task?.status === "DOING");
 
   return {

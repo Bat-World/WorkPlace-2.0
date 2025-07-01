@@ -236,6 +236,12 @@ type InvitationDetails {
       labelColor: String
       actingUserId: ID!
     ): Task!
+    setTaskLabels(
+      taskId: ID!
+      labelNames: [String!]!
+      labelColor: String
+      actingUserId: ID!
+    ): Task!
     addDeadline(taskId: ID!, dueDate: DateTime!, actingUserId: ID): Task!
     addComment(taskId: ID!, content: String!, actingUserId: ID, parentId: ID): Comment!
     likeComment(commentId: ID!, actingUserId: ID): CommentLike!

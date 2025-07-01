@@ -37,6 +37,7 @@ import { removeMember } from './mutations/Project/removeMember'
 import { declineInvite } from './mutations/Project/declineInvite'
 import { manageAssignees } from './mutations/Task/manageAssignees'
 import { getInvitationByToken } from './mutations/Project/getInvitationByToken'
+import { setTaskLabels } from './mutations/Task/setTaskLabels'
 
 
 export const resolvers = {
@@ -64,6 +65,7 @@ export const resolvers = {
     addReviewer,
     manageReviewers,
     addLabel,
+    setTaskLabels,
     addDeadline,
     addComment,
     likeComment,

@@ -55,7 +55,7 @@ const DueDatePicker = ({ value, onChange }: DueDatePickerProps) => {
 
   return (
     <div className="w-full flex mt-3 items-center gap-3">
-      <p className="text-[var(--foreground)]/50 text-base w-20">Due date</p>
+      <p className="text-[var(--foreground)]/50 text-base w-30">Дуусах хугацаа </p>
       <div className="flex gap-4">
         <Popover open={open} onOpenChange={setOpen}>
           <PopoverTrigger asChild>

@@ -53,6 +53,7 @@ const ReviewersSection = ({
       await manageReviewersMutation.mutateAsync({
         taskId: task.id,
         reviewerIds: newReviewers,
+        members,
       });
       console.log('Setting isUserUpdating to false (success)');
       // Only reset flag after successful mutation
@@ -80,6 +81,7 @@ const ReviewersSection = ({
       await manageReviewersMutation.mutateAsync({
         taskId: task.id,
         reviewerIds: [],
+        members,
       });
       // Only reset flag after successful mutation
       setIsUserUpdating(false);
@@ -96,13 +98,13 @@ const ReviewersSection = ({
   return (
     <>
       <div className="flex items-center justify-between">
-        <p className="text-[var(--background)]/50 text-sm">Шалгагчид</p>
+        <p className="text-[var(--background)]/50 text-sm">Шалгагч</p>
         <DropdownMenu>
           <DropdownMenuTrigger>
             <Ellipsis className="stroke-[var(--background)]/50 w-5 cursor-pointer" />
           </DropdownMenuTrigger>
           <DropdownMenuContent className="dark bg-black/10 backdrop-blur-sm rounded-2xl">
-            <DropdownMenuLabel>Reviewers</DropdownMenuLabel>
+            <DropdownMenuLabel>Шалгагч</DropdownMenuLabel>
             <DropdownMenuSeparator />
             <DropdownMenuCheckboxItem
               checked={selectedReviewers.length === 0}
