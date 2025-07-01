@@ -217,6 +217,7 @@ type InvitationDetails {
     getInvitationByToken(token: String!): InvitationDetails
     getDashboardStats(projectId: String!): DashboardStats!
     getReviewTasksByProject(projectId: ID!, userId: ID): [Task!]!
+    doneTasksCount(projectId: String!, filter: String): Int!
   }
 
   type Mutation {

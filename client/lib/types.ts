@@ -52,3 +52,30 @@ export interface Task {
     color: string;
   }>;
 }
+
+export interface DashboardStatsCardsProps {
+  totalTasks: number;
+  inProgressTasks: number;
+  reviewReadyTasks: number;
+  doneTasks: number;
+}
+
+export interface Comment {
+  id: string;
+  content: string;
+  createdAt: string;
+  parentId?: string;
+  author: {
+    id: string;
+    name: string | null;
+    email: string;
+    avatarUrl: string | null;
+  };
+  replies?: Comment[];
+  likeCount: number;
+  isLikedByUser: boolean;
+}
+
+export interface GetCommentsResponse {
+  getComments: Comment[];
+}
