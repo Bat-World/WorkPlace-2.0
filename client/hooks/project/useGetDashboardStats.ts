@@ -22,6 +22,7 @@ export const useGetDashboardStats = (projectId: string) => {
             totalTasks
             inProgressTasks
             reviewReadyTasks
+            doneTasks
           }
         }
       `,

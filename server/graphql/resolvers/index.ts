@@ -9,6 +9,7 @@ import { getComments } from './queries/Comment/getComments'
 import { getLogs } from './queries/Log/getLogs'
 import { getDashboardStats } from './queries/Project/getDashboardStats'
 import { getReviewTasksByProject } from './queries/Project/getInReviewTasks'
+import { doneTasksCount } from './queries/Task/getDoneTaksCount'
 
 import { createTask } from './mutations/Task/createTask'
 import { updateTask } from './mutations/Task/updateTask'
@@ -51,7 +52,8 @@ export const resolvers = {
     getLogs,
     getInvitationByToken,
     getDashboardStats,
-    getReviewTasksByProject
+    getReviewTasksByProject,
+    doneTasksCount
   },
   Mutation: {
     createTask,

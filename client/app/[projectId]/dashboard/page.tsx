@@ -7,40 +7,61 @@ import { DashboardStatsCards } from "./_components/StatsCards";
 import ClosedTasksAreaChart from "./_components/Chart";
 import ReviewTasksCard from "./_components/TasksToReview";
 import DashboardSkeleton from "./_components/Skeleton";
+import { Lock } from "lucide-react";
+import { useUser } from "@clerk/nextjs";
 
 export default function DashboardPage() {
   const { projectId } = useParams() as { projectId: string };
-
   const { data: statsData, isPending: isStatsLoading } = useGetDashboardStats(projectId);
   const { data: reviewData, isPending: isReviewLoading } = useGetReviewTasksByProject(projectId);
+  const user = useUser();
 
   const isLoading = isStatsLoading || isReviewLoading;
 
-  return (
-    <div className="w-full px-6 flex justify-center">
-      <div className="max-w-6xl w-full">
-        <h2 className="text-white text-2xl font-semibold mt-6">Dashboard Overview</h2>
-
-        {isLoading ? (
+  if (isLoading) {
+    return (
+      <div className="w-full px-6 pt-6">
+        <div className="w-full min-w-[1290px] max-w-[1290px] mx-auto">
           <DashboardSkeleton />
-        ) : (
-          <>
-            <DashboardStatsCards
-              totalTasks={statsData.totalTasks}
-              inProgressTasks={statsData.inProgressTasks}
-              reviewReadyTasks={statsData.reviewReadyTasks}
-            />
+        </div>
+      </div>
+    );
+  }
 
-            <div className="grid grid-cols-1 xl:grid-cols-3 gap-6 mt-6">
-              <div className="col-span-1 xl:col-span-2">
-                <ClosedTasksAreaChart />
-              </div>
-              <div className="col-span-1">
-                <ReviewTasksCard />
-              </div>
+  return (
+    <div className="w-full px-6">
+      <div className="w-full min-w-[1290px] max-w-[1290px] mx-auto">
+        <div className="mt-6">
+          <div className="text-[16px] font-light mb-2 text-muted-foreground">
+            Өдрийн мэнд,{" "}
+            <span className="font-normal tracking-wide">
+              {user.user?.firstName || "Хэрэглэгч"} 👋
+            </span>
+          </div>
+          <div className="flex items-center gap-4">
+            <h2 className="text-white text-[40px] font-medium leading-none">
+              Dashboard Overview
+            </h2>
+            <div className="px-3 py-1 rounded-full bg-[#292A37] text-white text-sm flex items-center gap-2 h-[33px]">
+              <Lock className="w-4 h-4 text-white" />
+              <span className="text-xs">Админ-д харагдана</span>
             </div>
-          </>
-        )}
+          </div>
+        </div>
+
+        <DashboardStatsCards
+          totalTasks={statsData.totalTasks}
+          inProgressTasks={statsData.inProgressTasks}
+          reviewReadyTasks={statsData.reviewReadyTasks}
+          doneTasks={statsData.doneTasks}
+        />
+
+        <div className="overflow-x-auto">
+          <div className="mt-6 grid grid-cols-[850px_416px] gap-[24px] justify-center">
+            <ClosedTasksAreaChart />
+            <ReviewTasksCard />
+          </div>
+        </div>
       </div>
     </div>
   );

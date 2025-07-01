@@ -11,13 +11,11 @@ model Project {
   id          String        @id @default(cuid())
   title       String
   description String?
-  avatarUrl   String?       // Project avatar/image URL
+  avatarUrl   String?       
   status      ProjectStatus @default(NOT_STARTED)
   createdById String
   createdAt   DateTime      @default(now())
   updatedAt   DateTime      @updatedAt
-
-  // Relations
   createdBy   User            @relation("CreatedProjects", fields: [createdById], references: [id])
   invitations Invitation[]
   labels      Label[]
@@ -34,8 +32,7 @@ model ProjectMember {
   updatedAt DateTime @updatedAt
   user      User     @relation(fields: [userId], references: [id])
   project   Project  @relation("ProjectMembers", fields: [projectId], references: [id])
-
-  @@unique([userId, projectId]) // prevent duplicate members
+  @@unique([userId, projectId]) 
 }
 
 model Invitation {
@@ -74,8 +71,8 @@ model Task {
   id           String     @id @default(cuid())
   title        String
   description  String?
-  body         String?    // Rich text content (HTML)
-  attachments  String[]   // Array of file URLs/paths
+  body         String?   
+  attachments  String[]  
   status       TaskStatus @default(TODO)
   projectId    String
   createdById  String
@@ -90,6 +87,7 @@ model Task {
   project      Project    @relation(fields: [projectId], references: [id])
   labels       Label[]    @relation("LabelToTask")
   reviewers    User[]     @relation("TaskReviewers")
+   doneAt      DateTime? 
 }
 
 model Label {
@@ -106,7 +104,7 @@ model Comment {
   content   String
   taskId    String
   authorId  String
-  parentId  String?  // For replies
+  parentId  String? 
   createdAt DateTime @default(now())
   author    User     @relation(fields: [authorId], references: [id])
   task      Task     @relation(fields: [taskId], references: [id])
@@ -122,8 +120,7 @@ model CommentLike {
   createdAt DateTime @default(now())
   comment   Comment  @relation(fields: [commentId], references: [id], onDelete: Cascade)
   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-  @@unique([commentId, userId]) // Prevent duplicate likes
+  @@unique([commentId, userId])
 }
 
 model Log {
