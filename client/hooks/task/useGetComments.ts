@@ -1,26 +1,8 @@
 import { useQuery } from "@tanstack/react-query";
 import { useAuth, useUser } from "@clerk/nextjs";
 import { sendRequest } from "@/lib/sendRequest";
-
-export interface Comment {
-  id: string;
-  content: string;
-  createdAt: string;
-  parentId?: string;
-  author: {
-    id: string;
-    name: string | null;
-    email: string;
-    avatarUrl: string | null;
-  };
-  replies?: Comment[];
-  likeCount: number;
-  isLikedByUser: boolean;
-}
-
-interface GetCommentsResponse {
-  getComments: Comment[];
-}
+import { GetCommentsResponse } from "@/lib/types";
+import { Comment } from "@/lib/types";
 
 export const useGetComments = (taskId: string) => {
   const { user } = useUser();
@@ -90,3 +72,5 @@ export const useGetComments = (taskId: string) => {
     enabled: !!taskId && !!user?.id,
   });
 }; 
+
+export type { Comment };
