@@ -21,7 +21,7 @@ const StatusSelect = ({ value, onChange }: StatusSelectProps) => (
       <SelectGroup>
         <SelectItem value="TODO">Шинэ хүсэлт</SelectItem>
         <SelectItem value="DOING">Хийж байгаа</SelectItem>
-        <SelectItem value="REVIEW">Шалгуулхад бэлэн</SelectItem>
+        <SelectItem value="REVIEW">Шалгуулахад бэлэн</SelectItem>
       </SelectGroup>
     </SelectContent>
   </Select>

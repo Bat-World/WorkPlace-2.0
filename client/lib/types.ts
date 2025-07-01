@@ -79,3 +79,14 @@ export interface Comment {
 export interface GetCommentsResponse {
   getComments: Comment[];
 }
+
+export interface FormState {
+  title: string;
+  description: string;
+  priority: string;
+  status: string;
+  assigneeIds: string[];
+  labels: string[];
+  labelInput: string;
+  date: Date | undefined;
+}

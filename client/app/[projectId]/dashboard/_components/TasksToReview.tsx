@@ -15,7 +15,7 @@ export default function ReviewTasksCard() {
         <div className="flex items-center gap-2">
           <div className="bg-[#F9D769] rounded-full w-2 h-2" />
           <div className="text-white text-lg font-semibold leading-[22px]">
-            Шалгуулах бэлэн таскууд
+            Шалгуулахад бэлэн таскууд
           </div>
         </div>
         <div className="text-white text-xl">•••</div>

@@ -54,7 +54,7 @@ export const organizeTasksByStatus = (tasks: any[]) => {
   const columns: Record<string, KanbanColumn> = {
     todo: { id: "todo", title: "Шинэ хүсэлтүүд", taskIds: [] },
     doing: { id: "doing", title: "Хийгдэж байгаа", taskIds: [] },
-    review: { id: "review", title: "Шалгуулхад бэлэн", taskIds: [] },
+    review: { id: "review", title: "Шалгуулахад бэлэн", taskIds: [] },
     done: { id: "done", title: "Дууссан", taskIds: [] },
   };
 

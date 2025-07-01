@@ -4,7 +4,6 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
-  DialogClose,
   DialogContent,
   DialogHeader,
   DialogTitle,
@@ -43,9 +42,20 @@ const CreateProjectDialog = () => {
       setEmails([...emails, currentEmail.trim()]);
       setCurrentEmail("");
     } else if (currentEmail.trim()) {
-      toast.error("Please enter a valid email address");
+      toast.error("Зөв имэйл хаяг оруулна уу");
     }
   };
+
+  const handleDemoFill = () => {
+  setTitle("Демо Төсөл");
+  setDescription("Энэ нь демо зориулалттай туршилтын төсөл юм.");
+  setEmails(["demo@email.com", "user@example.com"]);
+  setLabels(["фронтэнд", "яаралтай"]);
+  setCurrentEmail("");
+  setCurrentLabel("");
+};
+
+
 
   const handleAddLabel = (
     e: React.KeyboardEvent<HTMLInputElement> | React.MouseEvent
@@ -55,7 +65,7 @@ const CreateProjectDialog = () => {
       setLabels([...labels, currentLabel.trim()]);
       setCurrentLabel("");
     } else if (currentLabel.trim()) {
-      toast.error("Label must be 20 characters or less");
+      toast.error("Шошго нь 20 тэмдэгтээс хэтрэх ёсгүй");
     }
   };
 
@@ -67,43 +77,43 @@ const CreateProjectDialog = () => {
     setLabels(labels.filter((l) => l !== label));
   };
 
-const { isLoaded } = useUser();
+  const { isLoaded } = useUser();
 
-const handleSubmit = async (e: React.FormEvent) => {
-  e.preventDefault();
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
 
-  if (!isLoaded) {
-    toast.error("Please wait until user data is ready.");
-    return;
-  }
+    if (!isLoaded) {
+      toast.error("Хэрэглэгчийн мэдээлэл бэлэн болтол хүлээнэ үү");
+      return;
+    }
 
-  if (!title) {
-    toast.error("Project title is required");
-    return;
-  }
+    if (!title) {
+      toast.error("	Төслийн гарчиг шаардлагатай");
+      return;
+    }
 
-  try {
-    await createProject.mutateAsync({
-      title,
-      description,
-      invitees: emails,
-      labels,
-    });
+    try {
+      await createProject.mutateAsync({
+        title,
+        description,
+        invitees: emails,
+        labels,
+      });
 
-    
-    setTitle("");
-    setDescription("");
-    setEmails([]);
-    setLabels([]);
-    setCurrentEmail("");
-    setCurrentLabel("");
 
-    toast.success("Project created successfully!");
-    setOpen(false);
-  } catch (error) {
-    toast.error("Error creating project: " + String(error));
-  }
-};
+      setTitle("");
+      setDescription("");
+      setEmails([]);
+      setLabels([]);
+      setCurrentEmail("");
+      setCurrentLabel("");
+
+      toast.success("	Төсөл амжилттай үүслээ!");
+      setOpen(false);
+    } catch (error) {
+      toast.error("Error creating project: " + String(error));
+    }
+  };
 
 
   return (
@@ -112,9 +122,9 @@ const handleSubmit = async (e: React.FormEvent) => {
         <DialogTrigger asChild>
           <Button
             variant="secondary"
-            className="text-[var(--background)] flex items-center gap-2"
+            className="text-[var(--background)] flex items-center gap-2 cursor-pointer"
           >
-            <Plus className="h-5 w-5" /> Төсөл үүсгэх
+            <Plus className="h-5 w-5 " /> Төсөл үүсгэх
           </Button>
         </DialogTrigger>
         <DialogContent className="sm:max-w-xl bg-[#141318] border-[#3D3C41] dark text-[var(--foreground)] rounded-2xl">
@@ -225,18 +235,20 @@ const handleSubmit = async (e: React.FormEvent) => {
               </div>
             </div>
             <div className="w-full gap-3 flex mt-6">
-              <DialogClose asChild>
-                <Button
-                  variant="outline"
-                  className="flex-1 py-5 rounded-xl text-white border-[#2A2A2A] hover:bg-[#25252D]"
-                >
-                  Буцах
-                </Button>
-              </DialogClose>
+
+              <Button
+                variant="outline"
+                type="button"
+                className="flex-1 py-5 rounded-xl text-white border-[#2A2A2A] hover:bg-[#25252D] "
+                onClick={handleDemoFill}
+              >
+                Буцах
+              </Button>
+
               <Button
                 type="submit"
                 variant={"secondary"}
-                className="flex-1 py-5 rounded-xl text-white flex items-center justify-center gap-2"
+                className="flex-1 py-5 rounded-xl text-white flex items-center justify-center gap-2 cursor-pointer"
                 disabled={createProject.isPending || !title}
               >
                 {createProject.isPending ? (
