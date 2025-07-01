@@ -72,3 +72,5 @@ export const useGetComments = (taskId: string) => {
     enabled: !!taskId && !!user?.id,
   });
 }; 
+
+export type { Comment };
