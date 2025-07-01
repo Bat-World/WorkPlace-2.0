@@ -15,7 +15,11 @@ interface LabelsSectionProps {
   onLabelsChange: (labels: string[]) => void;
 }
 
-const LabelsSection = ({ task, labels, onLabelsChange }: LabelsSectionProps) => {
+const LabelsSection = ({
+  task,
+  labels,
+  onLabelsChange,
+}: LabelsSectionProps) => {
   const [input, setInput] = useState("");
   const [open, setOpen] = useState(false);
   const [tempLabels, setTempLabels] = useState<string[]>(labels);
@@ -70,7 +74,7 @@ const LabelsSection = ({ task, labels, onLabelsChange }: LabelsSectionProps) => 
               <Input
                 name="labels"
                 className="focus-visible:ring-0 w-full"
-                placeholder="Шошго бичээд Enter эсвэл таслал дарна уу"
+                placeholder=""
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
                 onKeyDown={handleKeyDown}
@@ -94,7 +98,7 @@ const LabelsSection = ({ task, labels, onLabelsChange }: LabelsSectionProps) => 
               </div>
               {tempLabels.length <= 0 && (
                 <p className="text-[var(--foreground)]/50 text-xs">
-                  Шинэ шошго үүсгэхийн тулд Enter эсвэл таслал дарна уу
+                  Шинэ шошго үүсгэхийн тулд Enter эсвэл таслал дээр дарна уу
                 </p>
               )}
               <Button
@@ -125,4 +129,4 @@ const LabelsSection = ({ task, labels, onLabelsChange }: LabelsSectionProps) => 
   );
 };
 
-export default LabelsSection; 
+export default LabelsSection;

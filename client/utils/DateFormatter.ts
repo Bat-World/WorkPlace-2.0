@@ -31,62 +31,62 @@ export function formatRelativeTime(dateString: string | null): string {
 
   // Less than 1 minute
   if (diffInSeconds < 60) {
-    return "just now";
+    return "Саяхан";
   }
 
   // Less than 1 hour
   if (diffInSeconds < 3600) {
     const minutes = Math.floor(diffInSeconds / 60);
-    return `${minutes}m ago`;
+    return `${minutes} минутын өмнө`;
   }
 
   // Less than 24 hours
   if (diffInSeconds < 86400) {
     const hours = Math.floor(diffInSeconds / 3600);
-    return `${hours}h ago`;
+    return `${hours} цагийн өмнө`;
   }
 
   // Less than 7 days
   if (diffInSeconds < 604800) {
     const days = Math.floor(diffInSeconds / 86400);
-    return `${days}d ago`;
+    return `${days} өдрийн өмнө`;
   }
 
   // Less than 30 days
   if (diffInSeconds < 2592000) {
     const weeks = Math.floor(diffInSeconds / 604800);
-    return `${weeks}w ago`;
+    return `${weeks} долоо хоногийн өмнө`;
   }
 
   // Less than 365 days
   if (diffInSeconds < 31536000) {
     const months = Math.floor(diffInSeconds / 2592000);
-    return `${months}mo ago`;
+    return `${months} сарын өмнө`;
   }
 
   // More than 1 year
   const years = Math.floor(diffInSeconds / 31536000);
-  return `${years}y ago`;
+  return `${years} жилын өмнө`;
 }
 
 export function formatInvitationDate(createdAt: any): string {
   try {
     let dateValue = createdAt;
-    
-    if (typeof dateValue === 'string') {
+
+    if (typeof dateValue === "string") {
       try {
         dateValue = JSON.parse(dateValue);
       } catch {
         dateValue = dateValue;
       }
     }
-    
+
     const date = new Date(dateValue);
-    
+
     if (isNaN(date.getTime())) {
       return "Invalid date";
     }
-    
+
     return formatDate(date.toISOString());
   } catch (error) {
     return "Invalid date";

@@ -15,8 +15,8 @@ interface PrioritySelectProps {
 const PrioritySelect = ({ value, onChange }: PrioritySelectProps) => (
   <div className="mt-3">
     <Select value={value} onValueChange={onChange}>
-      <SelectTrigger className="w-40">
-        <SelectValue placeholder="Select priority" />
+      <SelectTrigger className="w-44">
+        <SelectValue placeholder="Зэрэглэл сонгох" />
       </SelectTrigger>
       <SelectContent className="dark">
         <SelectGroup>

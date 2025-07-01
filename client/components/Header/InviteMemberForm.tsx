@@ -34,7 +34,7 @@ export const InviteMemberForm = ({
       <Input
         value={inviteEmail}
         onChange={(e) => onInviteEmailChange(e.target.value)}
-        placeholder="example@gmail.com"
+        placeholder="гишүүн@mail.com"
         className="text-[var(--foreground)] mt-5 bg-transparent border-[var(--foreground)]/20"
         onKeyDown={handleKeyDown}
       />
@@ -45,7 +45,7 @@ export const InviteMemberForm = ({
           className="bg-[var(--foreground)]/5 hover:bg-[var(--foreground)]/10 text-[var(--foreground)] px-8"
         >
           <Mail className="w-4" />
-          {isPending ? "Sending..." : "Урих"}
+          {isPending ? "Урьж байна..." : "Урих"}
         </Button>
       </div>
     </div>

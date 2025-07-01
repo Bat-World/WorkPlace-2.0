@@ -261,7 +261,7 @@ const TaskInfo = () => {
           )}
         </div>
         {canMarkAsDone && (
-          <div className="w-full flex flex-col justify-start gap-3 bg-[#141318] border border-[#1d1c1f] rounded-3xl p-6">
+          <div className="w-full flex flex-col justify-start gap-3 bg-[#141318] border border-[#0A8451] rounded-3xl p-6">
             <div className="flex items-center gap-3">
               <CircleCheck className="stroke-[#0A8451] w-8 h-auto aspect-square" />
               <div className="flex flex-col">
@@ -269,7 +269,7 @@ const TaskInfo = () => {
                   Таск амжилттай батлагдлаа
                 </p>
                 <p className="text-[var(--background)]/50 text-sm">
-                  Таск амжилттай батлагдлаа
+                  Таскыг дуусгахын тулд доорх товч дээр дарна уу.
                 </p>
               </div>
             </div>

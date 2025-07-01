@@ -16,7 +16,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Trash2 } from "lucide-react";
+import { Crown, ShieldUser, Trash2 } from "lucide-react";
 
 interface MembersTableProps {
   members: any[];
@@ -81,13 +81,14 @@ export const MembersTable = ({
                     value="ADMIN"
                     className="text-[var(--foreground)]"
                   >
-                    Admin
+                    <ShieldUser />
+                    Админ
                   </SelectItem>
                   <SelectItem
                     value="MEMBER"
                     className="text-[var(--foreground)]"
                   >
-                    Member
+                    Гишүүн
                   </SelectItem>
                 </SelectContent>
               </Select>

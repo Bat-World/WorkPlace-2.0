@@ -31,7 +31,7 @@ const ActionButtons = ({
           onClick={handleApproveTask}
           disabled={approveTaskMutation.isPending}
           variant="secondary"
-          className="mt-5 py-6 rounded-lg text-[var(--background)]"
+          className="mt-5 py-6 rounded-2xl text-[var(--background)]"
         >
           <Check
             strokeWidth={2}
@@ -40,11 +40,11 @@ const ActionButtons = ({
           {approveTaskMutation.isPending ? "Батлаж байна..." : "Таскыг батлах"}
         </Button>
       )}
-
+      {/* 
       <Button className="mt-5 py-5 bg-[#1D1B22] border border-[#3D3C41] hover:bg-[#232029] rounded-lg">
         <BookmarkX strokeWidth={1.5} className="stroke-[#EA3E3E] w-5! h-5!" />
         Таскыг хаах
-      </Button>
+      </Button> */}
     </>
   );
 };

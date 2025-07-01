@@ -49,14 +49,13 @@ export interface KanbanColumn {
   taskIds: string[];
 }
 
-// Function to organize tasks by status for Kanban board
 export const organizeTasksByStatus = (tasks: any[]) => {
   const kanbanTasks: Record<string, KanbanTask> = {};
   const columns: Record<string, KanbanColumn> = {
-    todo: { id: "todo", title: "To Do", taskIds: [] },
-    doing: { id: "doing", title: "In Progress", taskIds: [] },
-    review: { id: "review", title: "Review", taskIds: [] },
-    done: { id: "done", title: "Done", taskIds: [] },
+    todo: { id: "todo", title: "Шинэ хүсэлтүүд", taskIds: [] },
+    doing: { id: "doing", title: "Хийгдэж байгаа", taskIds: [] },
+    review: { id: "review", title: "Шалгуулхад бэлэн", taskIds: [] },
+    done: { id: "done", title: "Дууссан", taskIds: [] },
   };
 
   tasks.forEach((task) => {
@@ -68,16 +67,18 @@ export const organizeTasksByStatus = (tasks: any[]) => {
       label: task.labels?.[0]?.name || "No Label",
       comments: 0, // This would need to be fetched separately
       attachments: task.attachments?.length || 0,
-      assignees: task.assignees?.map((assignee: any) => ({
-        id: assignee.id,
-        name: assignee.name || assignee.email,
-        avatarUrl: assignee.avatarUrl,
-      })) || [],
-      labels: task.labels?.map((label: any) => ({
-        id: label.id,
-        name: label.name,
-        color: label.color,
-      })) || [],
+      assignees:
+        task.assignees?.map((assignee: any) => ({
+          id: assignee.id,
+          name: assignee.name || assignee.email,
+          avatarUrl: assignee.avatarUrl,
+        })) || [],
+      labels:
+        task.labels?.map((label: any) => ({
+          id: label.id,
+          name: label.name,
+          color: label.color,
+        })) || [],
       dueDate: task.dueDate,
       status: task.status,
     };
@@ -100,4 +101,4 @@ export const organizeTasksByStatus = (tasks: any[]) => {
   });
 
   return { tasks: kanbanTasks, columns };
-}; 
+};

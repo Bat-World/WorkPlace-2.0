@@ -31,7 +31,7 @@ export default function TaskAction({ taskId }: TaskActionProps) {
         // No success toast - it's instant now!
       } catch (error: any) {
         console.error("Error deleting task:", error);
-        toast.error("Failed to delete task. Please try again.");
+        toast.error("Таск устгахад алдаа гарлаа");
       }
     }
   };
@@ -50,10 +50,6 @@ export default function TaskAction({ taskId }: TaskActionProps) {
             <Eye />
             Үзэх
           </Link>
-        </DropdownMenuItem>
-        <DropdownMenuItem>
-          <PencilRuler />
-          Засварлах
         </DropdownMenuItem>
         <DropdownMenuItem
           className="group focus:text-red-400 transition-all duration-200"

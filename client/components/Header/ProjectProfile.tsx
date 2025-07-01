@@ -18,10 +18,14 @@ interface ProjectProfileProps {
   queryClient: any;
 }
 
-export const ProjectProfile = ({ currentProject, projectId, queryClient }: ProjectProfileProps) => {
+export const ProjectProfile = ({
+  currentProject,
+  projectId,
+  queryClient,
+}: ProjectProfileProps) => {
   const { user } = useUser();
   const { getToken } = useAuth();
-  
+
   const [isUploading, setIsUploading] = useState(false);
   const [projectName, setProjectName] = useState("");
   const [isEditingName, setIsEditingName] = useState(false);
@@ -127,9 +131,7 @@ export const ProjectProfile = ({ currentProject, projectId, queryClient }: Proje
 
   return (
     <div className="flex flex-col w-full">
-      <p className="text-[var(--foreground)] font-semibold text-xl">
-        General
-      </p>
+      <p className="text-[var(--foreground)] font-semibold text-xl">Ерөнхий</p>
       <Separator className="dark my-5" />
       <div className="flex items-center justify-between">
         <div className="flex gap-4 items-center">
@@ -162,9 +164,7 @@ export const ProjectProfile = ({ currentProject, projectId, queryClient }: Proje
             className="bg-[var(--foreground)]/5 hover:bg-[var(--foreground)]/10 text-[var(--foreground)]"
             disabled={isUploading}
             type="button"
-            onClick={() =>
-              document.getElementById("avatar-upload")?.click()
-            }
+            onClick={() => document.getElementById("avatar-upload")?.click()}
           >
             <Upload className="w-4" />
             {isUploading ? "Оруулж байна..." : "Зураг оруулах"}
@@ -245,4 +245,4 @@ export const ProjectProfile = ({ currentProject, projectId, queryClient }: Proje
       </div>
     </div>
   );
-}; 
+};

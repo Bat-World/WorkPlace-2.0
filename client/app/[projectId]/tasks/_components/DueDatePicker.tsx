@@ -64,7 +64,7 @@ const DueDatePicker = ({ value, onChange }: DueDatePickerProps) => {
               id="date-picker"
               className="w-32 justify-between font-normal"
             >
-              {value ? value.toLocaleDateString() : "Select date"}
+              {value ? value.toLocaleDateString() : "Сар өдөр"}
               <ChevronDownIcon />
             </Button>
           </PopoverTrigger>

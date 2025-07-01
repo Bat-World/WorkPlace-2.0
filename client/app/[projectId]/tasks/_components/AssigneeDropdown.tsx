@@ -23,8 +23,8 @@ const AssigneeDropdown = ({
   const selectedMembers = members.filter((m) => value.includes(m.id));
   
   const getDisplayText = () => {
-    if (loading) return "Loading...";
-    if (value.length === 0) return "Select assignees";
+    if (loading) return "";
+    if (value.length === 0) return "Гишүүн сонгох";
     if (value.length === 1) {
       const member = members.find((m) => m.id === value[0]);
       return member?.user?.name || member?.user?.email || "Selected";

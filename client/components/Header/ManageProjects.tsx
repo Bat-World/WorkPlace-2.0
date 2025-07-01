@@ -49,7 +49,7 @@ export default function ManageProjects() {
         </DialogTrigger>
         <DialogContent className="sm:max-w-4xl h-[45rem] dark rounded-3xl bg-[#141318] border-none flex">
           <div className="w-full flex items-center justify-center">
-            <p className="text-[var(--foreground)]">Loading project data...</p>
+            <p className="text-[var(--foreground)]"></p>
           </div>
         </DialogContent>
       </Dialog>
@@ -67,10 +67,10 @@ export default function ManageProjects() {
       <DialogContent className="sm:max-w-4xl h-[45rem] dark rounded-3xl bg-[#141318] border-none flex">
         <div className="w-3/12 h-full flex flex-col p-2">
           <p className="text-[var(--foreground)] text-2xl font-semibold">
-            Projects
+            Төсөл
           </p>
-          <p className="text-[var(--foreground)]/50 text-sm mt-1">
-            Manage your projects
+          <p className="text-[var(--foreground)]/50 text-xs mt-1">
+            Төслийн удирдлагын самбар
           </p>
           <div className="w-full flex flex-col gap-2 mt-10">
             <div

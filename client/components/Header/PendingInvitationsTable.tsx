@@ -40,7 +40,7 @@ export const PendingInvitationsTable = ({
   if (pendingInvitations?.length === 0) {
     return (
       <p className="text-[var(--foreground)]/50 text-sm">
-        No pending invitations
+        Урилга илгээгдээгүй байна.
       </p>
     );
   }

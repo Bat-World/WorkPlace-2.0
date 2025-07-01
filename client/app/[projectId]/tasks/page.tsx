@@ -11,7 +11,7 @@ import {
   KanbanColumn as KanbanColumnType,
 } from "@/lib/taskUtils";
 import { useParams } from "next/navigation";
-
+import KanbanSkeleton from "@/components/Skeletons/KanbanSekeleton";
 
 const columnOrder = ["todo", "doing", "review", "done"];
 const columnToStatus: Record<string, string> = {
@@ -22,22 +22,20 @@ const columnToStatus: Record<string, string> = {
 };
 
 export default function KanbanPage() {
-
-
   const params = useParams();
   const projectId = params.projectId as string;
   const { data: apiTasks, isLoading, error } = useGetTasksByProject(projectId);
   const updateTaskStatus = useUpdateTaskStatus();
   const [tasks, setTasks] = useState<Record<string, KanbanTask>>({});
   const [columns, setColumns] = useState<Record<string, KanbanColumnType>>({
- todo: { id: "todo", title: "Хийх", taskIds: [] },
-  doing: { id: "doing", title: "Яг одоо хийгдэж байна", taskIds: [] },
-  review: { id: "review", title: "Шалгах", taskIds: [] },
-  done: { id: "done", title: "Дууссан", taskIds: [] },
+    todo: { id: "todo", title: "Хийх", taskIds: [] },
+    doing: { id: "doing", title: "Яг одоо хийгдэж байна", taskIds: [] },
+    review: { id: "review", title: "Шалгах", taskIds: [] },
+    done: { id: "done", title: "Дууссан", taskIds: [] },
   });
   const [newTaskId, setNewTaskId] = useState<string | null>(null);
 
- const projectTitle = apiTasks?.[0]?.project?.title ?? "Төслийн нэр";
+  const projectTitle = apiTasks?.[0]?.project?.title ?? "Төслийн нэр";
 
   useEffect(() => {
     if (apiTasks) {
@@ -124,10 +122,8 @@ export default function KanbanPage() {
   if (isLoading) {
     return (
       <div className="px-20 flex flex-col items-center justify-center">
-      <Info projectName={projectTitle} />
-
-
-        <p>test</p>
+        <Info projectName={projectTitle} />
+        <KanbanSkeleton />
       </div>
     );
   }
@@ -135,15 +131,14 @@ export default function KanbanPage() {
   if (error) {
     return (
       <div className="px-20 flex flex-col items-center justify-center">
-        <p>Өө алдаа гарлаа {error.message || String(error)}</p>
+        <KanbanSkeleton />
       </div>
     );
   }
 
   return (
     <div className="min-h-screen px-20">
-     <Info projectName={apiTasks?.[0]?.project?.title || "Төслийн нэр"} />
-
+      <Info projectName={apiTasks?.[0]?.project?.title || "Төслийн нэр"} />
 
       <DragDropContext onDragEnd={onDragEnd}>
         <div className="grid grid-cols-1 md:grid-cols-4 mt-10">

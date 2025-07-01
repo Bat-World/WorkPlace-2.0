@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
@@ -19,23 +19,29 @@ const Comment = () => {
     if (!content.trim()) return;
 
     try {
-      await addCommentMutation.mutateAsync({
-        taskId,
-        content: content.trim(),
-      }, {
-        onSuccess: () => {
-          setContent("");
-          // No success toast - it's instant now!
+      await addCommentMutation.mutateAsync(
+        {
+          taskId,
+          content: content.trim(),
         },
-      });
+        {
+          onSuccess: () => {
+            setContent("");
+            // No success toast - it's instant now!
+          },
+        }
+      );
     } catch (error: any) {
       console.error("Error adding comment:", error);
-      toast.error("Failed to post comment. Please try again.");
+      toast.error("Сэтгэгдэл үлдээхэд алдаа гарлаа");
     }
   };
 
   return (
-    <form onSubmit={handleSubmit} className="w-full p-4 bg-[#141318] border-1 border-[#3D3C41] rounded-3xl">
+    <form
+      onSubmit={handleSubmit}
+      className="w-full p-4 bg-[#141318] border-1 border-[#3D3C41] rounded-3xl"
+    >
       <Textarea
         placeholder="Сэтгэгдэл үлдээх"
         className="focus-visible:ring-0 border-0 text-[var(--background)]"
@@ -43,13 +49,13 @@ const Comment = () => {
         onChange={(e) => setContent(e.target.value)}
         disabled={addCommentMutation.isPending}
       />
-      <div className="w-full flex justify-between items-center mt-5 pl-4">
-        <div className="flex items-center gap-3">
+      <div className="w-full flex justify-end mt-5 pl-4">
+        {/* <div className="flex items-center gap-3">
           <Italic className="stroke-[var(--background)]/50 w-4 cursor-pointer" />
           <Underline className="stroke-[var(--background)]/50 w-4 cursor-pointer" />
           <Bold className="stroke-[var(--background)]/50 w-4 cursor-pointer" />
-        </div>
-        <Button 
+        </div> */}
+        <Button
           type="submit"
           className="bg-[#2E2C33] px-6"
           disabled={addCommentMutation.isPending || !content.trim()}

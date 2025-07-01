@@ -38,10 +38,12 @@ const SortableItem = React.memo(
     task,
     index,
     isNew = false,
+    isDragDisabled = false,
   }: {
     task: KanbanTask | undefined;
     index: number;
     isNew?: boolean;
+    isDragDisabled?: boolean;
   }) => {
     if (!task) {
       return null;
@@ -51,7 +53,7 @@ const SortableItem = React.memo(
     const priorityStyles = getPriorityStyles(task.priority);
 
     return (
-      <Draggable draggableId={task.id} index={index}>
+      <Draggable draggableId={task.id} index={index} isDragDisabled={isDragDisabled}>
         {(provided, snapshot) => (
           <div
             ref={provided.innerRef}

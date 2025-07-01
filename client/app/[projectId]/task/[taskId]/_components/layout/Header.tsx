@@ -27,7 +27,7 @@ const Header = () => {
       case "DONE":
         return "Дууссан таск";
       case "APPROVED":
-        return "Хаагдсан таск";
+        return "Батлагдсан таск";
       default:
         return "Нээлттэй таск";
     }
@@ -38,7 +38,7 @@ const Header = () => {
 
     switch (task.status) {
       case "DONE":
-        return "bg-[#0A8451] hover:bg-[#0A8451]";
+        return "bg-[#8957E5] hover:bg-[#7345C8]";
       case "APPROVED":
         return "bg-[#F9D769] hover:bg-[#F9D769] text-black";
       default:
@@ -53,18 +53,26 @@ const Header = () => {
           <BreadcrumbList>
             <BreadcrumbItem>
               <BreadcrumbLink asChild>
-                <Link href="/">Tinder</Link>
+                <Link href="/projects">Төслүүд</Link>
               </BreadcrumbLink>
             </BreadcrumbItem>
             <BreadcrumbSeparator />
             <BreadcrumbItem>
               <BreadcrumbLink asChild>
-                <Link href="/">Swipe</Link>
+                <Link href={`/${task?.project?.id}/tasks`}>
+                  {task?.project?.title || (
+                    <Skeleton className="h-4 w-24 bg-gray-400 rounded" />
+                  )}
+                </Link>
               </BreadcrumbLink>
             </BreadcrumbItem>
             <BreadcrumbSeparator />
             <BreadcrumbItem>
-              <BreadcrumbPage>Projects</BreadcrumbPage>
+              <BreadcrumbPage>
+                {task?.title || (
+                  <Skeleton className="h-4 w-32 bg-gray-400 rounded" />
+                )}
+              </BreadcrumbPage>
             </BreadcrumbItem>
           </BreadcrumbList>
         </Breadcrumb>

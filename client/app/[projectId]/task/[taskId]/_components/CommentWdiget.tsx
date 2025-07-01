@@ -15,6 +15,7 @@ import { useParams } from "next/navigation";
 import { formatRelativeTime } from "@/utils/DateFormatter";
 import { Textarea } from "@/components/ui/textarea";
 import { toast } from "react-toastify";
+import { Skeleton } from "@/components/ui/skeleton";
 
 const CommentItem = ({
   comment,
@@ -162,7 +163,7 @@ const CommentWidget = () => {
       await likeCommentMutation.mutateAsync(commentId);
     } catch (error: any) {
       console.error("Error liking comment:", error);
-      toast.error("Failed to like comment. Please try again.");
+      toast.error("Алдаа гарлаа");
     }
   };
 
@@ -171,7 +172,7 @@ const CommentWidget = () => {
       await unlikeCommentMutation.mutateAsync(commentId);
     } catch (error: any) {
       console.error("Error unliking comment:", error);
-      toast.error("Failed to unlike comment. Please try again.");
+      toast.error("Алдаа гарлаа.");
     }
   };
 
@@ -190,24 +191,16 @@ const CommentWidget = () => {
       });
     } catch (error: any) {
       console.error("Error adding reply:", error);
-      toast.error("Failed to post reply. Please try again.");
+      toast.error("Хүсэлт амжилтгүй дахин оролдоно уу");
     }
   };
 
   if (isLoading) {
-    return (
-      <div className="w-full p-4 bg-[#141318] rounded-3xl">
-        <p className="text-[var(--background)]/50">Loading comments...</p>
-      </div>
-    );
+    return <Skeleton className="w-full h-30 rounded-3xl bg-gray-500" />;
   }
 
   if (error) {
-    return (
-      <div className="w-full p-4 bg-[#141318] rounded-3xl">
-        <p className="text-red-500">Error loading comments</p>
-      </div>
-    );
+    return toast.error("Өө алдаа гарлаа");
   }
 
   if (comments.length === 0) {
