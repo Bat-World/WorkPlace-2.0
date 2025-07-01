@@ -9,7 +9,7 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Plus } from "lucide-react";
-import { useState, KeyboardEvent } from "react";
+import { useState } from "react";
 import { Textarea } from "@/components/ui/textarea";
 import { useCreateTask } from "@/hooks/task/useCreateTask";
 import { useParams } from "next/navigation";
@@ -19,17 +19,8 @@ import PrioritySelect from "./PrioritySelect";
 import StatusSelect from "./StatusSelect";
 import LabelsInput from "./LabelsInput";
 import DueDatePicker from "./DueDatePicker";
-
-interface FormState {
-  title: string;
-  description: string;
-  priority: string;
-  status: string;
-  assigneeIds: string[];
-  labels: string[];
-  labelInput: string;
-  date: Date | undefined;
-}
+import { FormState } from "@/lib/types";
+import { toast } from "react-toastify";
 
 const initialForm: FormState = {
   title: "",
@@ -72,10 +63,26 @@ const CreateTaskDialog = () => {
           setForm(initialForm);
           setOpen(false);
           createTaskMutation.reset();
+          toast.success("	Таск амжилттай үүслээ")
         },
       }
     );
   };
+
+  const handleDemoFill = () => {
+    setForm({
+      title: "Демо Таск",
+      description: "Энэ нь демо зориулалттай туршилтын таск юм.",
+      priority: "HIGH",
+      status: "IN_PROGRESS",
+      assignee: members.length > 0 ? [members[0].user.id] : [],
+      labels: ["фронтэнд", "алдаа"],
+      labelInput: "",
+      date: new Date(Date.now() + 3 * 24 * 60 * 60 * 1000),
+    });
+  };
+
+
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
@@ -151,6 +158,14 @@ const CreateTaskDialog = () => {
                 : "Таск үүсгэх"}
             </Button>
           </div>
+          <button
+            type="button"
+            onClick={handleDemoFill}
+            className="text-sm text-transparent hover:underline mt-4 cursor-pointer"
+          >
+            Демо бөглөх
+          </button>
+
           {createTaskMutation.error && (
             <div className="text-red-500 text-sm mt-2">
               {createTaskMutation.error.message}

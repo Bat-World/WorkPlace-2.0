@@ -379,3 +379,9 @@
 .ProseMirror .is-editor-empty:first-child:focus::before {
   display: none;
 }
+
+@layer base {
+  button, [role="button"] {
+    cursor: pointer;
+  }
+}
