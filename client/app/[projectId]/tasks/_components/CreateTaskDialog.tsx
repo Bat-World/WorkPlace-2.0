@@ -13,9 +13,7 @@ import { useState, KeyboardEvent } from "react";
 import { Textarea } from "@/components/ui/textarea";
 import { useCreateTask } from "@/hooks/task/useCreateTask";
 import { useParams } from "next/navigation";
-import {
-  useGetProjectMembers,
-} from "@/hooks/project/useGetProjectMembers";
+import { useGetProjectMembers } from "@/hooks/project/useGetProjectMembers";
 import AssigneeDropdown from "./AssigneeDropdown";
 import PrioritySelect from "./PrioritySelect";
 import StatusSelect from "./StatusSelect";
@@ -27,7 +25,7 @@ interface FormState {
   description: string;
   priority: string;
   status: string;
-  assignee: string[];
+  assigneeIds: string[];
   labels: string[];
   labelInput: string;
   date: Date | undefined;
@@ -38,7 +36,7 @@ const initialForm: FormState = {
   description: "",
   priority: "",
   status: "",
-  assignee: [],
+  assigneeIds: [],
   labels: [],
   labelInput: "",
   date: undefined,
@@ -63,7 +61,7 @@ const CreateTaskDialog = () => {
         title: form.title,
         description: form.description,
         projectId,
-        assigneeIds: form.assignee.length > 0 ? form.assignee : undefined,
+        assigneeIds: form.assigneeIds,
         dueDate: form.date ? form.date.toISOString() : undefined,
         priority: form.priority || undefined,
         status: form.status || undefined,
@@ -106,8 +104,8 @@ const CreateTaskDialog = () => {
             onChange={(v: string) => handleChange("priority", v)}
           />
           <AssigneeDropdown
-            value={form.assignee}
-            onChange={(v: string[]) => handleChange("assignee", v)}
+            value={form.assigneeIds}
+            onChange={(v: string[]) => handleChange("assigneeIds", v)}
             members={members}
             loading={membersLoading}
           />
@@ -116,8 +114,8 @@ const CreateTaskDialog = () => {
             onChange={(v: Date | undefined) => handleChange("date", v)}
           />
           <div className="flex gap-4 mt-4 items-center">
-            <p className="text-[var(--foreground)]/50 text-base w-19">
-              Details
+            <p className="text-[var(--foreground)]/50 text-base w-29">
+              Дэлгэрэнгүй
             </p>
             <StatusSelect
               value={form.status}

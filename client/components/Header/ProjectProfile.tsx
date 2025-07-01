@@ -97,10 +97,10 @@ export const ProjectProfile = ({
       queryClient.invalidateQueries({ queryKey: ["project", projectId] });
       queryClient.invalidateQueries({ queryKey: ["projects"] });
 
-      toast.success("Project avatar updated successfully!");
+      toast.success("Зураг амжилттай солигдлоо");
     } catch (error) {
       console.error("Error updating avatar:", error);
-      toast.error("Failed to update project avatar");
+      toast.error("Алдаа гарлаа");
     } finally {
       setIsUploading(false);
       // Reset the input
@@ -110,23 +110,22 @@ export const ProjectProfile = ({
 
   const handleSaveProjectName = async () => {
     if (!projectName.trim()) {
-      toast.error("Project name cannot be empty");
+      toast.error("Төслийн нэр оруулна уу");
       return;
     }
 
     try {
       await updateProjectName.mutateAsync(projectName);
       setIsEditingName(false);
-      toast.success("Project name updated successfully!");
+      toast.success("Төслийн нэр амжилттай солигдлоо");
     } catch (error) {
       console.error("Error updating project name:", error);
-      toast.error("Failed to update project name");
+      toast.error("Алдаа гарлаа");
     }
   };
 
   const handleLeaveProject = () => {
-    // Handle leave project logic
-    console.log("Leaving project");
+    console.log("Амжилттай гаралаа");
   };
 
   return (

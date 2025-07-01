@@ -99,13 +99,13 @@ const AssigneeSection = ({
   return (
     <>
       <div className="flex items-center justify-between">
-        <p className="text-[var(--background)]/50 text-sm">Хүлээж авсан</p>
+        <p className="text-[var(--background)]/50 text-sm">Гүйцэтгэгч</p>
         <DropdownMenu>
           <DropdownMenuTrigger>
             <Ellipsis className="stroke-[var(--background)]/50 w-5 cursor-pointer" />
           </DropdownMenuTrigger>
           <DropdownMenuContent className="dark bg-black/10 backdrop-blur-sm rounded-2xl">
-            <DropdownMenuLabel>Assignee</DropdownMenuLabel>
+            <DropdownMenuLabel>Гүйцэтгэгч</DropdownMenuLabel>
             <DropdownMenuSeparator />
             <DropdownMenuCheckboxItem
               checked={selectedAssignees.length === 0}

@@ -4,6 +4,7 @@ export const createTask = async (_: any, args: any, context: any) => {
     description,
     projectId,
     assignedToId, // Keep for backward compatibility but convert to assignees
+    assigneeIds, // <-- new
     dueDate,
     priority,
     status,
@@ -46,8 +47,28 @@ export const createTask = async (_: any, args: any, context: any) => {
     validatedCreatedById = 'default-user-id';
   }
 
-  // Prepare assignees data - convert assignedToId to assignees array
-  const assigneesData = assignedToId ? { connect: [{ id: assignedToId }] } : undefined;
+  // Prepare assignees data - support both legacy and new
+  let assigneesData = undefined;
+  if (assigneeIds && assigneeIds.length > 0) {
+    // Ensure all users exist (auto-create if missing)
+    await Promise.all(
+      assigneeIds.map(async (userId: string) => {
+        let user = await context.prisma.user.findUnique({ where: { id: userId } });
+        if (!user) {
+          await context.prisma.user.create({
+            data: {
+              id: userId,
+              email: `${userId}@example.com`,
+              name: "Auto-created User",
+            },
+          });
+        }
+      })
+    );
+    assigneesData = { connect: assigneeIds.map((userId: string) => ({ id: userId })) };
+  } else if (assignedToId) {
+    assigneesData = { connect: [{ id: assignedToId }] };
+  }
 
   // Create the task
   const newTask = await context.prisma.task.create({

@@ -8,7 +8,7 @@ export const useManageReviewers = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: async ({ taskId, reviewerIds }: { taskId: string; reviewerIds: string[] }) => {
+    mutationFn: async ({ taskId, reviewerIds, members }: { taskId: string; reviewerIds: string[]; members: any[] }) => {
       const token = await getToken();
       const userId = user?.id;
 
@@ -54,10 +54,29 @@ export const useManageReviewers = () => {
 
       return res.data.data.manageReviewers;
     },
-    onSuccess: (data, variables) => {
-      // Temporarily disable invalidation to prevent state overwrite
-      // queryClient.invalidateQueries({ queryKey: ['task', variables.taskId] });
-      // queryClient.invalidateQueries({ queryKey: ['tasks'] });
+    onMutate: async ({ taskId, reviewerIds, members }) => {
+      await queryClient.cancelQueries({ queryKey: ['task', taskId] });
+      const previousTask = queryClient.getQueryData(['task', taskId]);
+      // Find the full reviewer objects from members
+      const newReviewers = members
+        ? members.filter((member) => reviewerIds.includes(member.user.id)).map((member) => member.user)
+        : [];
+      queryClient.setQueryData(['task', taskId], (old: any) => {
+        if (!old) return old;
+        return {
+          ...old,
+          reviewers: newReviewers,
+        };
+      });
+      return { previousTask };
+    },
+    onError: (err, variables, context) => {
+      if (context?.previousTask) {
+        queryClient.setQueryData(['task', variables.taskId], context.previousTask);
+      }
+    },
+    onSettled: (data, error, variables) => {
+      queryClient.invalidateQueries({ queryKey: ['task', variables.taskId] });
     },
   });
 }; 
