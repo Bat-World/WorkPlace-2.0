@@ -4,7 +4,7 @@ import { sendRequest } from '@/lib/sendRequest';
 
 export const useCreateProject = () => {
   const { getToken } = useAuth();
-  const { user } = useUser();
+  const { user, isLoaded } = useUser();
   const queryClient = useQueryClient();
 
   return useMutation({
@@ -14,11 +14,15 @@ export const useCreateProject = () => {
       invitees?: string[];
       labels?: string[];
     }) => {
-      const token = await getToken();
-      const userId = user?.id;
+      if (!isLoaded || !user) {
+        throw new Error('User not ready yet, please wait.');
+      }
 
-      if (!userId) {
-        throw new Error('User is not signed in');
+      const token = await getToken();
+      const userId = user.id;
+
+      if (!token) {
+        throw new Error('Auth token missing.');
       }
 
       const res = await sendRequest.post(
@@ -42,7 +46,14 @@ export const useCreateProject = () => {
         }
       );
 
-      return res.data.data.createProject;
+      const project = res?.data?.data?.createProject;
+
+      if (!project) {
+        console.error('Unexpected response from server:', res);
+        throw new Error('Project creation failed. Try again.');
+      }
+
+      return project;
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['projects'] });

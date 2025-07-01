@@ -18,6 +18,7 @@ import { useCreateProject } from "@/hooks/project/useCreateProject";
 import { motion, AnimatePresence } from "framer-motion";
 import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
+import { useUser } from "@clerk/nextjs";
 
 const CreateProjectDialog = () => {
   const [open, setOpen] = useState(false);
@@ -66,32 +67,44 @@ const CreateProjectDialog = () => {
     setLabels(labels.filter((l) => l !== label));
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!title) {
-      toast.error("Project title is required");
-      return;
-    }
+const { isLoaded } = useUser();
 
-    try {
-      await createProject.mutateAsync({
-        title,
-        description,
-        invitees: emails,
-        labels,
-      });
-      setTitle("");
-      setDescription("");
-      setEmails([]);
-      setLabels([]);
-      setCurrentEmail("");
-      setCurrentLabel("");
-      toast.success("Project created successfully!");
-      setOpen(false);
-    } catch (error) {
-      toast.error("Error creating project: " + String(error));
-    }
-  };
+const handleSubmit = async (e: React.FormEvent) => {
+  e.preventDefault();
+
+  if (!isLoaded) {
+    toast.error("Please wait until user data is ready.");
+    return;
+  }
+
+  if (!title) {
+    toast.error("Project title is required");
+    return;
+  }
+
+  try {
+    await createProject.mutateAsync({
+      title,
+      description,
+      invitees: emails,
+      labels,
+    });
+
+    
+    setTitle("");
+    setDescription("");
+    setEmails([]);
+    setLabels([]);
+    setCurrentEmail("");
+    setCurrentLabel("");
+
+    toast.success("Project created successfully!");
+    setOpen(false);
+  } catch (error) {
+    toast.error("Error creating project: " + String(error));
+  }
+};
+
 
   return (
     <div className="flex justify-end gap-6">
