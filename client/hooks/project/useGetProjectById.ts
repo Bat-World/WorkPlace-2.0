@@ -56,6 +56,10 @@ export const useGetProjectById = ({
                     priority
                     dueDate
                   }
+                        createdBy {
+      id
+      name
+    }
                 }
               }
             `,

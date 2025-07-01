@@ -39,13 +39,22 @@ export const Projects = () => {
           <TabsTrigger value="mine" className="flex items-center gap-2 px-4 py-2 rounded-md text-white data-[state=active]:bg-[#2A2A2A] data-[state=inactive]:text-gray-400 data-[state=active]:text-white transition-colors"><User />Миний төслүүд</TabsTrigger>
           <TabsTrigger value="others" className="flex items-center gap-2 px-4 py-2 rounded-md text-white data-[state=active]:bg-[#2A2A2A] data-[state=inactive]:text-gray-400 data-[state=active]:text-white transition-colors"><Grid />Бусад төслүүд</TabsTrigger>
         </TabsList>
-        <TabsContent value="mine">
-          {isPending ? <ProjectGridSkeleton /> : <ProjectGrid projects={myProjects} router={router} />}
-        </TabsContent>
+     <TabsContent value="mine">
+  {isPending ? (
+    <ProjectGridSkeleton />
+  ) : (
+    <ProjectGrid projects={myProjects} router={router} userId={user?.id} />
+  )}
+</TabsContent>
 
-        <TabsContent value="others">
-          {isPending ? <ProjectGridSkeleton /> : <ProjectGrid projects={otherProjects} router={router} />}
-        </TabsContent>
+<TabsContent value="others">
+  {isPending ? (
+    <ProjectGridSkeleton />
+  ) : (
+    <ProjectGrid projects={otherProjects} router={router} userId={user?.id} />
+  )}
+</TabsContent>
+
 
       </Tabs>
     </div>
