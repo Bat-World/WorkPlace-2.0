@@ -4,26 +4,35 @@ import Image from "next/image";
 export const ProjectGrid = ({
   projects,
   router,
+  userId,
 }: {
   projects: Project[] | undefined;
   router: any;
+  userId: string | undefined;
 }) => {
+
   return (
     <div className="w-full grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 gap-6 mt-8">
       {projects?.map((project: Project) => (
         <div
           key={project.id}
           className="w-full p-6 bg-[#141318] rounded-2xl hover:bg-[#1c1b22] transition duration-200 ease-in-out cursor-pointer flex flex-col justify-between"
-          onClick={() => router.push(`/${project.id}/dashboard`)}
+          onClick={() =>
+            router.push(
+              project.createdBy?.id === userId
+                ? `/${project.id}/dashboard`
+                : `/${project.id}/tasks`
+            )
+          }
+
         >
           <div className="flex gap-4 items-start">
             <div
               className="w-16 h-16 min-w-16 rounded-lg bg-cover bg-center"
               style={{
-                backgroundImage: `url(${
-                  project.avatarUrl ||
+                backgroundImage: `url(${project.avatarUrl ||
                   "https://img.clerk.com/eyJ0eXBlIjoiZGVmYXVsdCIsImlpZCI6Imluc18xbHlXRFppb2JyNjAwQUtVZVFEb1NsckVtb00iLCJyaWQiOiJvcmdfMnlPbDNOWHdQV2tIQ25pM1VxSFhETVkzcnExIiwiaW5pdGlhbHMiOiI0In0?width=160"
-                })`,
+                  })`,
               }}
             ></div>
             <div className="flex flex-col w-full max-w-[180px]">

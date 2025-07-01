@@ -2,11 +2,8 @@ export const getProjectById = async (_: any, args: any, context: any) => {
   const { projectId, skip = 0, take = 10, userId: argUserId } = args;
   const userId = argUserId || context?.userId;
   if (!userId) throw new Error('Unauthorized');
-  
-  let user = await context.prisma.user.findUnique({
-    where: { id: userId }
-  });
-  
+
+  let user = await context.prisma.user.findUnique({ where: { id: userId } });
   if (!user) {
     user = await context.prisma.user.create({
       data: {
@@ -16,32 +13,31 @@ export const getProjectById = async (_: any, args: any, context: any) => {
       }
     });
   }
-  
+
   const project = await context.prisma.project.findUnique({
     where: { id: projectId },
     include: {
+      createdBy: true, 
       tasks: { skip, take },
-      invitations: true,
       labels: true,
-      createdBy: true,
-      members: { 
+      invitations: true,
+      members: {
         include: { user: true }
       },
     }
   });
-  
+
   if (!project) throw new Error('Project not found');
-  
-  const validMembers = project.members.filter((m: any) => m.user !== null);
-  
-  const isMember = validMembers.some((m: any) => m.userId === userId);
+
+  const validMembers = project.members.filter((m: { user: null; }) => m.user !== null);
+
+  const isMember = validMembers.some((m: { userId: any; }) => m.userId === userId);
   if (!isMember && process.env.NODE_ENV === 'production') {
     throw new Error('Not a member of the project');
   }
-  
+
   return {
     ...project,
-    avatarUrl: project.avatarUrl,
-    members: validMembers
+    members: validMembers,
   };
-}; 
+};

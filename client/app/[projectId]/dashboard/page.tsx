@@ -3,20 +3,26 @@
 import { useParams } from "next/navigation";
 import { useGetDashboardStats } from "@/hooks/project/useGetDashboardStats";
 import { useGetReviewTasksByProject } from "@/hooks/project/useGetReviewTasksByProject";
+import { useGetProjectById } from "@/hooks/project/useGetProjectById";
 import { DashboardStatsCards } from "./_components/StatsCards";
 import ClosedTasksAreaChart from "./_components/Chart";
 import ReviewTasksCard from "./_components/TasksToReview";
 import DashboardSkeleton from "./_components/Skeleton";
 import { Lock } from "lucide-react";
 import { useUser } from "@clerk/nextjs";
+import { Projects } from "@/app/projects/_components/Projects";
+
 
 export default function DashboardPage() {
   const { projectId } = useParams() as { projectId: string };
   const { data: statsData, isPending: isStatsLoading } = useGetDashboardStats(projectId);
   const { data: reviewData, isPending: isReviewLoading } = useGetReviewTasksByProject(projectId);
+  const { data: projectData, isLoading: isProjectLoading } = useGetProjectById({ projectId });
   const user = useUser();
 
   const isLoading = isStatsLoading || isReviewLoading;
+  const isAdmin = projectData?.createdBy?.id === user.user?.id;
+
 
   if (isLoading) {
     return (
@@ -27,6 +33,10 @@ export default function DashboardPage() {
       </div>
     );
   }
+
+if (!isAdmin) {
+  return <Projects />;
+}
 
   return (
     <div className="w-full px-6">

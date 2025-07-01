@@ -12,7 +12,7 @@ export default function AcceptInviteClient() {
   const searchParams = useSearchParams();
   const router = useRouter();
   const token = searchParams.get('token');
-  const { user, isSignedIn, isLoaded } = useUser();
+  const { isSignedIn, isLoaded } = useUser();
 
   useEffect(() => {
     if (isLoaded && !isSignedIn) {
@@ -41,7 +41,7 @@ export default function AcceptInviteClient() {
   useEffect(() => {
     if (isSuccess && acceptData?.projectId) {
       toast.success(acceptData.message);
-      router.push(`/${acceptData.projectId}/dashboard`);
+      router.push(`/${acceptData.projectId}/tasks`);
     }
   }, [isSuccess, acceptData, router]);
 
