@@ -57,9 +57,9 @@ export const useGetProjectById = ({
                     dueDate
                   }
                         createdBy {
-      id
-      name
-    }
+                     id
+                      name
+                  }
                 }
               }
             `,

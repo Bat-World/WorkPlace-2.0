@@ -50,7 +50,7 @@ if (!isAdmin) {
           </div>
           <div className="flex items-center gap-4">
             <h2 className="text-white text-[40px] font-medium leading-none">
-              Dashboard Overview
+              Төслийн хураангуй
             </h2>
             <div className="px-3 py-1 rounded-full bg-[#292A37] text-white text-sm flex items-center gap-2 h-[33px]">
               <Lock className="w-4 h-4 text-white" />
