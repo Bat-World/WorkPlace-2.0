@@ -18,6 +18,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
 import { useUser } from "@clerk/nextjs";
+import { DialogClose } from "@radix-ui/react-dialog";
 
 const CreateProjectDialog = () => {
   const [open, setOpen] = useState(false);
@@ -45,17 +46,6 @@ const CreateProjectDialog = () => {
       toast.error("Зөв имэйл хаяг оруулна уу");
     }
   };
-
-  const handleDemoFill = () => {
-  setTitle("Демо Төсөл");
-  setDescription("Энэ нь демо зориулалттай туршилтын төсөл юм.");
-  setEmails(["demo@email.com", "user@example.com"]);
-  setLabels(["фронтэнд", "яаралтай"]);
-  setCurrentEmail("");
-  setCurrentLabel("");
-};
-
-
 
   const handleAddLabel = (
     e: React.KeyboardEvent<HTMLInputElement> | React.MouseEvent
@@ -100,7 +90,6 @@ const CreateProjectDialog = () => {
         labels,
       });
 
-
       setTitle("");
       setDescription("");
       setEmails([]);
@@ -114,7 +103,6 @@ const CreateProjectDialog = () => {
       toast.error("Error creating project: " + String(error));
     }
   };
-
 
   return (
     <div className="flex justify-end gap-6">
@@ -235,15 +223,15 @@ const CreateProjectDialog = () => {
               </div>
             </div>
             <div className="w-full gap-3 flex mt-6">
-
-              <Button
-                variant="outline"
-                type="button"
-                className="flex-1 py-5 rounded-xl text-white border-[#2A2A2A] hover:bg-[#25252D] "
-                onClick={handleDemoFill}
-              >
-                Буцах
-              </Button>
+              <DialogClose>
+                <Button
+                  variant="outline"
+                  type="button"
+                  className="flex-1 py-5 rounded-xl text-white border-[#2A2A2A] hover:bg-[#25252D] "
+                >
+                  Буцах
+                </Button>
+              </DialogClose>
 
               <Button
                 type="submit"

@@ -69,21 +69,6 @@ const CreateTaskDialog = () => {
     );
   };
 
-  const handleDemoFill = () => {
-    setForm({
-      title: "Демо Таск",
-      description: "Энэ нь демо зориулалттай туршилтын таск юм.",
-      priority: "HIGH",
-      status: "IN_PROGRESS",
-      assigneeIds: members.length > 0 ? [members[0].user.id] : [],
-      labels: ["фронтэнд", "алдаа"],
-      labelInput: "",
-      date: new Date(Date.now() + 3 * 24 * 60 * 60 * 1000),
-    });
-  };
-
-
-
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
@@ -158,13 +143,6 @@ const CreateTaskDialog = () => {
                 : "Таск үүсгэх"}
             </Button>
           </div>
-          <button
-            type="button"
-            onClick={handleDemoFill}
-            className="text-sm text-transparent hover:underline mt-4 cursor-pointer"
-          >
-            Демо бөглөх
-          </button>
 
           {createTaskMutation.error && (
             <div className="text-red-500 text-sm mt-2">
